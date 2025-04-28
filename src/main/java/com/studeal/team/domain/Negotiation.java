@@ -28,6 +28,7 @@ public class Negotiation {
     @Column(nullable = false)
     private Long proposedPrice;
 
+    @Version
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "ENUM('PENDING','ACCEPTED','REJECTED')", nullable = false)
     private NegotiationStatus status;

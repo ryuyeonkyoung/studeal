@@ -29,6 +29,7 @@ public class Attendance {
     @Column(nullable = false)
     private LocalDate date;
 
+    @Version
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "ENUM('PRESENT','ABSENT')", nullable = false)
     private AttendanceStatus status;

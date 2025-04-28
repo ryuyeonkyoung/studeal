@@ -20,6 +20,7 @@ public class Teacher extends User {
     @Column(columnDefinition = "TEXT")
     private String bio;
 
+    @Version
     @Column(columnDefinition = "FLOAT DEFAULT 0")
     private Float rating;
 

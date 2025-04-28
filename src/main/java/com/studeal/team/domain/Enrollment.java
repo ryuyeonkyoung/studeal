@@ -1,5 +1,6 @@
 package com.studeal.team.domain;
 
+import com.studeal.team.domain.common.BaseEntity;
 import com.studeal.team.domain.enums.EnrollmentStatus;
 import jakarta.persistence.*;
 import lombok.*;
@@ -26,12 +27,14 @@ public class Enrollment {
     @JoinColumn(name = "class_id")
     private Course course;
 
+    @Version
     @Column(nullable = false)
     private Long paidAmount;
 
     @Column(nullable = false)
     private LocalDateTime enrolledAt;
 
+    @Version
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "ENUM('WAITING','CONFIRMED')", nullable = false)
     private EnrollmentStatus status;
