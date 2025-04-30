@@ -1,5 +1,6 @@
 package com.studeal.team.domain;
 
+import com.studeal.team.domain.common.BaseEntity;
 import com.studeal.team.domain.enums.AttendanceStatus;
 import jakarta.persistence.*;
 import lombok.*;
@@ -13,7 +14,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Attendance {
+public class Attendance extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long attendanceId;
