@@ -1,5 +1,6 @@
 package com.studeal.team.domain;
 
+import com.studeal.team.converter.BooleanToYNConverter;
 import com.studeal.team.domain.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -7,7 +8,7 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "class_file")
+@Table(name = "CLASS_FILE")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -34,6 +35,7 @@ public class ClassFile extends BaseEntity {
     @Column(columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime uploadedAt;
 
-    @Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
-    private Boolean isThumbnail;
+    @Convert(converter = BooleanToYNConverter.class)
+    @Column(columnDefinition = "CHAR(1)", nullable = false)
+    private Boolean isThumbnail = false;
 }

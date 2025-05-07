@@ -1,13 +1,14 @@
 package com.studeal.team.domain;
 
 import com.studeal.team.domain.enums.EnrollmentStatus;
+import com.studeal.team.converter.BooleanToYNConverter;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "enrollment")
+@Table(name = "ENROLLMENT")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -36,8 +37,9 @@ public class Enrollment extends BaseEntity {
     @Column(columnDefinition = "ENUM('WAITING','CONFIRMED')", nullable = false)
     private EnrollmentStatus status;
 
-    @Column(nullable = false)
-    private Boolean isActive;
+    @Convert(converter = BooleanToYNConverter.class)
+    @Column(columnDefinition = "CHAR(1)", nullable = false)
+    private Boolean isActive = false;
 
     @Version
     private Integer version;

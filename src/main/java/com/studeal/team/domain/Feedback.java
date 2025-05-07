@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "feedback")
+@Table(name = "FEEDBACK")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -23,6 +23,6 @@ public class Feedback extends BaseEntity {
     @JoinColumn(name = "class_id")
     private Course course;
 
-    @Column(columnDefinition = "TEXT")
-    private String comment;
+    @Column(length = 1000)
+    private String feedbackText;
 }

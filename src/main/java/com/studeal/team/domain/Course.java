@@ -8,7 +8,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "class")
+@Table(name = "COURSES")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -22,8 +22,7 @@ public class Course extends BaseEntity {
     @Column(length = 200, nullable = false)
     private String title;
 
-    @Lob
-    @Basic(fetch = FetchType.LAZY)
+    @Column(length = 1000)
     private String description;
 
     @Column(nullable = false)

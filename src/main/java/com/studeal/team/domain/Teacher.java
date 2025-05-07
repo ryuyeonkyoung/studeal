@@ -16,8 +16,7 @@ import java.util.Set;
 @SuperBuilder
 public class Teacher extends User {
 
-    @Lob
-    @Basic(fetch = FetchType.LAZY)
+    @Column(length = 1000)
     private String bio;
 
     @Column(columnDefinition = "FLOAT DEFAULT 0")
