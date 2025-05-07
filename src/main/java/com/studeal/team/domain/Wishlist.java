@@ -22,4 +22,7 @@ public class Wishlist extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "negotiation_id")
     private Negotiation negotiation;
+
+    @Version
+    private Integer version;
 }

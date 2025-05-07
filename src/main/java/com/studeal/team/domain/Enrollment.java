@@ -38,4 +38,7 @@ public class Enrollment extends BaseEntity {
 
     @Column(nullable = false)
     private Boolean isActive;
+
+    @Version
+    private Integer version;
 }

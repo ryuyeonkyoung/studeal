@@ -33,4 +33,8 @@ public class Attendance extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "ENUM('PRESENT','ABSENT')", nullable = false)
     private AttendanceStatus status;
+
+    @Version
+    private Integer version;
+
 }
