@@ -8,7 +8,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@DiscriminatorValue(value = "TEACHER")
+@DiscriminatorValue(value = "teacher")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -20,7 +20,6 @@ public class Teacher extends User {
     @Basic(fetch = FetchType.LAZY)
     private String bio;
 
-    @Version
     @Column(columnDefinition = "FLOAT DEFAULT 0")
     private Float rating;
 
