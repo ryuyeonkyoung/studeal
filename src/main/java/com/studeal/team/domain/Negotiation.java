@@ -29,8 +29,11 @@ public class Negotiation extends BaseEntity {
     @Column(nullable = false)
     private Long proposedPrice;
 
-    @Version
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "ENUM('PENDING','ACCEPTED','REJECTED')", nullable = false)
     private NegotiationStatus status;
+
+    @Version
+    private Integer version;
+
 }

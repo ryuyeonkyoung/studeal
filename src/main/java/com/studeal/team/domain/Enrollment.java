@@ -27,18 +27,19 @@ public class Enrollment extends BaseEntity {
     @JoinColumn(name = "class_id")
     private Course course;
 
-    @Version
     @Column(nullable = false)
     private Long paidAmount;
 
     @Column(nullable = false)
     private LocalDateTime enrolledAt;
 
-    @Version
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "ENUM('WAITING','CONFIRMED')", nullable = false)
     private EnrollmentStatus status;
 
     @Column(nullable = false)
     private Boolean isActive;
+
+    @Version
+    private Integer version;
 }

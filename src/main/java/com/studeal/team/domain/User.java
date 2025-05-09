@@ -33,4 +33,7 @@ public class User {
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "ENUM('STUDENT','TEACHER')", nullable = false)
     private UserRole role;
+
+    @Version
+    private Integer version;
 }
