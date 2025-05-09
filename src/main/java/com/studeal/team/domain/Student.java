@@ -8,7 +8,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@DiscriminatorValue(value = "student")
+@DiscriminatorValue(value = "STUDENT")
 @Getter
 @Setter
 @NoArgsConstructor

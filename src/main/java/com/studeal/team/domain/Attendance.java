@@ -8,7 +8,7 @@ import lombok.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "attendance")
+@Table(name = "ATTENDANCE")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -28,7 +28,7 @@ public class Attendance extends BaseEntity {
     private Course course;
 
     @Column(nullable = false)
-    private LocalDate date;
+    private LocalDate attendanceDate;
 
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "ENUM('PRESENT','ABSENT')", nullable = false)

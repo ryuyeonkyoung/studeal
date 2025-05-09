@@ -7,7 +7,7 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 @Entity
-@Table(name = "users")
+@Table(name = "USERS")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @Getter
 @Setter
