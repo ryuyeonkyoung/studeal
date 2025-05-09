@@ -2,20 +2,19 @@ package com.studeal.team.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "teacher")
+@DiscriminatorValue(value = "TEACHER")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 public class Teacher extends User {
-    @Id
-    private Long teacherId;
 
     @Column(columnDefinition = "TEXT")
     private String bio;
@@ -26,4 +25,5 @@ public class Teacher extends User {
 
     @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Course> courses = new HashSet<>();
+
 }

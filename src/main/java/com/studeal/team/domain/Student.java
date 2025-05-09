@@ -2,20 +2,19 @@ package com.studeal.team.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "student")
+@DiscriminatorValue(value = "STUDENT")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 public class Student extends User {
-    @Id
-    private Long studentId;
 
     @Column(length = 100)
     private String major;
