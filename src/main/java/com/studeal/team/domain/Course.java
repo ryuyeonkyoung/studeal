@@ -23,7 +23,8 @@ public class Course extends BaseEntity {
     @Column(length = 200, nullable = false)
     private String title;
 
-    @Column(columnDefinition = "TEXT")
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
     private String description;
 
     @Column(nullable = false)

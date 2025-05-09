@@ -16,7 +16,8 @@ import java.util.Set;
 @SuperBuilder
 public class Teacher extends User {
 
-    @Column(columnDefinition = "TEXT")
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
     private String bio;
 
     @Version
