@@ -1,5 +1,6 @@
 package com.studeal.team.domain;
 
+import com.studeal.team.domain.common.BaseEntity;
 import com.studeal.team.domain.enums.EnrollmentStatus;
 import com.studeal.team.converter.BooleanToYNConverter;
 import jakarta.persistence.*;

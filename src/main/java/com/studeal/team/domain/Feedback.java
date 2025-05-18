@@ -1,5 +1,6 @@
 package com.studeal.team.domain;
 
+import com.studeal.team.domain.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
