@@ -1,4 +1,4 @@
-package com.studeal.team.domain.negotiation.domain;
+package com.studeal.team.domain.lesson.domain;
 
 import com.studeal.team.global.common.converter.BooleanToYNConverter;
 import com.studeal.team.global.common.domain.BaseEntity;
@@ -8,21 +8,21 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "NEGOTIATION_FILES")
+@Table(name = "LESSON_FILES")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class NegotiationFile extends BaseEntity {
+public class LessonFile extends BaseEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "negotiation_files_seq_gen")
-    @SequenceGenerator(name = "negotiation_files_seq_gen", sequenceName = "NEGOTIATION_FILES_SEQ", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "lesson_files_seq_gen")
+    @SequenceGenerator(name = "lesson_files_seq_gen", sequenceName = "LESSON_FILES_SEQ", allocationSize = 1)
     private Long fileId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "negotiation_id")
-    private Negotiation negotiation;
+    @JoinColumn(name = "lesson_id")
+    private Lesson lesson;
 
     @Column(length = 255, nullable = false)
     private String fileName;

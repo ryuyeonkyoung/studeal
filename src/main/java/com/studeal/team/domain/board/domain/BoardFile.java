@@ -1,4 +1,4 @@
-package com.studeal.team.domain.course.domain;
+package com.studeal.team.domain.board.domain;
 
 import com.studeal.team.global.common.converter.BooleanToYNConverter;
 import com.studeal.team.global.common.domain.BaseEntity;
@@ -8,20 +8,21 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "CLASS_FILE")
+@Table(name = "BOARD_FILES")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ClassFile extends BaseEntity {
+public class BoardFile extends BaseEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "board_files_seq_gen")
+    @SequenceGenerator(name = "board_files_seq_gen", sequenceName = "BOARD_FILES_SEQ", allocationSize = 1)
     private Long fileId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "class_id")
-    private Course course;
+    @JoinColumn(name = "board_id")
+    private Board board;
 
     @Column(length = 255, nullable = false)
     private String fileName;
@@ -32,10 +33,10 @@ public class ClassFile extends BaseEntity {
     @Column(length = 50)
     private String fileType;
 
-    @Column(columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")
+    @Column // Oracle에서는 DATETIME 대신 TIMESTAMP 사용
     private LocalDateTime uploadedAt;
 
     @Convert(converter = BooleanToYNConverter.class)
-    @Column(columnDefinition = "CHAR(1)", nullable = false)
+    @Column(nullable = false, columnDefinition = "CHAR(1) DEFAULT 'N'")
     private Boolean isThumbnail = false;
 }

@@ -8,7 +8,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "NEGOTIATION_PARTICIPANT")
+@Table(name = "NEGOTIATION_PARTICIPANTS")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -16,7 +16,8 @@ import lombok.*;
 @Builder
 public class NegotiationParticipant extends BaseEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "negotiation_participants_seq_gen")
+    @SequenceGenerator(name = "negotiation_participants_seq_gen", sequenceName = "NEGOTIATION_PARTICIPANTS_SEQ", allocationSize = 1)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -28,10 +29,10 @@ public class NegotiationParticipant extends BaseEntity {
     private User user;
 
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "ENUM('STUDENT','TEACHER')", nullable = false)
+    @Column(nullable = false)
     private UserRole role;
 
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "ENUM('JOINED','WITHDRAWN','CONFIRMED')", nullable = false)
+    @Column(nullable = false)
     private NegotiationParticipantStatus status;
 }
