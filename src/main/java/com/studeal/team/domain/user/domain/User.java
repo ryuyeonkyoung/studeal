@@ -9,6 +9,7 @@ import lombok.experimental.SuperBuilder;
 @Entity
 @Table(name = "USERS")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "role", discriminatorType = DiscriminatorType.STRING)
 @Getter
 @Setter
 @NoArgsConstructor
@@ -16,7 +17,8 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "users_seq_gen")
+    @SequenceGenerator(name = "users_seq_gen", sequenceName = "USERS_SEQ", allocationSize = 1)
     private Long userId;
 
     @Column(length = 50, nullable = false)
@@ -30,7 +32,7 @@ public class User {
     private String password;
 
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "ENUM('STUDENT','TEACHER')", nullable = false)
+    @Column(insertable = false, updatable = false)
     private UserRole role;
 
     @Version

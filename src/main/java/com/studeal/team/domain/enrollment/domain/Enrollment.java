@@ -1,6 +1,7 @@
 package com.studeal.team.domain.enrollment.domain;
 
-import com.studeal.team.domain.course.domain.Course;
+import com.studeal.team.domain.lesson.domain.Lesson;
+import com.studeal.team.domain.negotiation.domain.Negotiation;
 import com.studeal.team.global.common.domain.BaseEntity;
 import com.studeal.team.domain.enrollment.enums.EnrollmentStatus;
 import com.studeal.team.global.common.converter.BooleanToYNConverter;
@@ -9,9 +10,14 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
+/**
+ * Negotiation (협상) → 성공 → Enrollment (수강 신청, WAITING) → 충분한 학생 모집 → Lesson (수업 생성) → Enrollment 상태 변경 (CONFIRMED) (협상) → 성공 → Lesson (수업 생성) → Enrollment (수강 등록)
+ */
 @Entity
-@Table(name = "ENROLLMENT")
+@Table(name = "ENROLLMENTS")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -19,7 +25,8 @@ import java.time.LocalDateTime;
 @Builder
 public class Enrollment extends BaseEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "enrollments_seq_gen")
+    @SequenceGenerator(name = "enrollments_seq_gen", sequenceName = "ENROLLMENTS_SEQ", allocationSize = 1)
     private Long enrollmentId;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -27,8 +34,12 @@ public class Enrollment extends BaseEntity {
     private Student student;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "class_id")
-    private Course course;
+    @JoinColumn(name = "negotiation_id")
+    private Negotiation negotiation;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "lesson_id")
+    private Lesson lesson;
 
     @Column(nullable = false)
     private Long paidAmount;
@@ -37,11 +48,11 @@ public class Enrollment extends BaseEntity {
     private LocalDateTime enrolledAt;
 
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "ENUM('WAITING','CONFIRMED')", nullable = false)
+    @Column(nullable = false)
     private EnrollmentStatus status;
 
     @Convert(converter = BooleanToYNConverter.class)
-    @Column(columnDefinition = "CHAR(1)", nullable = false)
+    @Column(nullable = false)
     private Boolean isActive = false;
 
     @Version
