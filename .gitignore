@@ -1,6 +1,9 @@
 # Created by https://www.toptal.com/developers/gitignore/api/java,gradle,intellij,eclipse,macos,windows
 # Edit at https://www.toptal.com/developers/gitignore?templates=java,gradle,intellij,eclipse,macos,windows
 
+***/.gitignore
+***/resources/sql
+
 ### Eclipse ###
 .metadata
 bin/
@@ -72,6 +75,8 @@ local.properties
 # Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
 .idea
 *.iml
+
+**/application.yml
 
 # User-specific stuff
 .idea/**/workspace.xml
