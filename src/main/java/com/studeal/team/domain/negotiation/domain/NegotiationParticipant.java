@@ -1,7 +1,7 @@
 package com.studeal.team.domain.negotiation.domain;
 
 import com.studeal.team.global.common.domain.BaseEntity;
-import com.studeal.team.domain.user.enums.UserRole;
+import com.studeal.team.domain.user.domain.enums.UserRole;
 import com.studeal.team.domain.negotiation.enums.NegotiationParticipantStatus;
 import com.studeal.team.domain.user.domain.User;
 import jakarta.persistence.*;

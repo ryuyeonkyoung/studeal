@@ -1,7 +1,7 @@
 package com.studeal.team.domain.lesson.domain;
 
 import com.studeal.team.global.common.domain.BaseEntity;
-import com.studeal.team.domain.enrollment.enums.AttendanceStatus;
+import com.studeal.team.domain.enrollment.domain.enums.AttendanceStatus;
 import com.studeal.team.domain.user.domain.Student;
 import jakarta.persistence.*;
 import lombok.*;
@@ -38,5 +38,25 @@ public class LessonPresence extends BaseEntity {
 
     @Version
     private Integer version;
+
+    public void setStudent(Student student) {
+        if (this.student != null) {
+            this.student.getLessonPresences().remove(this);
+        }
+        this.student = student;
+        if (student != null && !student.getLessonPresences().contains(this)) {
+            student.getLessonPresences().add(this);
+        }
+    }
+
+    public void setLesson(Lesson lesson) {
+        if (this.lesson != null) {
+            this.lesson.getLessonPresences().remove(this);
+        }
+        this.lesson = lesson;
+        if (lesson != null && !lesson.getLessonPresences().contains(this)) {
+            lesson.getLessonPresences().add(this);
+        }
+    }
 
 }

@@ -3,15 +3,13 @@ package com.studeal.team.domain.enrollment.domain;
 import com.studeal.team.domain.lesson.domain.Lesson;
 import com.studeal.team.domain.negotiation.domain.Negotiation;
 import com.studeal.team.global.common.domain.BaseEntity;
-import com.studeal.team.domain.enrollment.enums.EnrollmentStatus;
+import com.studeal.team.domain.enrollment.domain.enums.EnrollmentStatus;
 import com.studeal.team.global.common.converter.BooleanToYNConverter;
 import com.studeal.team.domain.user.domain.Student;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Negotiation (협상) → 성공 → Enrollment (수강 신청, WAITING) → 충분한 학생 모집 → Lesson (수업 생성) → Enrollment 상태 변경 (CONFIRMED) (협상) → 성공 → Lesson (수업 생성) → Enrollment (수강 등록)

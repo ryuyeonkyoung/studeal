@@ -27,4 +27,24 @@ public class Grade extends BaseEntity {
     private Lesson lesson;
 
     private Float score;
+
+    public void setStudent(Student student) {
+        if (this.student != null) {
+            this.student.getGrades().remove(this);
+        }
+        this.student = student;
+        if (student != null && !student.getGrades().contains(this)) {
+            student.getGrades().add(this);
+        }
+    }
+
+    public void setLesson(Lesson lesson) {
+        if (this.lesson != null) {
+            this.lesson.getGrades().remove(this);
+        }
+        this.lesson = lesson;
+        if (lesson != null && !lesson.getGrades().contains(this)) {
+            lesson.getGrades().add(this);
+        }
+    }
 }

@@ -26,4 +26,14 @@ public class Teacher extends User {
     @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Lesson> lessons = new HashSet<>();
 
+    public void addLesson(Lesson lesson) {
+        this.lessons.add(lesson);
+        lesson.setTeacher(this);
+    }
+
+    public void removeLesson(Lesson lesson) {
+        this.lessons.remove(lesson);
+        lesson.setTeacher(null);
+    }
+
 }
