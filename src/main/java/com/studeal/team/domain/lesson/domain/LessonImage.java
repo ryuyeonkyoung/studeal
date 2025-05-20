@@ -5,8 +5,6 @@ import com.studeal.team.global.common.domain.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDateTime;
-
 @Entity
 @Table(name = "LESSON_FILES")
 @Getter
@@ -14,7 +12,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class LessonFile extends BaseEntity {
+public class LessonImage extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "lesson_files_seq_gen")
     @SequenceGenerator(name = "lesson_files_seq_gen", sequenceName = "LESSON_FILES_SEQ", allocationSize = 1)
@@ -36,4 +34,14 @@ public class LessonFile extends BaseEntity {
     @Convert(converter = BooleanToYNConverter.class)
     @Column(nullable = false, columnDefinition = "CHAR(1) DEFAULT 'N'")
     private Boolean isThumbnail = false;
+
+    public void setLesson(Lesson lesson) {
+        if (this.lesson != null) {
+            this.lesson.getLessonImages().remove(this);
+        }
+        this.lesson = lesson;
+        if (lesson != null) {
+            lesson.getLessonImages().add(this);
+        }
+    }
 }

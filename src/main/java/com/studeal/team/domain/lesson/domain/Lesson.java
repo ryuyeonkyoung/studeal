@@ -32,6 +32,9 @@ public class Lesson extends BaseEntity {
     @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Grade> grades = new HashSet<>();
 
+    @OneToMany
+    private Set<LessonImage> lessonImages = new HashSet<>();
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "teacher_id")
     private Teacher teacher;
@@ -48,4 +51,44 @@ public class Lesson extends BaseEntity {
 
     @Column(nullable = false)
     private Long price;
+
+    public void addEnrollment(Enrollment enrollment) {
+        this.enrollments.add(enrollment);
+        enrollment.setLesson(this);
+    }
+
+    public void removeEnrollment(Enrollment enrollment) {
+        this.enrollments.remove(enrollment);
+        enrollment.setLesson(null);
+    }
+
+    public void addLessonPresence(LessonPresence lessonPresence) {
+        this.lessonPresences.add(lessonPresence);
+        lessonPresence.setLesson(this);
+    }
+
+    public void removeLessonPresence(LessonPresence lessonPresence) {
+        this.lessonPresences.remove(lessonPresence);
+        lessonPresence.setLesson(null);
+    }
+
+    public void addGrade(Grade grade) {
+        this.grades.add(grade);
+        grade.setLesson(this);
+    }
+
+    public void removeGrade(Grade grade) {
+        this.grades.remove(grade);
+        grade.setLesson(null);
+    }
+
+    public void addLessonImage(LessonImage lessonImage) {
+        this.lessonImages.add(lessonImage);
+        lessonImage.setLesson(this);
+    }
+
+    public void removeLessonImage(LessonImage lessonImage) {
+        this.lessonImages.remove(lessonImage);
+        lessonImage.setLesson(null);
+    }
 }
