@@ -19,6 +19,8 @@ public enum ErrorStatus implements BaseErrorCode {
 
     // 도메인 관련 에러
     USER_NOT_FOUND(HttpStatus.BAD_REQUEST, "USER4001", "사용자가 없습니다."),
+    TEACHER_NOT_FOUND(HttpStatus.BAD_REQUEST, "TEACHER4001", "강사가 없습니다."),
+    STUDENT_NOT_FOUND(HttpStatus.BAD_REQUEST, "STUDENT4001", "학생이 없습니다."),
     NICKNAME_NOT_EXIST(HttpStatus.BAD_REQUEST, "MEMBER4002", "닉네임은 필수 입니다."),
 
     COURSE_NOT_FOUND(HttpStatus.BAD_REQUEST, "COURSE4001", "코스가 없습니다."),
@@ -29,7 +31,6 @@ public enum ErrorStatus implements BaseErrorCode {
     NEGOTIATION_NOT_FOUND(HttpStatus.BAD_REQUEST, "NEGOTIATION4001", "협상 정보가 없습니다."),
     NEGOTIATION_ALREADY_ENROLLED(HttpStatus.BAD_REQUEST, "NEGOTIATION4002", "이미 수강중인 협상입니다."),
     NEGOTIATION_ALREADY_ENROLLED_BY_ANOTHER_USER(HttpStatus.BAD_REQUEST, "NEGOTIATION4003", "다른 사용자가 수강중인 협상입니다."),
-
     // 예시,,,
     ARTICLE_NOT_FOUND(HttpStatus.NOT_FOUND, "ARTICLE4001", "게시글이 없습니다."),
     // For test
