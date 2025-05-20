@@ -1,7 +1,7 @@
 package com.studeal.team.domain.lesson.domain;
 
 import com.studeal.team.global.common.domain.BaseEntity;
-import com.studeal.team.domain.enrollment.enums.AttendanceStatus;
+import com.studeal.team.domain.enrollment.domain.enums.AttendanceStatus;
 import com.studeal.team.domain.user.domain.Student;
 import jakarta.persistence.*;
 import lombok.*;
