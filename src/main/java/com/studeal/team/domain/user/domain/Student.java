@@ -28,4 +28,24 @@ public class Student extends User {
 
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Grade> grades = new HashSet<>();
+
+    public void addLessonPresence(LessonPresence lessonPresence) {
+        this.lessonPresences.add(lessonPresence);
+        lessonPresence.setStudent(this);
+    }
+
+    public void removeLessonPresence(LessonPresence lessonPresence) {
+        this.lessonPresences.remove(lessonPresence);
+        lessonPresence.setStudent(null);
+    }
+
+    public void addGrade(Grade grade) {
+        this.grades.add(grade);
+        grade.setStudent(this);
+    }
+
+    public void removeGrade(Grade grade) {
+        this.grades.remove(grade);
+        grade.setStudent(null);
+    }
 }
