@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "LESSON_PRESENCES")
@@ -30,7 +31,7 @@ public class LessonPresence extends BaseEntity {
     private Lesson lesson;
 
     @Column(nullable = false)
-    private LocalDate attendanceDate;
+    private LocalDateTime attendanceDate;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
