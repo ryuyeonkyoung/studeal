@@ -23,7 +23,7 @@ public class Lesson extends BaseEntity {
     @SequenceGenerator(name = "lessons_seq_gen", sequenceName = "LESSONS_SEQ", allocationSize = 1)
     private Long lessonId;
 
-    @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL)
     private Set<Enrollment> enrollments = new HashSet<>();
 
     @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL, orphanRemoval = true)
