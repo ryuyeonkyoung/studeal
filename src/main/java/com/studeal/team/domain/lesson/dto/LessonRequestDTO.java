@@ -7,7 +7,6 @@ import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 
-import java.time.LocalDate;
 import java.util.List;
 
 public class LessonRequestDTO {
@@ -18,18 +17,17 @@ public class LessonRequestDTO {
         @Size(max = 200)
         private String title;
 
-        @NotBlank
+        @NotNull
         private Long teacherId;
+
+        @NotNull
+        private Long negotiationId;
 
         @ExistStudents
         private List<Long> studentIds;
 
-        @NotBlank
         @Size(max = 1000)
         private String description;
-
-        @NotBlank
-        private LocalDate lessonDate;
 
         @NotNull
         @Positive

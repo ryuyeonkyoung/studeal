@@ -8,19 +8,20 @@ import com.studeal.team.domain.lesson.domain.Lesson;
 import com.studeal.team.domain.lesson.domain.LessonPresence;
 import com.studeal.team.domain.enrollment.domain.Enrollment;
 import com.studeal.team.domain.lesson.dao.LessonRepository;
+import com.studeal.team.domain.negotiation.dao.NegotiationRepository;
+import com.studeal.team.domain.negotiation.domain.Negotiation;
 import com.studeal.team.domain.user.dao.TeacherRepository;
 import com.studeal.team.domain.user.dao.StudentRepository;
 import com.studeal.team.domain.user.domain.Teacher;
 import com.studeal.team.domain.user.domain.Student;
 import com.studeal.team.global.error.code.status.ErrorStatus;
-import com.studeal.team.global.error.exception.handler.TeacherHandler;
-import com.studeal.team.global.error.exception.handler.StudentHandler;
+import com.studeal.team.global.error.exception.handler.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -29,6 +30,7 @@ public class LessonService {
     private final LessonRepository lessonRepository;
     private final TeacherRepository teacherRepository;
     private final StudentRepository studentRepository;
+    private final NegotiationRepository negotiationRepository;
 
     @Transactional
     public Lesson createLesson(LessonRequestDTO.CreateRequest request) {
@@ -39,18 +41,28 @@ public class LessonService {
                 .orElseThrow(() -> new TeacherHandler(ErrorStatus.TEACHER_NOT_FOUND));
         newLesson.setTeacher(teacher);
 
+        // 협상 정보 연관관계 매핑
+        Negotiation negotiation = negotiationRepository.findById(request.getNegotiationId())
+                .orElseThrow(() -> new NegotiationHandler(ErrorStatus.NEGOTIATION_NOT_FOUND));
+        newLesson.setNegotiation(negotiation);
+
+        // 현재 시간 설정
+        LocalDateTime currentDate = LocalDateTime.now();
+
         // 수강신청 연관관계 매핑
         List<Enrollment> enrollments = request.getStudentIds().stream()
                 .map(studentId -> {
                     Student student = studentRepository.findById(studentId)
-                            .orElseThrow(() -> new StudentHandler(ErrorStatus.STUDENT_NOT_FOUND));
+                            .orElseThrow(() -> new EnrollmentHandler(ErrorStatus.STUDENT_NOT_FOUND));
 
                     return Enrollment.builder()
                             .student(student)
                             .lesson(newLesson)
+                            .negotiation(negotiation)
                             .paidAmount(request.getPrice())
                             .status(EnrollmentStatus.WAITING)
                             .isActive(true)
+                            .enrolledAt(currentDate)
                             .build();
                 }).toList();
 
@@ -64,7 +76,7 @@ public class LessonService {
                             .student(student)
                             .lesson(newLesson)
                             .status(AttendanceStatus.ABSENT)
-                            .attendanceDate(request.getLessonDate())
+                            .attendanceDate(currentDate)
                             .build();
                 }).toList();
 
@@ -74,3 +86,4 @@ public class LessonService {
         return lessonRepository.save(newLesson);
     }
 }
+
