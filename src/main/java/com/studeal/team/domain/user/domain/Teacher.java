@@ -1,6 +1,7 @@
 package com.studeal.team.domain.user.domain;
 
 import com.studeal.team.domain.lesson.domain.Lesson;
+import com.studeal.team.domain.user.domain.enums.MajorSubject;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -17,8 +18,8 @@ import java.util.Set;
 @SuperBuilder
 public class Teacher extends User {
 
-    @Column(length = 1000)
-    private String bio;
+    @Enumerated(EnumType.STRING)
+    private MajorSubject major;
 
     @Column
     private Float rating;

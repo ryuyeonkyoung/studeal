@@ -18,11 +18,6 @@ import java.util.Set;
 @SuperBuilder
 public class Student extends User {
 
-    @Column(length = 100)
-    private String major;
-
-    private Integer gradeLevel;
-
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<LessonPresence> lessonPresences = new HashSet<>();
 
@@ -49,3 +44,4 @@ public class Student extends User {
         grade.setStudent(null);
     }
 }
+
