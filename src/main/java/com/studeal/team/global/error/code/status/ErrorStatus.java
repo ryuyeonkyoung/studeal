@@ -23,6 +23,13 @@ public enum ErrorStatus implements BaseErrorCode {
     STUDENT_NOT_FOUND(HttpStatus.BAD_REQUEST, "STUDENT4001", "학생이 없습니다."),
     NICKNAME_NOT_EXIST(HttpStatus.BAD_REQUEST, "MEMBER4002", "닉네임은 필수 입니다."),
 
+    // Lesson 관련 에러
+    LESSON_NOT_FOUND(HttpStatus.BAD_REQUEST, "LESSON4001", "수업이 존재하지 않습니다."),
+    LESSON_TITLE_EMPTY(HttpStatus.BAD_REQUEST, "LESSON4002", "수업 제목은 필수입니다."),
+    LESSON_TEACHER_NOT_FOUND(HttpStatus.BAD_REQUEST, "LESSON4003", "강사 정보가 필요합니다."),
+    LESSON_STUDENTS_EMPTY(HttpStatus.BAD_REQUEST, "LESSON4004", "최소 한 명 이상의 학생이 필요합니다."),
+    LESSON_PRICE_INVALID(HttpStatus.BAD_REQUEST, "LESSON4005", "유효한 수업 가격이 필요합니다."),
+
     COURSE_NOT_FOUND(HttpStatus.BAD_REQUEST, "COURSE4001", "코스가 없습니다."),
     COURSE_NOT_ENOUGH(HttpStatus.BAD_REQUEST, "COURSE4002", "코스가 부족합니다."),
     COURSE_ALREADY_ENROLLED(HttpStatus.BAD_REQUEST, "COURSE4003", "이미 수강중인 코스입니다."),
