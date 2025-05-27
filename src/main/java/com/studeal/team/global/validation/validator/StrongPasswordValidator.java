@@ -3,9 +3,13 @@ package com.studeal.team.global.validation.validator;
 import com.studeal.team.global.validation.annotation.StrongPassword;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
 import java.util.regex.Pattern;
 
+@Component
+@RequiredArgsConstructor
 public class StrongPasswordValidator implements ConstraintValidator<StrongPassword, String> {
 
     private static final String PASSWORD_PATTERN =
