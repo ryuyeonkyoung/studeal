@@ -6,7 +6,9 @@ import com.studeal.team.global.validation.annotation.UniqueEmail;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
+@Component
 @RequiredArgsConstructor
 public class UniqueEmailValidator implements ConstraintValidator<UniqueEmail, String> {
 
@@ -19,13 +21,13 @@ public class UniqueEmailValidator implements ConstraintValidator<UniqueEmail, St
             // null 체크는 @NotBlank 또는 @NotNull이 처리하도록 함
             return true;
         }
-        
+
         // 학생 중에서 이메일 중복 확인
         boolean studentExists = studentRepository.findByEmail(email).isPresent();
         if (studentExists) {
             return false;
         }
-        
+
         // 강사 중에서 이메일 중복 확인
         boolean teacherExists = teacherRepository.findByEmail(email).isPresent();
         return !teacherExists;
