@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -47,7 +48,8 @@ public class LessonService {
         newLesson.setNegotiation(negotiation);
 
         // 현재 시간 설정
-        LocalDateTime currentDate = LocalDateTime.now();
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        LocalDate currentDate = currentDateTime.toLocalDate();
 
         // 수강신청 연관관계 매핑
         List<Enrollment> enrollments = request.getStudentIds().stream()
@@ -62,7 +64,7 @@ public class LessonService {
                             .paidAmount(request.getPrice())
                             .status(EnrollmentStatus.WAITING)
                             .isActive(true)
-                            .enrolledAt(currentDate)
+                            .enrolledAt(currentDateTime)
                             .build();
                 }).toList();
 

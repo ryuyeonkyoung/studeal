@@ -31,7 +31,7 @@ public class LessonPresence extends BaseEntity {
     private Lesson lesson;
 
     @Column(nullable = false)
-    private LocalDateTime attendanceDate;
+    private LocalDate attendanceDate;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -61,3 +61,4 @@ public class LessonPresence extends BaseEntity {
     }
 
 }
+
