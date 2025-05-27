@@ -19,6 +19,12 @@ public enum ErrorStatus implements BaseErrorCode {
 
     // 도메인 관련 에러
     USER_NOT_FOUND(HttpStatus.BAD_REQUEST, "USER4001", "사용자가 없습니다."),
+    USER_DUPLICATE_EMAIL(HttpStatus.BAD_REQUEST, "USER4002", "이미 등록된 이메일입니다."),
+    USER_INVALID_ROLE(HttpStatus.BAD_REQUEST, "USER4003", "유효하지 않은 사용자 역할입니다."),
+    USER_INVALID_PASSWORD(HttpStatus.BAD_REQUEST, "USER4004", "유효하지 않은 비밀번호 형식입니다."),
+    USER_NAME_EMPTY(HttpStatus.BAD_REQUEST, "USER4005", "이름은 필수입니다."),
+    USER_EMAIL_INVALID(HttpStatus.BAD_REQUEST, "USER4006", "유효한 이메일 형식이 아닙니다."),
+
     TEACHER_NOT_FOUND(HttpStatus.BAD_REQUEST, "TEACHER4001", "강사가 없습니다."),
     STUDENT_NOT_FOUND(HttpStatus.BAD_REQUEST, "STUDENT4001", "학생이 없습니다."),
     NICKNAME_NOT_EXIST(HttpStatus.BAD_REQUEST, "MEMBER4002", "닉네임은 필수 입니다."),
@@ -37,11 +43,7 @@ public enum ErrorStatus implements BaseErrorCode {
 
     NEGOTIATION_NOT_FOUND(HttpStatus.BAD_REQUEST, "NEGOTIATION4001", "협상 정보가 없습니다."),
     NEGOTIATION_ALREADY_ENROLLED(HttpStatus.BAD_REQUEST, "NEGOTIATION4002", "이미 수강중인 협상입니다."),
-    NEGOTIATION_ALREADY_ENROLLED_BY_ANOTHER_USER(HttpStatus.BAD_REQUEST, "NEGOTIATION4003", "다른 사용자가 수강중인 협상입니다."),
-    // 예시,,,
-    ARTICLE_NOT_FOUND(HttpStatus.NOT_FOUND, "ARTICLE4001", "게시글이 없습니다."),
-    // For test
-    TEMP_EXCEPTION(HttpStatus.BAD_REQUEST, "TEMP4001", "이거는 테스트");
+    NEGOTIATION_ALREADY_ENROLLED_BY_ANOTHER_USER(HttpStatus.BAD_REQUEST, "NEGOTIATION4003", "다른 사용자가 수강중인 협상입니다.");
 
     private final HttpStatus httpStatus;
     private final String code;
@@ -67,3 +69,4 @@ public enum ErrorStatus implements BaseErrorCode {
                 ;
     }
 }
+

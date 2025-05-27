@@ -21,6 +21,9 @@ public class User {
     @SequenceGenerator(name = "users_seq_gen", sequenceName = "USERS_SEQ", allocationSize = 1)
     private Long userId;
 
+    @Column(length = 1000)
+    private String bio;
+
     @Column(length = 50, nullable = false)
     private String name;
 
@@ -28,13 +31,14 @@ public class User {
     @Column(length = 100, nullable = false, unique = true)
     private String email;
 
-    @Column(length = 255, nullable = false)
+    @Column(nullable = false)
     private String password;
 
     @Enumerated(EnumType.STRING)
-    @Column(insertable = false, updatable = false)
+    @Column(name = "role", insertable = false, updatable = false)
     private UserRole role;
 
     @Version
     private Integer version;
 }
+
