@@ -277,6 +277,11 @@ $RECYCLE.BIN/
 **/build/
 !src/**/build/
 
+# Swagger/OpenAPI files
+!build/generated/
+!build/generated/openapi/
+!build/generated/openapi/**
+
 # Ignore Gradle GUI config
 gradle-app.setting
 
