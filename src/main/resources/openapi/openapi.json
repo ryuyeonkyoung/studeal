@@ -21,6 +21,10 @@
       "description": "회원가입 및 로그인 관련 API"
     },
     {
+      "name": "게시판 API",
+      "description": "과외 모집 게시판 관련 API"
+    },
+    {
       "name": "수업",
       "description": "수업 관련 API"
     }
@@ -36,7 +40,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateRequest"
+                "$ref": "#/components/schemas/com.studeal.team.domain.negotiation.dto.NegotiationRequestDTO$CreateRequest"
               }
             }
           },
@@ -48,7 +52,7 @@
             "content": {
               "*/*": {
                 "schema": {
-                  "$ref": "#/components/schemas/NegotiationResponseDTO"
+                  "$ref": "#/components/schemas/com.studeal.team.domain.negotiation.dto.NegotiationResponseDTO"
                 }
               }
             }
@@ -68,7 +72,121 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateRequest"
+                "$ref": "#/components/schemas/com.studeal.team.domain.lesson.dto.LessonRequestDTO$CreateRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "LESSON4003": {
+            "description": "강사 정보가 필요합니다.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
+                }
+              }
+            }
+          },
+          "COMMON200": {
+            "description": "OK, 성공",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponseCom.studeal.team.domain.lesson.dto.LessonResponseDTO$CreateResponse"
+                }
+              }
+            }
+          },
+          "LESSON4004": {
+            "description": "최소 한 명 이상의 학생이 필요합니다.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
+                }
+              }
+            }
+          },
+          "LESSON4001": {
+            "description": "수업이 존재하지 않습니다.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
+                }
+              }
+            }
+          },
+          "LESSON4005": {
+            "description": "유효한 수업 가격이 필요합니다.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
+                }
+              }
+            }
+          },
+          "LESSON4002": {
+            "description": "수업 제목은 필수입니다.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
+                }
+              }
+            }
+          },
+          "STUDENT4001": {
+            "description": "학생이 존재하지 않습니다.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
+                }
+              }
+            }
+          },
+          "TEACHER4001": {
+            "description": "강사가 존재하지 않습니다.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/studeal/boards/teachers/{teacherId}": {
+      "post": {
+        "tags": [
+          "게시판 API"
+        ],
+        "summary": "게시글 생성",
+        "description": "선생님이 과외 모집 게시글을 작성합니다.",
+        "operationId": "createBoard",
+        "parameters": [
+          {
+            "name": "teacherId",
+            "in": "path",
+            "description": "선생님 ID",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/com.studeal.team.domain.board.dto.BoardRequestDTO$CreateRequest"
               }
             }
           },
@@ -80,77 +198,27 @@
             "content": {
               "*/*": {
                 "schema": {
-                  "$ref": "#/components/schemas/ApiResponseCreateResponse"
-                }
-              }
-            }
-          },
-          "LESSON4001": {
-            "description": "수업이 존재하지 않습니다.",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiResponse"
-                }
-              }
-            }
-          },
-          "LESSON4005": {
-            "description": "유효한 수업 가격이 필요합니다.",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiResponse"
-                }
-              }
-            }
-          },
-          "STUDENT4001": {
-            "description": "학생이 존재하지 않습니다.",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiResponse"
-                }
-              }
-            }
-          },
-          "LESSON4003": {
-            "description": "강사 정보가 필요합니다.",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiResponse"
-                }
-              }
-            }
-          },
-          "LESSON4004": {
-            "description": "최소 한 명 이상의 학생이 필요합니다.",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiResponse"
-                }
-              }
-            }
-          },
-          "LESSON4002": {
-            "description": "수업 제목은 필수입니다.",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiResponse"
+                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponseBoardDetailResponse"
                 }
               }
             }
           },
           "TEACHER4001": {
-            "description": "강사가 존재하지 않습니다.",
+            "description": "선생님을 찾을 수 없습니다.",
             "content": {
               "*/*": {
                 "schema": {
-                  "$ref": "#/components/schemas/ApiResponse"
+                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
+                }
+              }
+            }
+          },
+          "BOARD4001": {
+            "description": "게시글을 찾을 수 없습니다.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
                 }
               }
             }
@@ -170,29 +238,29 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/SignupRequest"
+                "$ref": "#/components/schemas/com.studeal.team.domain.user.dto.UserRequestDTO$SignupRequest"
               }
             }
           },
           "required": true
         },
         "responses": {
+          "USER4005": {
+            "description": "이름은 필수입니다.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
+                }
+              }
+            }
+          },
           "COMMON200": {
             "description": "OK, 성공",
             "content": {
               "*/*": {
                 "schema": {
-                  "$ref": "#/components/schemas/ApiResponseUserResponseDTO"
-                }
-              }
-            }
-          },
-          "USER4002": {
-            "description": "이미 등록된 이메일입니다.",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiResponse"
+                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponseCom.studeal.team.domain.user.dto.UserResponseDTO"
                 }
               }
             }
@@ -202,7 +270,17 @@
             "content": {
               "*/*": {
                 "schema": {
-                  "$ref": "#/components/schemas/ApiResponse"
+                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
+                }
+              }
+            }
+          },
+          "USER4002": {
+            "description": "이미 등록된 이메일입니다.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
                 }
               }
             }
@@ -212,17 +290,7 @@
             "content": {
               "*/*": {
                 "schema": {
-                  "$ref": "#/components/schemas/ApiResponse"
-                }
-              }
-            }
-          },
-          "USER4005": {
-            "description": "이름은 필수입니다.",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiResponse"
+                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
                 }
               }
             }
@@ -232,7 +300,7 @@
             "content": {
               "*/*": {
                 "schema": {
-                  "$ref": "#/components/schemas/ApiResponse"
+                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
                 }
               }
             }
@@ -243,7 +311,7 @@
   },
   "components": {
     "schemas": {
-      "CreateRequest": {
+      "com.studeal.team.domain.negotiation.dto.NegotiationRequestDTO$CreateRequest": {
         "required": [
           "proposedPrice",
           "studentId",
@@ -268,7 +336,7 @@
           }
         }
       },
-      "NegotiationResponseDTO": {
+      "com.studeal.team.domain.negotiation.dto.NegotiationResponseDTO": {
         "type": "object",
         "properties": {
           "negotiationId": {
@@ -297,7 +365,47 @@
           }
         }
       },
-      "ApiResponse": {
+      "com.studeal.team.domain.lesson.dto.LessonRequestDTO$CreateRequest": {
+        "required": [
+          "negotiationId",
+          "price",
+          "teacherId",
+          "title"
+        ],
+        "type": "object",
+        "properties": {
+          "title": {
+            "maxLength": 200,
+            "minLength": 0,
+            "type": "string"
+          },
+          "teacherId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "negotiationId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "studentIds": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          "description": {
+            "maxLength": 1000,
+            "minLength": 0,
+            "type": "string"
+          },
+          "price": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "com.studeal.team.global.error.ApiResponse": {
         "type": "object",
         "properties": {
           "isSuccess": {
@@ -314,24 +422,7 @@
           }
         }
       },
-      "ApiResponseCreateResponse": {
-        "type": "object",
-        "properties": {
-          "isSuccess": {
-            "type": "boolean"
-          },
-          "code": {
-            "type": "string"
-          },
-          "message": {
-            "type": "string"
-          },
-          "result": {
-            "$ref": "#/components/schemas/CreateResponse"
-          }
-        }
-      },
-      "CreateResponse": {
+      "com.studeal.team.domain.lesson.dto.LessonResponseDTO$CreateResponse": {
         "type": "object",
         "properties": {
           "lessonId": {
@@ -350,7 +441,165 @@
           }
         }
       },
-      "SignupRequest": {
+      "com.studeal.team.global.error.ApiResponseCom.studeal.team.domain.lesson.dto.LessonResponseDTO$CreateResponse": {
+        "type": "object",
+        "properties": {
+          "isSuccess": {
+            "type": "boolean"
+          },
+          "code": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "result": {
+            "$ref": "#/components/schemas/com.studeal.team.domain.lesson.dto.LessonResponseDTO$CreateResponse"
+          }
+        }
+      },
+      "com.studeal.team.domain.board.dto.BoardRequestDTO$CreateRequest": {
+        "required": [
+          "major",
+          "startPrice",
+          "subject",
+          "title"
+        ],
+        "type": "object",
+        "properties": {
+          "title": {
+            "maxLength": 200,
+            "minLength": 0,
+            "type": "string",
+            "description": "게시글 제목",
+            "example": "고등 수학 과외 모집합니다"
+          },
+          "content": {
+            "maxLength": 2000,
+            "minLength": 0,
+            "type": "string",
+            "description": "게시글 내용",
+            "example": "수학 전공 대학생이 수학 과외를 모집합니다. 문제 풀이 및 개념 설명에 능숙합니다."
+          },
+          "major": {
+            "type": "string",
+            "description": "과외 과목",
+            "example": "MATH",
+            "enum": [
+              "MATH",
+              "SCIENCE",
+              "ENGLISH",
+              "KOREAN",
+              "HISTORY",
+              "CODING"
+            ]
+          },
+          "startPrice": {
+            "type": "integer",
+            "description": "시작 수업 가격",
+            "format": "int64",
+            "example": 50000
+          },
+          "subject": {
+            "maxLength": 100,
+            "minLength": 0,
+            "type": "string",
+            "description": "수업 주제",
+            "example": "고등 수학 - 미적분"
+          }
+        },
+        "description": "게시글 생성 요청"
+      },
+      "BoardDetailResponse": {
+        "type": "object",
+        "properties": {
+          "boardId": {
+            "type": "integer",
+            "description": "게시글 ID",
+            "format": "int64",
+            "example": 1
+          },
+          "title": {
+            "type": "string",
+            "description": "게시글 제목",
+            "example": "고등 수학 과외 모집합니다"
+          },
+          "content": {
+            "type": "string",
+            "description": "게시글 내용",
+            "example": "수학 전공 대학생이 수학 과외를 모집합니다. 문제 풀이 및 개념 설명에 능숙합니다."
+          },
+          "teacherId": {
+            "type": "integer",
+            "description": "선생님 ID",
+            "format": "int64",
+            "example": 1
+          },
+          "teacherName": {
+            "type": "string",
+            "description": "선생님 이름",
+            "example": "김선생"
+          },
+          "major": {
+            "type": "string",
+            "description": "게시글 유형",
+            "example": "MATH",
+            "enum": [
+              "MATH",
+              "SCIENCE",
+              "ENGLISH",
+              "KOREAN",
+              "HISTORY",
+              "CODING"
+            ]
+          },
+          "expectedPrice": {
+            "type": "integer",
+            "description": "예상 수업 가격",
+            "format": "int64",
+            "example": 50000
+          },
+          "specMajor": {
+            "type": "string",
+            "description": "구체적인 과외 주제",
+            "example": "고등 수학 - 미적분"
+          },
+          "createdAt": {
+            "type": "string",
+            "description": "생성 일시",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "description": "수정 일시",
+            "format": "date-time"
+          },
+          "thumbnailUrl": {
+            "type": "string",
+            "description": "썸네일 이미지 URL",
+            "example": "/images/thumbnails/math-123.jpg"
+          }
+        },
+        "description": "게시글 상세 응답"
+      },
+      "com.studeal.team.global.error.ApiResponseBoardDetailResponse": {
+        "type": "object",
+        "properties": {
+          "isSuccess": {
+            "type": "boolean"
+          },
+          "code": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "result": {
+            "$ref": "#/components/schemas/BoardDetailResponse"
+          }
+        }
+      },
+      "com.studeal.team.domain.user.dto.UserRequestDTO$SignupRequest": {
         "required": [
           "email",
           "name",
@@ -399,24 +648,7 @@
           }
         }
       },
-      "ApiResponseUserResponseDTO": {
-        "type": "object",
-        "properties": {
-          "isSuccess": {
-            "type": "boolean"
-          },
-          "code": {
-            "type": "string"
-          },
-          "message": {
-            "type": "string"
-          },
-          "result": {
-            "$ref": "#/components/schemas/UserResponseDTO"
-          }
-        }
-      },
-      "UserResponseDTO": {
+      "com.studeal.team.domain.user.dto.UserResponseDTO": {
         "type": "object",
         "properties": {
           "userId": {
@@ -449,6 +681,23 @@
               "HISTORY",
               "CODING"
             ]
+          }
+        }
+      },
+      "com.studeal.team.global.error.ApiResponseCom.studeal.team.domain.user.dto.UserResponseDTO": {
+        "type": "object",
+        "properties": {
+          "isSuccess": {
+            "type": "boolean"
+          },
+          "code": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "result": {
+            "$ref": "#/components/schemas/com.studeal.team.domain.user.dto.UserResponseDTO"
           }
         }
       }
