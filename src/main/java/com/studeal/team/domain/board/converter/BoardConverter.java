@@ -1,7 +1,7 @@
 package com.studeal.team.domain.board.converter;
 
-import com.studeal.team.domain.board.domain.Board;
-import com.studeal.team.domain.board.domain.BoardFile;
+import com.studeal.team.domain.board.domain.AuctionBoard;
+import com.studeal.team.domain.board.domain.AuctionBoardFile;
 import com.studeal.team.domain.board.dto.BoardRequestDTO;
 import com.studeal.team.domain.board.dto.BoardResponseDTO;
 import com.studeal.team.domain.user.domain.Teacher;
@@ -17,28 +17,28 @@ import java.util.stream.Collectors;
 public class BoardConverter {
 
     /**
-     * Board 엔티티를 DetailResponse DTO로 변환
+     * AuctionBoard 엔티티를 DetailResponse DTO로 변환
      */
-    public static BoardResponseDTO.DetailResponse toDetailResponse(Board board) {
+    public static BoardResponseDTO.DetailResponse toDetailResponse(AuctionBoard auctionBoard) {
         BoardResponseDTO.DetailResponse.DetailResponseBuilder builder = BoardResponseDTO.DetailResponse.builder()
-                .boardId(board.getBoardId())
-                .title(board.getTitle())
-                .content(board.getContent())
-                .major(board.getMajor())
-                .expectedPrice(board.getExpectedPrice())
-                .specMajor(board.getSpecMajor())
-                .createdAt(board.getCreatedAt())
-                .updatedAt(board.getUpdatedAt());
+                .boardId(auctionBoard.getBoardId())
+                .title(auctionBoard.getTitle())
+                .content(auctionBoard.getContent())
+                .major(auctionBoard.getMajor())
+                .expectedPrice(auctionBoard.getExpectedPrice())
+                .specMajor(auctionBoard.getSpecMajor())
+                .createdAt(auctionBoard.getCreatedAt())
+                .updatedAt(auctionBoard.getUpdatedAt());
 
         // 선생님 정보 세팅 - User 클래스에서 상속받은 필드를 사용
-        if (board.getTeacher() != null) {
-            builder.teacherId(board.getTeacher().getUserId())
-                   .teacherName(board.getTeacher().getName());
+        if (auctionBoard.getTeacher() != null) {
+            builder.teacherId(auctionBoard.getTeacher().getUserId())
+                   .teacherName(auctionBoard.getTeacher().getName());
         }
 
         // 썸네일 이미지가 있는 경우 URL 세팅
-        board.getFiles().stream()
-            .filter(BoardFile::getIsThumbnail)
+        auctionBoard.getFiles().stream()
+            .filter(AuctionBoardFile::getIsThumbnail)
             .findFirst()
             .ifPresent(file -> builder.thumbnailUrl(file.getFilePath()));
 
@@ -46,25 +46,25 @@ public class BoardConverter {
     }
 
     /**
-     * Board 엔티티를 ListItemResponse DTO로 변환
+     * AuctionBoard 엔티티를 ListItemResponse DTO로 변환
      */
-    public static BoardResponseDTO.ListItemResponse toListItemResponse(Board board) {
+    public static BoardResponseDTO.ListItemResponse toListItemResponse(AuctionBoard auctionBoard) {
         BoardResponseDTO.ListItemResponse.ListItemResponseBuilder builder = BoardResponseDTO.ListItemResponse.builder()
-                .boardId(board.getBoardId())
-                .title(board.getTitle())
-                .major(board.getMajor())
-                .expectedPrice(board.getExpectedPrice())
-                .specMajor(board.getSpecMajor())
-                .createdAt(board.getCreatedAt());
+                .boardId(auctionBoard.getBoardId())
+                .title(auctionBoard.getTitle())
+                .major(auctionBoard.getMajor())
+                .expectedPrice(auctionBoard.getExpectedPrice())
+                .specMajor(auctionBoard.getSpecMajor())
+                .createdAt(auctionBoard.getCreatedAt());
 
         // 선생님 정보 세팅 - User 클래스에서 상속받은 필드를 사용
-        if (board.getTeacher() != null) {
-            builder.teacherName(board.getTeacher().getName());
+        if (auctionBoard.getTeacher() != null) {
+            builder.teacherName(auctionBoard.getTeacher().getName());
         }
 
         // 썸네일 이미지가 있는 경우 URL 세팅
-        board.getFiles().stream()
-            .filter(BoardFile::getIsThumbnail)
+        auctionBoard.getFiles().stream()
+            .filter(AuctionBoardFile::getIsThumbnail)
             .findFirst()
             .ifPresent(file -> builder.thumbnailUrl(file.getFilePath()));
 
@@ -72,9 +72,9 @@ public class BoardConverter {
     }
 
     /**
-     * Board Page 객체를 PageResponse DTO로 변환
+     * AuctionBoard Page 객체를 PageResponse DTO로 변환
      */
-    public static BoardResponseDTO.PageResponse toPageResponse(Page<Board> boardPage) {
+    public static BoardResponseDTO.PageResponse toPageResponse(Page<AuctionBoard> boardPage) {
         List<BoardResponseDTO.ListItemResponse> boardDtos = boardPage.getContent().stream()
                 .map(BoardConverter::toListItemResponse)
                 .collect(Collectors.toList());
@@ -91,10 +91,10 @@ public class BoardConverter {
     }
 
     /**
-     * CreateRequest DTO와 Teacher 엔티티로 Board 엔티티 생성
+     * CreateRequest DTO와 Teacher 엔티티로 AuctionBoard 엔티티 생성
      */
-    public static Board toEntity(BoardRequestDTO.CreateRequest request, Teacher teacher) {
-        return Board.builder()
+    public static AuctionBoard toEntity(BoardRequestDTO.CreateRequest request, Teacher teacher) {
+        return AuctionBoard.builder()
                 .title(request.getTitle())
                 .content(request.getContent())
                 .teacher(teacher)
@@ -106,17 +106,17 @@ public class BoardConverter {
     }
 
     /**
-     * UpdateRequest DTO로 Board 엔티티 업데이트
+     * UpdateRequest DTO로 AuctionBoard 엔티티 업데이트
      */
-    public static void updateEntity(Board board, BoardRequestDTO.UpdateRequest request) {
-        board.setTitle(request.getTitle());
-        board.setContent(request.getContent());
-        board.setMajor(request.getMajor());
-        board.setExpectedPrice(request.getExpectedPrice());
-        board.setSpecMajor(request.getSubject());
+    public static void updateEntity(AuctionBoard auctionBoard, BoardRequestDTO.UpdateRequest request) {
+        auctionBoard.setTitle(request.getTitle());
+        auctionBoard.setContent(request.getContent());
+        auctionBoard.setMajor(request.getMajor());
+        auctionBoard.setExpectedPrice(request.getExpectedPrice());
+        auctionBoard.setSpecMajor(request.getSubject());
 
-        if (board.getFiles() == null) {
-            board.setFiles(new ArrayList<>());
+        if (auctionBoard.getFiles() == null) {
+            auctionBoard.setFiles(new ArrayList<>());
         }
     }
 }
