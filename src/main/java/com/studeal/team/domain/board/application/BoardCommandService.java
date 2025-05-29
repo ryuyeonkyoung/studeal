@@ -34,6 +34,7 @@ public class BoardCommandService {
      * @param request 게시글 요청 DTO
      * @return 생성된 게시글 응답 DTO
      */
+    // TODO: JPA 성능 최적화 필요 - N+1 문제 고려
     public BoardResponseDTO.DetailResponse createBoard(Long teacherId, BoardRequestDTO.CreateRequest request) {
         // 선생님 정보 조회
         Teacher teacher = teacherRepository.findById(teacherId)
