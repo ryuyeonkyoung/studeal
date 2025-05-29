@@ -30,6 +30,142 @@
     }
   ],
   "paths": {
+    "/studeal/boards/{boardId}/teachers/{teacherId}": {
+      "put": {
+        "tags": [
+          "게시판 API"
+        ],
+        "summary": "게시글 수정",
+        "description": "과외 모집 게시글을 수정합니다. 본인이 작성한 게시글만 수정 가능합니다.",
+        "operationId": "updateBoard",
+        "parameters": [
+          {
+            "name": "boardId",
+            "in": "path",
+            "description": "게시글 ID",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "teacherId",
+            "in": "path",
+            "description": "선생님 ID",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BoardUpdateRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "COMMON200": {
+            "description": "OK, 성공",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponseBoardDetailResponse"
+                }
+              }
+            }
+          },
+          "BOARD4003": {
+            "description": "게시글 수정 권한이 없습니다.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
+                }
+              }
+            }
+          },
+          "BOARD4001": {
+            "description": "게시글을 찾을 수 없습니다.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "게시판 API"
+        ],
+        "summary": "게시글 삭제",
+        "description": "선생님이 작성한 과외 모집 게시글을 삭제합니다.",
+        "operationId": "deleteBoard",
+        "parameters": [
+          {
+            "name": "boardId",
+            "in": "path",
+            "description": "게시글 ID",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "teacherId",
+            "in": "path",
+            "description": "선생님 ID",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "BOARD4002": {
+            "description": "게시글 작성자만 삭제할 수 있습니다.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
+                }
+              }
+            }
+          },
+          "COMMON200": {
+            "description": "OK, 성공",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponseJava.lang.Object"
+                }
+              }
+            }
+          },
+          "BOARD4001": {
+            "description": "게시글을 찾을 수 없습니다.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/studeal/negotiations": {
       "post": {
         "tags": [
@@ -79,8 +215,8 @@
           "required": true
         },
         "responses": {
-          "LESSON4005": {
-            "description": "유효한 수업 가격이 필요합니다.",
+          "TEACHER4001": {
+            "description": "강사가 존재하지 않습니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -95,36 +231,6 @@
               "*/*": {
                 "schema": {
                   "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponseCom.studeal.team.domain.lesson.dto.LessonResponseDTO$CreateResponse"
-                }
-              }
-            }
-          },
-          "LESSON4001": {
-            "description": "수업이 존재하지 않습니다.",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
-                }
-              }
-            }
-          },
-          "LESSON4004": {
-            "description": "최소 한 명 이상의 학생이 필요합니다.",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
-                }
-              }
-            }
-          },
-          "STUDENT4001": {
-            "description": "학생이 존재하지 않습니다.",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
                 }
               }
             }
@@ -149,8 +255,38 @@
               }
             }
           },
-          "TEACHER4001": {
-            "description": "강사가 존재하지 않습니다.",
+          "STUDENT4001": {
+            "description": "학생이 존재하지 않습니다.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
+                }
+              }
+            }
+          },
+          "LESSON4001": {
+            "description": "수업이 존재하지 않습니다.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
+                }
+              }
+            }
+          },
+          "LESSON4004": {
+            "description": "최소 한 명 이상의 학생이 필요합니다.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
+                }
+              }
+            }
+          },
+          "LESSON4005": {
+            "description": "유효한 수업 가격이 필요합니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -255,16 +391,6 @@
               }
             }
           },
-          "USER4002": {
-            "description": "이미 등록된 이메일입니다.",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
-                }
-              }
-            }
-          },
           "USER4003": {
             "description": "유효하지 않은 사용자 역할입니다.",
             "content": {
@@ -275,8 +401,8 @@
               }
             }
           },
-          "USER4005": {
-            "description": "이름은 필수입니다.",
+          "USER4002": {
+            "description": "이미 등록된 이메일입니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -287,6 +413,16 @@
           },
           "USER4004": {
             "description": "유효하지 않은 비밀번호 형식입니다.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
+                }
+              }
+            }
+          },
+          "USER4005": {
+            "description": "이름은 필수입니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -307,74 +443,168 @@
           }
         }
       }
-    },
-    "/studeal/boards/{boardId}/teachers/{teacherId}": {
-      "delete": {
-        "tags": [
-          "게시판 API"
-        ],
-        "summary": "게시글 삭제",
-        "description": "선생님이 작성한 과외 모집 게시글을 삭제합니다.",
-        "operationId": "deleteBoard",
-        "parameters": [
-          {
-            "name": "boardId",
-            "in": "path",
-            "description": "게시글 ID",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          },
-          {
-            "name": "teacherId",
-            "in": "path",
-            "description": "선생님 ID",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "responses": {
-          "COMMON200": {
-            "description": "OK, 성공",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponseJava.lang.Object"
-                }
-              }
-            }
-          },
-          "BOARD4002": {
-            "description": "게시글 작성자만 삭제할 수 있습니다.",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
-                }
-              }
-            }
-          },
-          "BOARD4001": {
-            "description": "게시글을 찾을 수 없습니다.",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
-                }
-              }
-            }
-          }
-        }
-      }
     }
   },
   "components": {
     "schemas": {
+      "BoardUpdateRequest": {
+        "required": [
+          "expectedPrice",
+          "major",
+          "subject",
+          "title"
+        ],
+        "type": "object",
+        "properties": {
+          "title": {
+            "maxLength": 200,
+            "minLength": 0,
+            "type": "string",
+            "description": "게시글 제목",
+            "example": "고등 수학 과외 모집합니다 (수정)"
+          },
+          "content": {
+            "maxLength": 2000,
+            "minLength": 0,
+            "type": "string",
+            "description": "게시글 내용",
+            "example": "수학 전공 대학생이 수학 과외를 모집합니다. 문제 풀이 및 개념 설명에 능숙합니다. (내용 수정)"
+          },
+          "major": {
+            "type": "string",
+            "description": "게시글 유형",
+            "example": "MATH",
+            "enum": [
+              "MATH",
+              "SCIENCE",
+              "ENGLISH",
+              "KOREAN",
+              "HISTORY",
+              "CODING"
+            ]
+          },
+          "expectedPrice": {
+            "type": "integer",
+            "description": "예상 수업 가격",
+            "format": "int64",
+            "example": 55000
+          },
+          "subject": {
+            "maxLength": 100,
+            "minLength": 0,
+            "type": "string",
+            "description": "수업 주제",
+            "example": "고등 수학 - 미적분과 통계"
+          }
+        },
+        "description": "게시글 수정 요청"
+      },
+      "com.studeal.team.global.error.ApiResponse": {
+        "type": "object",
+        "properties": {
+          "isSuccess": {
+            "type": "boolean"
+          },
+          "code": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "result": {
+            "type": "object"
+          }
+        }
+      },
+      "BoardDetailResponse": {
+        "type": "object",
+        "properties": {
+          "boardId": {
+            "type": "integer",
+            "description": "게시글 ID",
+            "format": "int64",
+            "example": 1
+          },
+          "title": {
+            "type": "string",
+            "description": "게시글 제목",
+            "example": "고등 수학 과외 모집합니다"
+          },
+          "content": {
+            "type": "string",
+            "description": "게시글 내용",
+            "example": "수학 전공 대학생이 수학 과외를 모집합니다. 문제 풀이 및 개념 설명에 능숙합니다."
+          },
+          "teacherId": {
+            "type": "integer",
+            "description": "선생님 ID",
+            "format": "int64",
+            "example": 1
+          },
+          "teacherName": {
+            "type": "string",
+            "description": "선생님 이름",
+            "example": "김선생"
+          },
+          "major": {
+            "type": "string",
+            "description": "게시글 유형",
+            "example": "MATH",
+            "enum": [
+              "MATH",
+              "SCIENCE",
+              "ENGLISH",
+              "KOREAN",
+              "HISTORY",
+              "CODING"
+            ]
+          },
+          "expectedPrice": {
+            "type": "integer",
+            "description": "예상 수업 가격",
+            "format": "int64",
+            "example": 50000
+          },
+          "specMajor": {
+            "type": "string",
+            "description": "구체적인 과외 주제",
+            "example": "고등 수학 - 미적분"
+          },
+          "createdAt": {
+            "type": "string",
+            "description": "생성 일시",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "description": "수정 일시",
+            "format": "date-time"
+          },
+          "thumbnailUrl": {
+            "type": "string",
+            "description": "썸네일 이미지 URL",
+            "example": "/images/thumbnails/math-123.jpg"
+          }
+        },
+        "description": "게시글 상세 응답"
+      },
+      "com.studeal.team.global.error.ApiResponseBoardDetailResponse": {
+        "type": "object",
+        "properties": {
+          "isSuccess": {
+            "type": "boolean"
+          },
+          "code": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "result": {
+            "$ref": "#/components/schemas/BoardDetailResponse"
+          }
+        }
+      },
       "com.studeal.team.domain.negotiation.dto.NegotiationRequestDTO$CreateRequest": {
         "required": [
           "proposedPrice",
@@ -469,23 +699,6 @@
           }
         }
       },
-      "com.studeal.team.global.error.ApiResponse": {
-        "type": "object",
-        "properties": {
-          "isSuccess": {
-            "type": "boolean"
-          },
-          "code": {
-            "type": "string"
-          },
-          "message": {
-            "type": "string"
-          },
-          "result": {
-            "type": "object"
-          }
-        }
-      },
       "com.studeal.team.domain.lesson.dto.LessonResponseDTO$CreateResponse": {
         "type": "object",
         "properties": {
@@ -573,95 +786,6 @@
           }
         },
         "description": "게시글 생성 요청"
-      },
-      "BoardDetailResponse": {
-        "type": "object",
-        "properties": {
-          "boardId": {
-            "type": "integer",
-            "description": "게시글 ID",
-            "format": "int64",
-            "example": 1
-          },
-          "title": {
-            "type": "string",
-            "description": "게시글 제목",
-            "example": "고등 수학 과외 모집합니다"
-          },
-          "content": {
-            "type": "string",
-            "description": "게시글 내용",
-            "example": "수학 전공 대학생이 수학 과외를 모집합니다. 문제 풀이 및 개념 설명에 능숙합니다."
-          },
-          "teacherId": {
-            "type": "integer",
-            "description": "선생님 ID",
-            "format": "int64",
-            "example": 1
-          },
-          "teacherName": {
-            "type": "string",
-            "description": "선생님 이름",
-            "example": "김선생"
-          },
-          "major": {
-            "type": "string",
-            "description": "게시글 유형",
-            "example": "MATH",
-            "enum": [
-              "MATH",
-              "SCIENCE",
-              "ENGLISH",
-              "KOREAN",
-              "HISTORY",
-              "CODING"
-            ]
-          },
-          "expectedPrice": {
-            "type": "integer",
-            "description": "예상 수업 가격",
-            "format": "int64",
-            "example": 50000
-          },
-          "specMajor": {
-            "type": "string",
-            "description": "구체적인 과외 주제",
-            "example": "고등 수학 - 미적분"
-          },
-          "createdAt": {
-            "type": "string",
-            "description": "생성 일시",
-            "format": "date-time"
-          },
-          "updatedAt": {
-            "type": "string",
-            "description": "수정 일시",
-            "format": "date-time"
-          },
-          "thumbnailUrl": {
-            "type": "string",
-            "description": "썸네일 이미지 URL",
-            "example": "/images/thumbnails/math-123.jpg"
-          }
-        },
-        "description": "게시글 상세 응답"
-      },
-      "com.studeal.team.global.error.ApiResponseBoardDetailResponse": {
-        "type": "object",
-        "properties": {
-          "isSuccess": {
-            "type": "boolean"
-          },
-          "code": {
-            "type": "string"
-          },
-          "message": {
-            "type": "string"
-          },
-          "result": {
-            "$ref": "#/components/schemas/BoardDetailResponse"
-          }
-        }
       },
       "com.studeal.team.domain.user.dto.UserRequestDTO$SignupRequest": {
         "required": [
