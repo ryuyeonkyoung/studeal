@@ -25,8 +25,8 @@ public class Negotiation extends BaseEntity {
     @SequenceGenerator(name = "negotiations_seq_gen", sequenceName = "NEGOTIATIONS_SEQ", allocationSize = 1)
     private Long negotiationId;
 
-    @OneToMany(mappedBy = "negotiation", cascade = CascadeType.ALL)
-    private Set<Enrollment> enrollments = new HashSet<>();
+    @OneToOne(mappedBy = "negotiation", cascade = CascadeType.ALL)
+    private Enrollment enrollment;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "student_id")
