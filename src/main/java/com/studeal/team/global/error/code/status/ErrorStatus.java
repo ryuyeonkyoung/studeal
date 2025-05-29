@@ -35,6 +35,7 @@ public enum ErrorStatus implements BaseErrorCode {
     BOARD_UNAUTHORIZED(HttpStatus.FORBIDDEN, "BOARD4003", "게시글 권한이 없습니다."),
     BOARD_INVALID_TYPE(HttpStatus.BAD_REQUEST, "BOARD4004", "유효하지 않은 게시글 유형입니다."),
     BOARD_SUBJECT_EMPTY(HttpStatus.BAD_REQUEST, "BOARD4005", "수업 주제는 필수입니다."),
+    BOARD_STUDENT_FORBIDDEN(HttpStatus.FORBIDDEN, "BOARD4006", "학생은 게시글을 올릴 수 없습니다."),
 
     // Lesson 관련 에러
     LESSON_NOT_FOUND(HttpStatus.BAD_REQUEST, "LESSON4001", "수업이 존재하지 않습니다."),
