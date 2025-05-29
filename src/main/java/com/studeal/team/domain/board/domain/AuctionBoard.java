@@ -1,5 +1,6 @@
 package com.studeal.team.domain.board.domain;
 
+import com.studeal.team.domain.lesson.domain.Lesson;
 import com.studeal.team.domain.negotiation.domain.Negotiation;
 import com.studeal.team.domain.user.domain.Teacher;
 import com.studeal.team.domain.user.domain.enums.MajorSubject;
@@ -31,13 +32,15 @@ public class AuctionBoard extends BaseEntity {
     @Column(length = 2000)
     private String content;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    private Lesson lesson;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "teacher_id")
     private Teacher teacher;  // 선생님만 작성 가능
 
-    @OneToOne
-    @JoinColumn(name = "negotiation_id")
-    private Negotiation negotiation;
+    @OneToMany(mappedBy = "auctionBoard", cascade = CascadeType.ALL)
+    private Set<Negotiation> negotiations = new HashSet<>(); // 협상 정보
 
     @Column(nullable = false)
     private Long expectedPrice;  // 예상 수업 가격
