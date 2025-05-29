@@ -22,7 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.LocalDate;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -51,39 +50,29 @@ public class LessonService {
         LocalDateTime currentDateTime = LocalDateTime.now();
         LocalDate currentDate = currentDateTime.toLocalDate();
 
-        // 수강신청 연관관계 매핑
-        List<Enrollment> enrollments = request.getStudentIds().stream()
-                .map(studentId -> {
-                    Student student = studentRepository.findById(studentId)
-                            .orElseThrow(() -> new EnrollmentHandler(ErrorStatus.STUDENT_NOT_FOUND));
+        // 학생 조회
+        Student student = studentRepository.findById(request.getStudentId())
+                .orElseThrow(() -> new StudentHandler(ErrorStatus.STUDENT_NOT_FOUND));
 
-                    return Enrollment.builder()
-                            .student(student)
-                            .lesson(newLesson)
-                            .negotiation(negotiation)
-                            .paidAmount(request.getPrice())
-                            .status(EnrollmentStatus.WAITING)
-                            .isActive(true)
-                            .enrolledAt(currentDateTime)
-                            .build();
-                }).toList();
+        // 수강신청 연관관계 매핑 (1:1 관계)
+        Enrollment enrollment = Enrollment.builder()
+                .student(student)
+                .negotiation(negotiation)
+                .paidAmount(request.getPrice())
+                .status(EnrollmentStatus.WAITING)
+                .isActive(true)
+                .enrolledAt(currentDateTime)
+                .build();
 
         // 출석 정보 연관관계 매핑
-        List<LessonPresence> presences = request.getStudentIds().stream()
-                .map(studentId -> {
-                    Student student = studentRepository.findById(studentId)
-                            .orElseThrow(() -> new StudentHandler(ErrorStatus.STUDENT_NOT_FOUND));
+        LessonPresence presence = LessonPresence.builder()
+                .student(student)
+                .lesson(newLesson)
+                .status(AttendanceStatus.ABSENT)
+                .attendanceDate(currentDate)
+                .build();
 
-                    return LessonPresence.builder()
-                            .student(student)
-                            .lesson(newLesson)
-                            .status(AttendanceStatus.ABSENT)
-                            .attendanceDate(currentDate)
-                            .build();
-                }).toList();
-
-        enrollments.forEach(newLesson::addEnrollment);
-        presences.forEach(newLesson::addLessonPresence);
+        newLesson.addLessonPresence(presence);
 
         return lessonRepository.save(newLesson);
     }
