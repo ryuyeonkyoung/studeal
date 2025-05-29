@@ -13,7 +13,6 @@ import com.studeal.team.global.error.exception.handler.TeacherHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 게시판 명령 서비스 클래스
@@ -46,5 +45,26 @@ public class BoardCommandService {
         log.info("게시글 생성 완료. 게시글 ID: {}", savedBoard.getBoardId());
 
         return BoardConverter.toDetailResponse(savedBoard);
+    }
+
+    /**
+     * 게시글 삭제
+     * @param boardId 게시글 ID
+     * @param teacherId 선생님 ID (작성자 확인용)
+     */
+    public void deleteBoard(Long boardId, Long teacherId) {
+        // 게시글 조회
+        Board board = boardRepository.findById(boardId)
+                .orElseThrow(() -> new BoardHandler(ErrorStatus.BOARD_NOT_FOUND));
+
+        // 게시글 작성자 확인
+        if (!board.getTeacher().getUserId().equals(teacherId)) {
+            throw new BoardHandler(ErrorStatus.BOARD_UNAUTHORIZED);
+        }
+
+        // 게시글 삭제 (연관된 파일도 함께 삭제됨 - cascade 설정)
+        boardRepository.delete(board);
+
+        log.info("게시글 삭제 완료. 게시글 ID: {}", boardId);
     }
 }

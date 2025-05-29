@@ -42,4 +42,18 @@ public class BoardController {
         BoardResponseDTO.DetailResponse response = boardCommandService.createBoard(teacherId, request);
         return ApiResponse.onSuccess(response);
     }
+
+    @Operation(summary = "게시글 삭제", description = "선생님이 작성한 과외 모집 게시글을 삭제합니다.")
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "BOARD4001", description = "게시글을 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ApiResponse.class))),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "BOARD4002", description = "게시글 작성자만 삭제할 수 있습니다.", content = @Content(schema = @Schema(implementation = ApiResponse.class)))
+    })
+    @DeleteMapping("/{boardId}/teachers/{teacherId}")
+    public ApiResponse<?> deleteBoard(
+            @Parameter(description = "게시글 ID") @PathVariable Long boardId,
+            @Parameter(description = "선생님 ID") @PathVariable @ExistTeacher Long teacherId) {
+        boardCommandService.deleteBoard(boardId, teacherId);
+        return ApiResponse.onSuccess(null);
+    }
 }

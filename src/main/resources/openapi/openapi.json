@@ -79,16 +79,6 @@
           "required": true
         },
         "responses": {
-          "LESSON4003": {
-            "description": "강사 정보가 필요합니다.",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
-                }
-              }
-            }
-          },
           "COMMON200": {
             "description": "OK, 성공",
             "content": {
@@ -99,8 +89,38 @@
               }
             }
           },
+          "LESSON4003": {
+            "description": "강사 정보가 필요합니다.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
+                }
+              }
+            }
+          },
+          "STUDENT4001": {
+            "description": "학생이 존재하지 않습니다.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
+                }
+              }
+            }
+          },
           "LESSON4004": {
             "description": "최소 한 명 이상의 학생이 필요합니다.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
+                }
+              }
+            }
+          },
+          "TEACHER4001": {
+            "description": "강사가 존재하지 않습니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -131,26 +151,6 @@
           },
           "LESSON4002": {
             "description": "수업 제목은 필수입니다.",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
-                }
-              }
-            }
-          },
-          "STUDENT4001": {
-            "description": "학생이 존재하지 않습니다.",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
-                }
-              }
-            }
-          },
-          "TEACHER4001": {
-            "description": "강사가 존재하지 않습니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -193,12 +193,12 @@
           "required": true
         },
         "responses": {
-          "COMMON200": {
-            "description": "OK, 성공",
+          "BOARD4001": {
+            "description": "게시글을 찾을 수 없습니다.",
             "content": {
               "*/*": {
                 "schema": {
-                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponseBoardDetailResponse"
+                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
                 }
               }
             }
@@ -213,12 +213,12 @@
               }
             }
           },
-          "BOARD4001": {
-            "description": "게시글을 찾을 수 없습니다.",
+          "COMMON200": {
+            "description": "OK, 성공",
             "content": {
               "*/*": {
                 "schema": {
-                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
+                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponseBoardDetailResponse"
                 }
               }
             }
@@ -245,6 +245,26 @@
           "required": true
         },
         "responses": {
+          "COMMON200": {
+            "description": "OK, 성공",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponseCom.studeal.team.domain.user.dto.UserResponseDTO"
+                }
+              }
+            }
+          },
+          "USER4004": {
+            "description": "유효하지 않은 비밀번호 형식입니다.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
+                }
+              }
+            }
+          },
           "USER4005": {
             "description": "이름은 필수입니다.",
             "content": {
@@ -255,12 +275,12 @@
               }
             }
           },
-          "COMMON200": {
-            "description": "OK, 성공",
+          "USER4006": {
+            "description": "유효한 이메일 형식이 아닙니다.",
             "content": {
               "*/*": {
                 "schema": {
-                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponseCom.studeal.team.domain.user.dto.UserResponseDTO"
+                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
                 }
               }
             }
@@ -284,9 +304,43 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "/studeal/boards/{boardId}/teachers/{teacherId}": {
+      "delete": {
+        "tags": [
+          "게시판 API"
+        ],
+        "summary": "게시글 삭제",
+        "description": "선생님이 작성한 과외 모집 게시글을 삭제합니다.",
+        "operationId": "deleteBoard",
+        "parameters": [
+          {
+            "name": "boardId",
+            "in": "path",
+            "description": "게시글 ID",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
           },
-          "USER4004": {
-            "description": "유효하지 않은 비밀번호 형식입니다.",
+          {
+            "name": "teacherId",
+            "in": "path",
+            "description": "선생님 ID",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "BOARD4001": {
+            "description": "게시글을 찾을 수 없습니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -295,8 +349,18 @@
               }
             }
           },
-          "USER4006": {
-            "description": "유효한 이메일 형식이 아닙니다.",
+          "COMMON200": {
+            "description": "OK, 성공",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponseJava.lang.Object"
+                }
+              }
+            }
+          },
+          "BOARD4002": {
+            "description": "게시글 작성자만 삭제할 수 있습니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -698,6 +762,23 @@
           },
           "result": {
             "$ref": "#/components/schemas/com.studeal.team.domain.user.dto.UserResponseDTO"
+          }
+        }
+      },
+      "com.studeal.team.global.error.ApiResponseJava.lang.Object": {
+        "type": "object",
+        "properties": {
+          "isSuccess": {
+            "type": "boolean"
+          },
+          "code": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "result": {
+            "type": "object"
           }
         }
       }
