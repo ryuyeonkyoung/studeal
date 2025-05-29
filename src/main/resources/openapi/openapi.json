@@ -71,6 +71,16 @@
           "required": true
         },
         "responses": {
+          "BOARD4001": {
+            "description": "게시글을 찾을 수 없습니다.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
+                }
+              }
+            }
+          },
           "COMMON200": {
             "description": "OK, 성공",
             "content": {
@@ -83,16 +93,6 @@
           },
           "BOARD4003": {
             "description": "게시글 수정 권한이 없습니다.",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
-                }
-              }
-            }
-          },
-          "BOARD4001": {
-            "description": "게시글을 찾을 수 없습니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -133,8 +133,8 @@
           }
         ],
         "responses": {
-          "BOARD4002": {
-            "description": "게시글 작성자만 삭제할 수 있습니다.",
+          "BOARD4001": {
+            "description": "게시글을 찾을 수 없습니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -153,8 +153,8 @@
               }
             }
           },
-          "BOARD4001": {
-            "description": "게시글을 찾을 수 없습니다.",
+          "BOARD4002": {
+            "description": "게시글 작성자만 삭제할 수 있습니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -215,16 +215,6 @@
           "required": true
         },
         "responses": {
-          "TEACHER4001": {
-            "description": "강사가 존재하지 않습니다.",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
-                }
-              }
-            }
-          },
           "COMMON200": {
             "description": "OK, 성공",
             "content": {
@@ -235,8 +225,18 @@
               }
             }
           },
-          "LESSON4003": {
-            "description": "강사 정보가 필요합니다.",
+          "TEACHER4001": {
+            "description": "강사가 존재하지 않습니다.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
+                }
+              }
+            }
+          },
+          "LESSON4004": {
+            "description": "최소 한 명 이상의 학생이 필요합니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -275,8 +275,8 @@
               }
             }
           },
-          "LESSON4004": {
-            "description": "최소 한 명 이상의 학생이 필요합니다.",
+          "LESSON4003": {
+            "description": "강사 정보가 필요합니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -329,12 +329,12 @@
           "required": true
         },
         "responses": {
-          "COMMON200": {
-            "description": "OK, 성공",
+          "BOARD4001": {
+            "description": "게시글을 찾을 수 없습니다.",
             "content": {
               "*/*": {
                 "schema": {
-                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponseBoardDetailResponse"
+                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
                 }
               }
             }
@@ -349,12 +349,12 @@
               }
             }
           },
-          "BOARD4001": {
-            "description": "게시글을 찾을 수 없습니다.",
+          "COMMON200": {
+            "description": "OK, 성공",
             "content": {
               "*/*": {
                 "schema": {
-                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
+                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponseBoardDetailResponse"
                 }
               }
             }
@@ -391,8 +391,8 @@
               }
             }
           },
-          "USER4003": {
-            "description": "유효하지 않은 사용자 역할입니다.",
+          "USER4005": {
+            "description": "이름은 필수입니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -421,8 +421,8 @@
               }
             }
           },
-          "USER4005": {
-            "description": "이름은 필수입니다.",
+          "USER4006": {
+            "description": "유효한 이메일 형식이 아닙니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -431,8 +431,8 @@
               }
             }
           },
-          "USER4006": {
-            "description": "유효한 이메일 형식이 아닙니다.",
+          "USER4003": {
+            "description": "유효하지 않은 사용자 역할입니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -663,6 +663,7 @@
         "required": [
           "negotiationId",
           "price",
+          "studentId",
           "teacherId",
           "title"
         ],
@@ -673,20 +674,17 @@
             "minLength": 0,
             "type": "string"
           },
-          "teacherId": {
-            "type": "integer",
-            "format": "int64"
-          },
           "negotiationId": {
             "type": "integer",
             "format": "int64"
           },
-          "studentIds": {
-            "type": "array",
-            "items": {
-              "type": "integer",
-              "format": "int64"
-            }
+          "studentId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "teacherId": {
+            "type": "integer",
+            "format": "int64"
           },
           "description": {
             "maxLength": 1000,
