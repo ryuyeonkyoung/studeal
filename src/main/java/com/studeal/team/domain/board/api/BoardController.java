@@ -43,6 +43,21 @@ public class BoardController {
         return ApiResponse.onSuccess(response);
     }
 
+    @Operation(summary = "게시글 수정", description = "과외 모집 게시글을 수정합니다. 본인이 작성한 게시글만 수정 가능합니다.")
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "BOARD4001", description = "게시글을 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ApiResponse.class))),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "BOARD4003", description = "게시글 수정 권한이 없습니다.", content = @Content(schema = @Schema(implementation = ApiResponse.class)))
+    })
+    @PutMapping("/{boardId}/teachers/{teacherId}")
+    public ApiResponse<BoardResponseDTO.DetailResponse> updateBoard(
+            @Parameter(description = "게시글 ID") @PathVariable Long boardId,
+            @Parameter(description = "선생님 ID") @PathVariable @ExistTeacher Long teacherId,
+            @Valid @RequestBody BoardRequestDTO.UpdateRequest request) {
+        BoardResponseDTO.DetailResponse response = boardCommandService.updateBoard(boardId, teacherId, request);
+        return ApiResponse.onSuccess(response);
+    }
+
     @Operation(summary = "게시글 삭제", description = "선생님이 작성한 과외 모집 게시글을 삭제합니다.")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),

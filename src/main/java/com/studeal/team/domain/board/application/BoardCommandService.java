@@ -54,6 +54,39 @@ public class BoardCommandService {
     }
 
     /**
+     * 게시글 수정
+     * @param boardId 게시글 ID
+     * @param teacherId 선생님 ID (작성자 확인용)
+     * @param request 게시글 요청 DTO
+     * @return 수정된 게시글 응답 DTO
+     */
+    public BoardResponseDTO.DetailResponse updateBoard(Long boardId, Long teacherId, BoardRequestDTO.UpdateRequest request) {
+        // 게시글 조회
+        Board board = boardRepository.findById(boardId)
+                .orElseThrow(() -> new BoardHandler(ErrorStatus.BOARD_NOT_FOUND));
+
+        // 게시글 작성자 확인
+        if (!board.getTeacher().getUserId().equals(teacherId)) {
+            throw new BoardHandler(ErrorStatus.BOARD_UNAUTHORIZED);
+        }
+
+        // 학생인 경우 게시글 수정 불가 검증
+        if (board.getTeacher().getRole() == UserRole.STUDENT) {
+            throw new BoardHandler(ErrorStatus.BOARD_STUDENT_FORBIDDEN);
+        }
+
+        // 게시글 정보 업데이트
+        BoardConverter.updateEntity(board, request);
+
+        // 변경된 게시글 저장
+        Board updatedBoard = boardRepository.save(board);
+
+        log.info("게시글 수정 완료. 게시글 ID: {}", boardId);
+
+        return BoardConverter.toDetailResponse(updatedBoard);
+    }
+
+    /**
      * 게시글 삭제
      * @param boardId 게시글 ID
      * @param teacherId 선생님 ID (작성자 확인용)
