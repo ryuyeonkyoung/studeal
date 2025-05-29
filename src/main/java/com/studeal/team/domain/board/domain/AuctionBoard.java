@@ -33,7 +33,7 @@ public class AuctionBoard extends BaseEntity {
     private String content;
 
     @OneToOne(fetch = FetchType.LAZY)
-    private Lesson lesson;
+    private Lesson lesson; // 추가
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "teacher_id")

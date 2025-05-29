@@ -1,7 +1,6 @@
 package com.studeal.team.domain.enrollment.domain;
 
 import com.studeal.team.domain.enrollment.domain.enums.EnrollmentStatus;
-import com.studeal.team.domain.lesson.domain.Lesson;
 import com.studeal.team.domain.negotiation.domain.Negotiation;
 import com.studeal.team.domain.user.domain.Student;
 import com.studeal.team.global.common.converter.BooleanToYNConverter;
@@ -34,10 +33,6 @@ public class Enrollment extends BaseEntity {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "negotiation_id") // Negotiation중 일부만 Enrollment로 연결되므로 외래키가 Enrollment에 위치
     private Negotiation negotiation; // Negotiation (협상 성공 시)
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "lesson_id")
-    private Lesson lesson;
 
     @Column(nullable = false)
     private Long paidAmount;

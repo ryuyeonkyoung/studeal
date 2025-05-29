@@ -1,9 +1,9 @@
 package com.studeal.team.domain.lesson.domain;
 
+import com.studeal.team.domain.board.domain.AuctionBoard;
 import com.studeal.team.domain.negotiation.domain.Negotiation;
-import com.studeal.team.global.common.domain.BaseEntity;
-import com.studeal.team.domain.enrollment.domain.Enrollment;
 import com.studeal.team.domain.user.domain.Teacher;
+import com.studeal.team.global.common.domain.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -23,8 +23,9 @@ public class Lesson extends BaseEntity {
     @SequenceGenerator(name = "lessons_seq_gen", sequenceName = "LESSONS_SEQ", allocationSize = 1)
     private Long lessonId;
 
-    @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL)
-    private Set<Enrollment> enrollments = new HashSet<>();
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "auction_board_id")
+    private AuctionBoard auctionBoard;
 
     @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<LessonPresence> lessonPresences = new HashSet<>();
@@ -51,16 +52,6 @@ public class Lesson extends BaseEntity {
 
     @Column(nullable = false)
     private Long price;
-
-    public void addEnrollment(Enrollment enrollment) {
-        this.enrollments.add(enrollment);
-        enrollment.setLesson(this);
-    }
-
-    public void removeEnrollment(Enrollment enrollment) {
-        this.enrollments.remove(enrollment);
-        enrollment.setLesson(null);
-    }
 
     public void addLessonPresence(LessonPresence lessonPresence) {
         this.lessonPresences.add(lessonPresence);
