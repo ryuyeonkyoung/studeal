@@ -7,6 +7,7 @@ import com.studeal.team.domain.board.dto.BoardRequestDTO;
 import com.studeal.team.domain.board.dto.BoardResponseDTO;
 import com.studeal.team.domain.user.dao.TeacherRepository;
 import com.studeal.team.domain.user.domain.Teacher;
+import com.studeal.team.domain.user.domain.enums.UserRole;
 import com.studeal.team.global.error.code.status.ErrorStatus;
 import com.studeal.team.global.error.exception.handler.BoardHandler;
 import com.studeal.team.global.error.exception.handler.TeacherHandler;
@@ -37,6 +38,11 @@ public class BoardCommandService {
         // 선생님 정보 조회
         Teacher teacher = teacherRepository.findById(teacherId)
                 .orElseThrow(() -> new TeacherHandler(ErrorStatus.TEACHER_NOT_FOUND));
+
+        // 학생인 경우 게시글 작성 불가 검증
+        if (teacher.getRole() == UserRole.STUDENT) {
+            throw new BoardHandler(ErrorStatus.BOARD_STUDENT_FORBIDDEN);
+        }
 
         // 게시글 생성 및 저장
         Board board = BoardConverter.toEntity(request, teacher);
