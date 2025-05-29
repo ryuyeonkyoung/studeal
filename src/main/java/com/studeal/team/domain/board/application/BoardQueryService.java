@@ -2,7 +2,7 @@ package com.studeal.team.domain.board.application;
 
 import com.studeal.team.domain.board.converter.BoardConverter;
 import com.studeal.team.domain.board.dao.BoardRepository;
-import com.studeal.team.domain.board.domain.Board;
+import com.studeal.team.domain.board.domain.AuctionBoard;
 import com.studeal.team.domain.board.dto.BoardResponseDTO;
 import com.studeal.team.global.error.code.status.ErrorStatus;
 import com.studeal.team.global.error.exception.handler.BoardHandler;
@@ -31,12 +31,12 @@ public class BoardQueryService {
      * @return 게시글 응답 DTO
      */
     public BoardResponseDTO.DetailResponse getBoard(Long boardId) {
-        Board board = boardRepository.findByIdWithTeacher(boardId)
+        AuctionBoard auctionBoard = boardRepository.findByIdWithTeacher(boardId)
                 .orElseThrow(() -> new BoardHandler(ErrorStatus.BOARD_NOT_FOUND));
 
         log.info("게시글 조회 완료. 게시글 ID: {}", boardId);
 
-        return BoardConverter.toDetailResponse(board);
+        return BoardConverter.toDetailResponse(auctionBoard);
     }
 
     /**
@@ -45,7 +45,7 @@ public class BoardQueryService {
      * @return 게시글 목록 페이징 응답 DTO
      */
     public BoardResponseDTO.PageResponse getBoardList(Pageable pageable) {
-        Page<Board> boardPage = boardRepository.findAll(pageable);
+        Page<AuctionBoard> boardPage = boardRepository.findAll(pageable);
 
         log.info("게시글 목록 조회 완료. 페이지: {}, 사이즈: {}", pageable.getPageNumber(), pageable.getPageSize());
 
@@ -59,7 +59,7 @@ public class BoardQueryService {
      * @return 게시글 목록 페이징 응답 DTO
      */
     public BoardResponseDTO.PageResponse getBoardListByTeacher(Long teacherId, Pageable pageable) {
-        Page<Board> boardPage = boardRepository.findByTeacherUserId(teacherId, pageable);
+        Page<AuctionBoard> boardPage = boardRepository.findByTeacherUserId(teacherId, pageable);
 
         log.info("선생님 ID로 게시글 목록 조회 완료. 선생님 ID: {}", teacherId);
 
@@ -73,7 +73,7 @@ public class BoardQueryService {
      * @return 게시글 목록 페이징 응답 DTO
      */
     public BoardResponseDTO.PageResponse searchBoardsByTitle(String keyword, Pageable pageable) {
-        Page<Board> boardPage = boardRepository.findByTitleContaining(keyword, pageable);
+        Page<AuctionBoard> boardPage = boardRepository.findByTitleContaining(keyword, pageable);
 
         log.info("제목으로 게시글 검색 완료. 키워드: {}", keyword);
 
@@ -87,7 +87,7 @@ public class BoardQueryService {
      * @return 게시글 목록 페이징 응답 DTO
      */
     public BoardResponseDTO.PageResponse searchBoardsBySubject(String subject, Pageable pageable) {
-        Page<Board> boardPage = boardRepository.findBySpecMajorContaining(subject, pageable);
+        Page<AuctionBoard> boardPage = boardRepository.findBySpecMajorContaining(subject, pageable);
 
         log.info("수업 주제로 게시글 검색 완료. 주제: {}", subject);
 

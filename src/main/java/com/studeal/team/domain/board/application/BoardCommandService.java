@@ -2,7 +2,7 @@ package com.studeal.team.domain.board.application;
 
 import com.studeal.team.domain.board.converter.BoardConverter;
 import com.studeal.team.domain.board.dao.BoardRepository;
-import com.studeal.team.domain.board.domain.Board;
+import com.studeal.team.domain.board.domain.AuctionBoard;
 import com.studeal.team.domain.board.dto.BoardRequestDTO;
 import com.studeal.team.domain.board.dto.BoardResponseDTO;
 import com.studeal.team.domain.user.dao.TeacherRepository;
@@ -46,12 +46,12 @@ public class BoardCommandService {
         }
 
         // 게시글 생성 및 저장
-        Board board = BoardConverter.toEntity(request, teacher);
-        Board savedBoard = boardRepository.save(board);
+        AuctionBoard auctionBoard = BoardConverter.toEntity(request, teacher);
+        AuctionBoard savedAuctionBoard = boardRepository.save(auctionBoard);
 
-        log.info("게시글 생성 완료. 게시글 ID: {}", savedBoard.getBoardId());
+        log.info("게시글 생성 완료. 게시글 ID: {}", savedAuctionBoard.getBoardId());
 
-        return BoardConverter.toDetailResponse(savedBoard);
+        return BoardConverter.toDetailResponse(savedAuctionBoard);
     }
 
     /**
@@ -63,28 +63,28 @@ public class BoardCommandService {
      */
     public BoardResponseDTO.DetailResponse updateBoard(Long boardId, Long teacherId, BoardRequestDTO.UpdateRequest request) {
         // 게시글 조회
-        Board board = boardRepository.findById(boardId)
+        AuctionBoard auctionBoard = boardRepository.findById(boardId)
                 .orElseThrow(() -> new BoardHandler(ErrorStatus.BOARD_NOT_FOUND));
 
         // 게시글 작성자 확인
-        if (!board.getTeacher().getUserId().equals(teacherId)) {
+        if (!auctionBoard.getTeacher().getUserId().equals(teacherId)) {
             throw new BoardHandler(ErrorStatus.BOARD_UNAUTHORIZED);
         }
 
         // 학생인 경우 게시글 수정 불가 검증
-        if (board.getTeacher().getRole() == UserRole.STUDENT) {
+        if (auctionBoard.getTeacher().getRole() == UserRole.STUDENT) {
             throw new BoardHandler(ErrorStatus.BOARD_STUDENT_FORBIDDEN);
         }
 
         // 게시글 정보 업데이트
-        BoardConverter.updateEntity(board, request);
+        BoardConverter.updateEntity(auctionBoard, request);
 
         // 변경된 게시글 저장
-        Board updatedBoard = boardRepository.save(board);
+        AuctionBoard updatedAuctionBoard = boardRepository.save(auctionBoard);
 
         log.info("게시글 수정 완료. 게시글 ID: {}", boardId);
 
-        return BoardConverter.toDetailResponse(updatedBoard);
+        return BoardConverter.toDetailResponse(updatedAuctionBoard);
     }
 
     /**
@@ -94,16 +94,16 @@ public class BoardCommandService {
      */
     public void deleteBoard(Long boardId, Long teacherId) {
         // 게시글 조회
-        Board board = boardRepository.findById(boardId)
+        AuctionBoard auctionBoard = boardRepository.findById(boardId)
                 .orElseThrow(() -> new BoardHandler(ErrorStatus.BOARD_NOT_FOUND));
 
         // 게시글 작성자 확인
-        if (!board.getTeacher().getUserId().equals(teacherId)) {
+        if (!auctionBoard.getTeacher().getUserId().equals(teacherId)) {
             throw new BoardHandler(ErrorStatus.BOARD_UNAUTHORIZED);
         }
 
         // 게시글 삭제 (연관된 파일도 함께 삭제됨 - cascade 설정)
-        boardRepository.delete(board);
+        boardRepository.delete(auctionBoard);
 
         log.info("게시글 삭제 완료. 게시글 ID: {}", boardId);
     }

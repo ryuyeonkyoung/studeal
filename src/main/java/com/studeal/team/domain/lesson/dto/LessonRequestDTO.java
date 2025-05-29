@@ -1,13 +1,10 @@
 package com.studeal.team.domain.lesson.dto;
 
-import com.studeal.team.global.validation.annotation.ExistStudents;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
-
-import java.util.List;
 
 public class LessonRequestDTO {
 
@@ -18,13 +15,13 @@ public class LessonRequestDTO {
         private String title;
 
         @NotNull
-        private Long teacherId;
-
-        @NotNull
         private Long negotiationId;
 
-        @ExistStudents
-        private List<Long> studentIds;
+        @NotNull
+        private Long studentId; // 데이터 검증을 위해 필요
+
+        @NotNull
+        private Long teacherId; // 데이터 검증을 위해 필요
 
         @Size(max = 1000)
         private String description;

@@ -1,7 +1,7 @@
 package com.studeal.team.domain.board.domain;
 
+import com.studeal.team.domain.lesson.domain.Lesson;
 import com.studeal.team.domain.negotiation.domain.Negotiation;
-import com.studeal.team.domain.user.domain.Student;
 import com.studeal.team.domain.user.domain.Teacher;
 import com.studeal.team.domain.user.domain.enums.MajorSubject;
 import com.studeal.team.global.common.domain.BaseEntity;
@@ -20,7 +20,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Board extends BaseEntity {
+public class AuctionBoard extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "boards_seq_gen")
     @SequenceGenerator(name = "boards_seq_gen", sequenceName = "BOARDS_SEQ", allocationSize = 1)
@@ -32,13 +32,15 @@ public class Board extends BaseEntity {
     @Column(length = 2000)
     private String content;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    private Lesson lesson; // 추가
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "teacher_id")
-    private Teacher teacher;  // 선생님이 작성한 경우
+    private Teacher teacher;  // 선생님만 작성 가능
 
-    @OneToOne
-    @JoinColumn(name = "negotiation_id")
-    private Negotiation negotiation;
+    @OneToMany(mappedBy = "auctionBoard", cascade = CascadeType.ALL)
+    private Set<Negotiation> negotiations = new HashSet<>(); // 협상 정보
 
     @Column(nullable = false)
     private Long expectedPrice;  // 예상 수업 가격
@@ -50,8 +52,8 @@ public class Board extends BaseEntity {
     @Column(length = 200)
     private String specMajor;  // 구체적인 과외 주제
 
-    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
-    private List<BoardFile> files = new ArrayList<>();
+    @OneToMany(mappedBy = "auctionBoard", cascade = CascadeType.ALL)
+    private List<AuctionBoardFile> files = new ArrayList<>();
 
     @Version
     private Integer version;

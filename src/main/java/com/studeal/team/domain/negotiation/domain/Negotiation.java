@@ -1,16 +1,13 @@
 package com.studeal.team.domain.negotiation.domain;
 
-import com.studeal.team.domain.board.domain.Board;
+import com.studeal.team.domain.board.domain.AuctionBoard;
 import com.studeal.team.domain.enrollment.domain.Enrollment;
-import com.studeal.team.global.common.domain.BaseEntity;
 import com.studeal.team.domain.negotiation.enums.NegotiationStatus;
 import com.studeal.team.domain.user.domain.Student;
 import com.studeal.team.domain.user.domain.Teacher;
+import com.studeal.team.global.common.domain.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.util.HashSet;
-import java.util.Set;
 
 /*
  * Negotiation (협상) → 성공 → Enrollment (수강 신청, WAITING) → 충분한 학생 모집 → Lesson (수업 생성) → Enrollment 상태 변경 (CONFIRMED)
@@ -28,8 +25,8 @@ public class Negotiation extends BaseEntity {
     @SequenceGenerator(name = "negotiations_seq_gen", sequenceName = "NEGOTIATIONS_SEQ", allocationSize = 1)
     private Long negotiationId;
 
-    @OneToMany(mappedBy = "negotiation", cascade = CascadeType.ALL)
-    private Set<Enrollment> enrollments = new HashSet<>();
+    @OneToOne(mappedBy = "negotiation", cascade = CascadeType.ALL)
+    private Enrollment enrollment;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "student_id")
@@ -39,8 +36,8 @@ public class Negotiation extends BaseEntity {
     @JoinColumn(name = "teacher_id")
     private Teacher teacher;
 
-    @OneToOne(mappedBy = "negotiation")
-    private Board board;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private AuctionBoard auctionBoard;
 
     @Column(nullable = false)
     private Long proposedPrice;

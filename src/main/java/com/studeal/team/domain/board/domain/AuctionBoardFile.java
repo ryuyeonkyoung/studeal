@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class BoardFile extends BaseEntity {
+public class AuctionBoardFile extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "board_files_seq_gen")
     @SequenceGenerator(name = "board_files_seq_gen", sequenceName = "BOARD_FILES_SEQ", allocationSize = 1)
@@ -22,7 +22,7 @@ public class BoardFile extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_id")
-    private Board board;
+    private AuctionBoard auctionBoard;
 
     @Column(length = 255, nullable = false)
     private String fileName;
