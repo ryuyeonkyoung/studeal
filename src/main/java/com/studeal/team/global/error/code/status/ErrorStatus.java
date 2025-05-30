@@ -49,7 +49,8 @@ public enum ErrorStatus implements BaseErrorCode {
     COURSE_ALREADY_ENROLLED(HttpStatus.BAD_REQUEST, "COURSE4003", "이미 수강중인 코스입니다."),
     COURSE_ALREADY_ENROLLED_BY_ANOTHER_USER(HttpStatus.BAD_REQUEST, "COURSE4004", "다른 사용자가 수강중인 코스입니다."),
 
-    NEGOTIATION_NOT_FOUND(HttpStatus.BAD_REQUEST, "NEGOTIATION4001", "협상 정보가 없습니다."),
+    NEGOTIATION_NOT_FOUND(HttpStatus.BAD_REQUEST, "NEGOTIATION404", "존재하지 않는 협상입니다."),
+    NEGOTIATION_INVALID_ROLE(HttpStatus.BAD_REQUEST, "NEGOTIATION4002", "역할에 맞지 않는 사용자 ID입니다."),
     NEGOTIATION_ALREADY_ENROLLED(HttpStatus.BAD_REQUEST, "NEGOTIATION4002", "이미 수강중인 협상입니다."),
     NEGOTIATION_ALREADY_ENROLLED_BY_ANOTHER_USER(HttpStatus.BAD_REQUEST, "NEGOTIATION4003", "다른 사용자가 수강중인 협상입니다.");
 

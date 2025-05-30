@@ -1,19 +1,20 @@
 // NegotiationService.java
 package com.studeal.team.domain.negotiation.application;
 
+import com.studeal.team.domain.negotiation.api.dto.NegotiationRequestDTO;
+import com.studeal.team.domain.negotiation.api.dto.NegotiationResponseDTO;
 import com.studeal.team.domain.negotiation.converter.NegotiationConverter;
 import com.studeal.team.domain.negotiation.dao.NegotiationRepository;
 import com.studeal.team.domain.negotiation.domain.Negotiation;
-import com.studeal.team.domain.negotiation.api.dto.NegotiationRequestDTO;
-import com.studeal.team.domain.negotiation.api.dto.NegotiationResponseDTO;
 import com.studeal.team.domain.negotiation.domain.enums.NegotiationStatus;
 import com.studeal.team.domain.user.dao.StudentRepository;
 import com.studeal.team.domain.user.dao.TeacherRepository;
 import com.studeal.team.domain.user.domain.Student;
 import com.studeal.team.domain.user.domain.Teacher;
 import com.studeal.team.global.error.code.status.ErrorStatus;
-import com.studeal.team.global.error.exception.handler.TeacherHandler;
+import com.studeal.team.global.error.exception.handler.NegotiationHandler;
 import com.studeal.team.global.error.exception.handler.StudentHandler;
+import com.studeal.team.global.error.exception.handler.TeacherHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,7 +46,7 @@ public class NegotiationService {
     @Transactional
     public void deleteNegotiation(Long negotiationId) {
         Negotiation negotiation = negotiationRepository.findById(negotiationId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 협상입니다."));
+                .orElseThrow(() -> new NegotiationHandler(ErrorStatus.NEGOTIATION_NOT_FOUND));
         negotiationRepository.delete(negotiation);
     }
 }
