@@ -2,7 +2,7 @@ package com.studeal.team.domain.favorite.domain;
 
 import com.studeal.team.global.common.domain.BaseEntity;
 import com.studeal.team.domain.negotiation.domain.Negotiation;
-import com.studeal.team.domain.user.domain.User;
+import com.studeal.team.domain.user.domain.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 

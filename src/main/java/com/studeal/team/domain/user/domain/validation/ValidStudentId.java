@@ -1,4 +1,4 @@
-package com.studeal.team.domain.user.validation;
+package com.studeal.team.domain.user.domain.validation;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
@@ -10,11 +10,11 @@ import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Documented
-@Constraint(validatedBy = ValidTeacherIdValidator.class)
+@Constraint(validatedBy = ValidStudentIdValidator.class)
 @Target({ FIELD })
 @Retention(RUNTIME)
-public @interface ValidTeacherId {
-    String message() default "해당 ID는 TEACHER 역할이 아닙니다.";
+public @interface ValidStudentId {
+    String message() default "해당 ID는 STUDENT 역할이 아닙니다.";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }

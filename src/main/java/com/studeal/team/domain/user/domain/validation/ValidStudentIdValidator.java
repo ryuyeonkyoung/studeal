@@ -1,7 +1,7 @@
-package com.studeal.team.domain.user.validation;
+package com.studeal.team.domain.user.domain.validation;
 
 import com.studeal.team.domain.user.dao.StudentRepository;
-import com.studeal.team.domain.user.domain.enums.UserRole;
+import com.studeal.team.domain.user.domain.entity.enums.UserRole;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import lombok.RequiredArgsConstructor;

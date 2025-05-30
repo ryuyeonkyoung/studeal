@@ -1,6 +1,5 @@
-package com.studeal.team.global.validation.annotation;
+package com.studeal.team.domain.user.domain.validation;
 
-import com.studeal.team.global.validation.validator.ValidMajorSubjectValidator;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 import java.lang.annotation.*;

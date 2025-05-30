@@ -1,6 +1,6 @@
-package com.studeal.team.domain.user.domain;
+package com.studeal.team.domain.user.domain.entity;
 
-import com.studeal.team.domain.user.domain.enums.UserRole;
+import com.studeal.team.domain.user.domain.entity.enums.UserRole;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.*;

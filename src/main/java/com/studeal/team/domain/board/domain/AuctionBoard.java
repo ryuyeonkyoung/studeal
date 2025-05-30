@@ -2,8 +2,8 @@ package com.studeal.team.domain.board.domain;
 
 import com.studeal.team.domain.lesson.domain.Lesson;
 import com.studeal.team.domain.negotiation.domain.Negotiation;
-import com.studeal.team.domain.user.domain.Teacher;
-import com.studeal.team.domain.user.domain.enums.MajorSubject;
+import com.studeal.team.domain.user.domain.entity.Teacher;
+import com.studeal.team.domain.user.domain.entity.enums.MajorSubject;
 import com.studeal.team.global.common.domain.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;

@@ -1,7 +1,6 @@
-package com.studeal.team.global.validation.validator;
+package com.studeal.team.domain.user.domain.validation;
 
 import com.studeal.team.domain.user.dao.TeacherRepository;
-import com.studeal.team.global.validation.annotation.ExistTeacher;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import lombok.RequiredArgsConstructor;

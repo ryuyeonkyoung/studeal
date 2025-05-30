@@ -1,16 +1,16 @@
 // NegotiationService.java
 package com.studeal.team.domain.negotiation.application;
 
-import com.studeal.team.domain.negotiation.api.dto.NegotiationRequestDTO;
-import com.studeal.team.domain.negotiation.api.dto.NegotiationResponseDTO;
+import com.studeal.team.domain.negotiation.dto.NegotiationRequestDTO;
+import com.studeal.team.domain.negotiation.dto.NegotiationResponseDTO;
 import com.studeal.team.domain.negotiation.converter.NegotiationConverter;
 import com.studeal.team.domain.negotiation.dao.NegotiationRepository;
 import com.studeal.team.domain.negotiation.domain.Negotiation;
 import com.studeal.team.domain.negotiation.domain.enums.NegotiationStatus;
 import com.studeal.team.domain.user.dao.StudentRepository;
 import com.studeal.team.domain.user.dao.TeacherRepository;
-import com.studeal.team.domain.user.domain.Student;
-import com.studeal.team.domain.user.domain.Teacher;
+import com.studeal.team.domain.user.domain.entity.Student;
+import com.studeal.team.domain.user.domain.entity.Teacher;
 import com.studeal.team.global.error.code.status.ErrorStatus;
 import com.studeal.team.global.error.exception.handler.NegotiationHandler;
 import com.studeal.team.global.error.exception.handler.StudentHandler;

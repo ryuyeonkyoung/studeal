@@ -2,8 +2,8 @@
 package com.studeal.team.domain.negotiation.converter;
 
 import com.studeal.team.domain.negotiation.domain.Negotiation;
-import com.studeal.team.domain.negotiation.api.dto.NegotiationRequestDTO;
-import com.studeal.team.domain.negotiation.api.dto.NegotiationResponseDTO;
+import com.studeal.team.domain.negotiation.dto.NegotiationRequestDTO;
+import com.studeal.team.domain.negotiation.dto.NegotiationResponseDTO;
 
 public class NegotiationConverter {
 

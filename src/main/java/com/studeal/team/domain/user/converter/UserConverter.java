@@ -1,9 +1,9 @@
 package com.studeal.team.domain.user.converter;
 
-import com.studeal.team.domain.user.domain.Student;
-import com.studeal.team.domain.user.domain.Teacher;
-import com.studeal.team.domain.user.domain.User;
-import com.studeal.team.domain.user.domain.enums.UserRole;
+import com.studeal.team.domain.user.domain.entity.Student;
+import com.studeal.team.domain.user.domain.entity.Teacher;
+import com.studeal.team.domain.user.domain.entity.User;
+import com.studeal.team.domain.user.domain.entity.enums.UserRole;
 import com.studeal.team.domain.user.dto.UserRequestDTO;
 import com.studeal.team.domain.user.dto.UserResponseDTO;
 

@@ -5,7 +5,7 @@ import com.studeal.team.domain.board.application.BoardQueryService;
 import com.studeal.team.domain.board.dto.BoardRequestDTO;
 import com.studeal.team.domain.board.dto.BoardResponseDTO;
 import com.studeal.team.global.error.ApiResponse;
-import com.studeal.team.global.validation.annotation.ExistTeacher;
+import com.studeal.team.domain.user.domain.validation.ExistTeacher;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
