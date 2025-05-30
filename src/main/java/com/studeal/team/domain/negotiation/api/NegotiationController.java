@@ -11,11 +11,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -32,9 +28,20 @@ public class NegotiationController {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "NEGOTIATION4001", description = "유효하지 않은 가격 제안 요청입니다.", content = @Content(schema = @Schema(implementation = ApiResponse.class)))
     })
     @PostMapping
-    public ResponseEntity<NegotiationResponseDTO> createNegotiation(
+    public ApiResponse<NegotiationResponseDTO> createNegotiation(
             @Valid @RequestBody NegotiationRequestDTO.CreateRequest request) {
-        return ResponseEntity.ok(negotiationService.initiateNegotiation(request));
+        return ApiResponse.onSuccess(negotiationService.initiateNegotiation(request));
+    }
+
+    @Operation(summary = "학생 가격 제안(협상) 삭제 API", description = "협상 ID로 학생의 가격 제안(협상)을 삭제하는 API입니다.")
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "NEGOTIATION404", description = "존재하지 않는 협상입니다.", content = @Content(schema = @Schema(implementation = ApiResponse.class)))
+    })
+    @DeleteMapping("/{negotiationId}")
+    public ApiResponse<Void> deleteNegotiation(@PathVariable Long negotiationId) {
+        negotiationService.deleteNegotiation(negotiationId);
+        return ApiResponse.onSuccess(null);
     }
 }
 

@@ -41,4 +41,11 @@ public class NegotiationService {
 
         return NegotiationConverter.toResponseDTO(negotiationRepository.save(negotiation));
     }
+
+    @Transactional
+    public void deleteNegotiation(Long negotiationId) {
+        Negotiation negotiation = negotiationRepository.findById(negotiationId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 협상입니다."));
+        negotiationRepository.delete(negotiation);
+    }
 }
