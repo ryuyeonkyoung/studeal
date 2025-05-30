@@ -1,8 +1,7 @@
 package com.studeal.team.global.validation.validator;
 
-import com.studeal.team.domain.user.domain.enums.MajorSubject;
 import com.studeal.team.domain.user.domain.enums.UserRole;
-import com.studeal.team.domain.user.dto.UserRequestDTO;
+import com.studeal.team.domain.user.api.dto.UserRequestDTO;
 import com.studeal.team.global.validation.annotation.ValidMajorSubject;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
