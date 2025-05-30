@@ -27,6 +27,10 @@
     {
       "name": "수업",
       "description": "수업 관련 API"
+    },
+    {
+      "name": "가격 제안(협상)",
+      "description": "학생의 가격 제안(협상) 관련 API"
     }
   ],
   "paths": {
@@ -71,16 +75,6 @@
           "required": true
         },
         "responses": {
-          "BOARD4001": {
-            "description": "게시글을 찾을 수 없습니다.",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
-                }
-              }
-            }
-          },
           "COMMON200": {
             "description": "OK, 성공",
             "content": {
@@ -93,6 +87,16 @@
           },
           "BOARD4003": {
             "description": "게시글 수정 권한이 없습니다.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
+                }
+              }
+            }
+          },
+          "BOARD4001": {
+            "description": "게시글을 찾을 수 없습니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -133,16 +137,6 @@
           }
         ],
         "responses": {
-          "BOARD4001": {
-            "description": "게시글을 찾을 수 없습니다.",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
-                }
-              }
-            }
-          },
           "COMMON200": {
             "description": "OK, 성공",
             "content": {
@@ -162,6 +156,16 @@
                 }
               }
             }
+          },
+          "BOARD4001": {
+            "description": "게시글을 찾을 수 없습니다.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
+                }
+              }
+            }
           }
         }
       }
@@ -169,26 +173,48 @@
     "/studeal/negotiations": {
       "post": {
         "tags": [
-          "negotiation-controller"
+          "가격 제안(협상)"
         ],
+        "summary": "학생 가격 제안(협상) 생성 API",
+        "description": "학생이 강사에게 가격 제안을 생성하는 API입니다.",
         "operationId": "createNegotiation",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/com.studeal.team.domain.negotiation.dto.NegotiationRequestDTO$CreateRequest"
+                "$ref": "#/components/schemas/com.studeal.team.domain.negotiation.api.dto.NegotiationRequestDTO$CreateRequest"
               }
             }
           },
           "required": true
         },
         "responses": {
-          "200": {
-            "description": "OK",
+          "COMMON200": {
+            "description": "OK, 성공",
             "content": {
               "*/*": {
                 "schema": {
-                  "$ref": "#/components/schemas/com.studeal.team.domain.negotiation.dto.NegotiationResponseDTO"
+                  "$ref": "#/components/schemas/com.studeal.team.domain.negotiation.api.dto.NegotiationResponseDTO"
+                }
+              }
+            }
+          },
+          "NEGOTIATION4001": {
+            "description": "유효하지 않은 가격 제안 요청입니다.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
+                }
+              }
+            }
+          },
+          "USER404": {
+            "description": "존재하지 않는 학생 또는 강사입니다.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
                 }
               }
             }
@@ -208,25 +234,35 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/com.studeal.team.domain.lesson.dto.LessonRequestDTO$CreateRequest"
+                "$ref": "#/components/schemas/com.studeal.team.domain.lesson.api.dto.LessonRequestDTO$CreateRequest"
               }
             }
           },
           "required": true
         },
         "responses": {
+          "LESSON4003": {
+            "description": "강사 정보가 필요합니다.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
+                }
+              }
+            }
+          },
           "COMMON200": {
             "description": "OK, 성공",
             "content": {
               "*/*": {
                 "schema": {
-                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponseCom.studeal.team.domain.lesson.dto.LessonResponseDTO$CreateResponse"
+                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponseCom.studeal.team.domain.lesson.api.dto.LessonResponseDTO$CreateResponse"
                 }
               }
             }
           },
-          "TEACHER4001": {
-            "description": "강사가 존재하지 않습니다.",
+          "STUDENT4001": {
+            "description": "학생이 존재하지 않습니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -245,18 +281,8 @@
               }
             }
           },
-          "LESSON4002": {
-            "description": "수업 제목은 필수입니다.",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
-                }
-              }
-            }
-          },
-          "STUDENT4001": {
-            "description": "학생이 존재하지 않습니다.",
+          "LESSON4005": {
+            "description": "유효한 수업 가격이 필요합니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -275,8 +301,8 @@
               }
             }
           },
-          "LESSON4003": {
-            "description": "강사 정보가 필요합니다.",
+          "LESSON4002": {
+            "description": "수업 제목은 필수입니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -285,8 +311,8 @@
               }
             }
           },
-          "LESSON4005": {
-            "description": "유효한 수업 가격이 필요합니다.",
+          "TEACHER4001": {
+            "description": "강사가 존재하지 않습니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -322,19 +348,19 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/com.studeal.team.domain.board.dto.BoardRequestDTO$CreateRequest"
+                "$ref": "#/components/schemas/com.studeal.team.domain.board.api.dto.BoardRequestDTO$CreateRequest"
               }
             }
           },
           "required": true
         },
         "responses": {
-          "BOARD4001": {
-            "description": "게시글을 찾을 수 없습니다.",
+          "COMMON200": {
+            "description": "OK, 성공",
             "content": {
               "*/*": {
                 "schema": {
-                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
+                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponseBoardDetailResponse"
                 }
               }
             }
@@ -349,12 +375,12 @@
               }
             }
           },
-          "COMMON200": {
-            "description": "OK, 성공",
+          "BOARD4001": {
+            "description": "게시글을 찾을 수 없습니다.",
             "content": {
               "*/*": {
                 "schema": {
-                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponseBoardDetailResponse"
+                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
                 }
               }
             }
@@ -374,7 +400,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/com.studeal.team.domain.user.dto.UserRequestDTO$SignupRequest"
+                "$ref": "#/components/schemas/com.studeal.team.domain.user.api.dto.UserRequestDTO$SignupRequest"
               }
             }
           },
@@ -386,17 +412,7 @@
             "content": {
               "*/*": {
                 "schema": {
-                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponseCom.studeal.team.domain.user.dto.UserResponseDTO"
-                }
-              }
-            }
-          },
-          "USER4005": {
-            "description": "이름은 필수입니다.",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
+                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponseCom.studeal.team.domain.user.api.dto.UserResponseDTO"
                 }
               }
             }
@@ -411,8 +427,18 @@
               }
             }
           },
-          "USER4004": {
-            "description": "유효하지 않은 비밀번호 형식입니다.",
+          "USER4003": {
+            "description": "유효하지 않은 사용자 역할입니다.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
+                }
+              }
+            }
+          },
+          "USER4005": {
+            "description": "이름은 필수입니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -431,8 +457,8 @@
               }
             }
           },
-          "USER4003": {
-            "description": "유효하지 않은 사용자 역할입니다.",
+          "USER4004": {
+            "description": "유효하지 않은 비밀번호 형식입니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -605,7 +631,7 @@
           }
         }
       },
-      "com.studeal.team.domain.negotiation.dto.NegotiationRequestDTO$CreateRequest": {
+      "com.studeal.team.domain.negotiation.api.dto.NegotiationRequestDTO$CreateRequest": {
         "required": [
           "proposedPrice",
           "studentId",
@@ -624,13 +650,10 @@
           "proposedPrice": {
             "type": "integer",
             "format": "int64"
-          },
-          "message": {
-            "type": "string"
           }
         }
       },
-      "com.studeal.team.domain.negotiation.dto.NegotiationResponseDTO": {
+      "com.studeal.team.domain.negotiation.api.dto.NegotiationResponseDTO": {
         "type": "object",
         "properties": {
           "negotiationId": {
@@ -659,7 +682,7 @@
           }
         }
       },
-      "com.studeal.team.domain.lesson.dto.LessonRequestDTO$CreateRequest": {
+      "com.studeal.team.domain.lesson.api.dto.LessonRequestDTO$CreateRequest": {
         "required": [
           "negotiationId",
           "price",
@@ -697,7 +720,7 @@
           }
         }
       },
-      "com.studeal.team.domain.lesson.dto.LessonResponseDTO$CreateResponse": {
+      "com.studeal.team.domain.lesson.api.dto.LessonResponseDTO$CreateResponse": {
         "type": "object",
         "properties": {
           "lessonId": {
@@ -716,7 +739,7 @@
           }
         }
       },
-      "com.studeal.team.global.error.ApiResponseCom.studeal.team.domain.lesson.dto.LessonResponseDTO$CreateResponse": {
+      "com.studeal.team.global.error.ApiResponseCom.studeal.team.domain.lesson.api.dto.LessonResponseDTO$CreateResponse": {
         "type": "object",
         "properties": {
           "isSuccess": {
@@ -729,11 +752,11 @@
             "type": "string"
           },
           "result": {
-            "$ref": "#/components/schemas/com.studeal.team.domain.lesson.dto.LessonResponseDTO$CreateResponse"
+            "$ref": "#/components/schemas/com.studeal.team.domain.lesson.api.dto.LessonResponseDTO$CreateResponse"
           }
         }
       },
-      "com.studeal.team.domain.board.dto.BoardRequestDTO$CreateRequest": {
+      "com.studeal.team.domain.board.api.dto.BoardRequestDTO$CreateRequest": {
         "required": [
           "major",
           "startPrice",
@@ -785,7 +808,7 @@
         },
         "description": "게시글 생성 요청"
       },
-      "com.studeal.team.domain.user.dto.UserRequestDTO$SignupRequest": {
+      "com.studeal.team.domain.user.api.dto.UserRequestDTO$SignupRequest": {
         "required": [
           "email",
           "name",
@@ -834,7 +857,7 @@
           }
         }
       },
-      "com.studeal.team.domain.user.dto.UserResponseDTO": {
+      "com.studeal.team.domain.user.api.dto.UserResponseDTO": {
         "type": "object",
         "properties": {
           "userId": {
@@ -870,7 +893,7 @@
           }
         }
       },
-      "com.studeal.team.global.error.ApiResponseCom.studeal.team.domain.user.dto.UserResponseDTO": {
+      "com.studeal.team.global.error.ApiResponseCom.studeal.team.domain.user.api.dto.UserResponseDTO": {
         "type": "object",
         "properties": {
           "isSuccess": {
@@ -883,7 +906,7 @@
             "type": "string"
           },
           "result": {
-            "$ref": "#/components/schemas/com.studeal.team.domain.user.dto.UserResponseDTO"
+            "$ref": "#/components/schemas/com.studeal.team.domain.user.api.dto.UserResponseDTO"
           }
         }
       },
