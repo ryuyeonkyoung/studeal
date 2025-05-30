@@ -1,5 +1,5 @@
 // NegotiationResponseDTO.java
-package com.studeal.team.domain.negotiation.api.dto;
+package com.studeal.team.domain.negotiation.dto;
 
 import com.studeal.team.domain.negotiation.domain.enums.NegotiationStatus;
 import lombok.Builder;

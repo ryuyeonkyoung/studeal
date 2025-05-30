@@ -2,7 +2,7 @@ package com.studeal.team.domain.lesson.domain;
 
 import com.studeal.team.domain.board.domain.AuctionBoard;
 import com.studeal.team.domain.negotiation.domain.Negotiation;
-import com.studeal.team.domain.user.domain.Teacher;
+import com.studeal.team.domain.user.domain.entity.Teacher;
 import com.studeal.team.global.common.domain.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;

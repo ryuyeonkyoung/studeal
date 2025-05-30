@@ -1,6 +1,6 @@
 package com.studeal.team.domain.board.dto;
 
-import com.studeal.team.domain.user.domain.enums.MajorSubject;
+import com.studeal.team.domain.user.domain.entity.enums.MajorSubject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

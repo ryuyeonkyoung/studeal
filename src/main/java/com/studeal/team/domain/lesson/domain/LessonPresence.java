@@ -2,12 +2,11 @@ package com.studeal.team.domain.lesson.domain;
 
 import com.studeal.team.global.common.domain.BaseEntity;
 import com.studeal.team.domain.enrollment.domain.enums.AttendanceStatus;
-import com.studeal.team.domain.user.domain.Student;
+import com.studeal.team.domain.user.domain.entity.Student;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "LESSON_PRESENCES")

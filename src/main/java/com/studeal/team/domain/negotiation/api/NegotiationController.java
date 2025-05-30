@@ -1,7 +1,7 @@
 package com.studeal.team.domain.negotiation.api;
 
-import com.studeal.team.domain.negotiation.api.dto.NegotiationRequestDTO;
-import com.studeal.team.domain.negotiation.api.dto.NegotiationResponseDTO;
+import com.studeal.team.domain.negotiation.dto.NegotiationRequestDTO;
+import com.studeal.team.domain.negotiation.dto.NegotiationResponseDTO;
 import com.studeal.team.domain.negotiation.application.NegotiationService;
 import com.studeal.team.global.error.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;

@@ -1,4 +1,4 @@
-package com.studeal.team.domain.user.domain;
+package com.studeal.team.domain.user.domain.entity;
 
 import com.studeal.team.domain.lesson.domain.LessonPresence;
 import com.studeal.team.domain.lesson.domain.Grade;

@@ -2,7 +2,7 @@ package com.studeal.team.domain.enrollment.domain;
 
 import com.studeal.team.domain.enrollment.domain.enums.EnrollmentStatus;
 import com.studeal.team.domain.negotiation.domain.Negotiation;
-import com.studeal.team.domain.user.domain.Student;
+import com.studeal.team.domain.user.domain.entity.Student;
 import com.studeal.team.global.common.converter.BooleanToYNConverter;
 import com.studeal.team.global.common.domain.BaseEntity;
 import jakarta.persistence.*;

@@ -1,4 +1,4 @@
-package com.studeal.team.domain.user.domain.enums;
+package com.studeal.team.domain.user.domain.entity.enums;
 
 public enum MajorSubject {
     MATH,
