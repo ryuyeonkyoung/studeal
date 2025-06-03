@@ -55,7 +55,7 @@ public enum ErrorStatus implements BaseErrorCode {
 
     // 수강 신청 관련 에러
     ENROLLMENT_NOT_FOUND(HttpStatus.BAD_REQUEST, "ENROLLMENT404", "존재하지 않는 수강 신청입니다."),
-    ENROLLMENT_ALREADY_EXISTS(HttpStatus.BAD_REQUEST, "ENROLLMENT4001", "이미 수강 신청이 존재합니다."),
+    ENROLLMENT_ALREADY_EXISTS(HttpStatus.BAD_REQUEST, "ENROLLMENT4001", "이미 Enrollment(학생의 수업 참여 확정 현황)가 존재합니다."),
     ENROLLMENT_INVALID_REQUEST(HttpStatus.BAD_REQUEST, "ENROLLMENT4002", "유효하지 않은 수강 신청 요청입니다."),
     ENROLLMENT_INVALID_NEGOTIATION_STATUS(HttpStatus.BAD_REQUEST, "ENROLLMENT4003", "협상이 성공 상태가 아닙니다.");
 
