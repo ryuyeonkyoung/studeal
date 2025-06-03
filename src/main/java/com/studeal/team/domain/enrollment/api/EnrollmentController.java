@@ -41,7 +41,7 @@ public class EnrollmentController {
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "ENROLLMENT404", description = "존재하지 않는 수강 신청입니다.", content = @Content(schema = @Schema(implementation = ApiResponse.class)))
     })
-    @PutMapping("/{enrollmentId}/status")
+    @PatchMapping("/{enrollmentId}/status")
     public ApiResponse<EnrollmentResponseDTO> updateStatus(
             @PathVariable Long enrollmentId,
             @Valid @RequestBody EnrollmentRequestDTO.StatusUpdateRequest request) {
