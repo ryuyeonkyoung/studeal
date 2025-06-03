@@ -10,9 +10,10 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 
-/**
- * Negotiation (협상) → 성공 → Enrollment (수강 신청, WAITING) → 충분한 학생 모집 → Lesson (수업 생성) → Enrollment 상태 변경 (CONFIRMED) (협상) → 성공 → Lesson (수업 생성) → Enrollment (수강 등록)
- */
+/*
+ * AuctionBoard (게시글) → Negotiation (협상) → 성공 → Enrollment (수강 신청, WAITING) → Lesson (수업 생성) → Enrollment 상태 변경 (CONFIRMED)
+*/
+
 @Entity
 @Table(name = "ENROLLMENTS")
 @Getter

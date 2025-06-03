@@ -49,10 +49,15 @@ public enum ErrorStatus implements BaseErrorCode {
     COURSE_ALREADY_ENROLLED(HttpStatus.BAD_REQUEST, "COURSE4003", "이미 수강중인 코스입니다."),
     COURSE_ALREADY_ENROLLED_BY_ANOTHER_USER(HttpStatus.BAD_REQUEST, "COURSE4004", "다른 사용자가 수강중인 코스입니다."),
 
+    // 협상 관련 에러
     NEGOTIATION_NOT_FOUND(HttpStatus.BAD_REQUEST, "NEGOTIATION404", "존재하지 않는 협상입니다."),
-    NEGOTIATION_INVALID_ROLE(HttpStatus.BAD_REQUEST, "NEGOTIATION4002", "역할에 맞지 않는 사용자 ID입니다."),
-    NEGOTIATION_ALREADY_ENROLLED(HttpStatus.BAD_REQUEST, "NEGOTIATION4002", "이미 수강중인 협상입니다."),
-    NEGOTIATION_ALREADY_ENROLLED_BY_ANOTHER_USER(HttpStatus.BAD_REQUEST, "NEGOTIATION4003", "다른 사용자가 수강중인 협상입니다.");
+    INVALID_NEGOTIATION_REQUEST(HttpStatus.BAD_REQUEST, "NEGOTIATION4001", "유효하지 않은 가격 제안 요청입니다."),
+
+    // 수강 신청 관련 에러
+    ENROLLMENT_NOT_FOUND(HttpStatus.BAD_REQUEST, "ENROLLMENT404", "존재하지 않는 수강 신청입니다."),
+    ENROLLMENT_ALREADY_EXISTS(HttpStatus.BAD_REQUEST, "ENROLLMENT4001", "이미 수강 신청이 존재합니다."),
+    ENROLLMENT_INVALID_REQUEST(HttpStatus.BAD_REQUEST, "ENROLLMENT4002", "유효하지 않은 수강 신청 요청입니다."),
+    ENROLLMENT_INVALID_NEGOTIATION_STATUS(HttpStatus.BAD_REQUEST, "ENROLLMENT4003", "협상이 성공 상태가 아닙니다.");
 
     private final HttpStatus httpStatus;
     private final String code;
