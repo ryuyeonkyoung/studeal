@@ -34,4 +34,17 @@ public class EnrollmentController {
     public ApiResponse<EnrollmentResponseDTO> createEnrollment(@Valid @RequestBody EnrollmentRequestDTO.CreateRequest request) {
         return ApiResponse.onSuccess(enrollmentService.createEnrollment(request));
     }
+
+    @Operation(
+            summary = "수업 참여 확정 변경 API",
+            description = "수업 참여 확정 상태를 변경하는 API입니다. (WAITING, CONFIRMED, CANCELED 상태로 변경 가능)")
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "ENROLLMENT404", description = "존재하지 않는 수강 신청입니다.", content = @Content(schema = @Schema(implementation = ApiResponse.class)))
+    })
+    @PutMapping("/{enrollmentId}/status")
+    public ApiResponse<EnrollmentResponseDTO> updateStatus(
+            @PathVariable Long enrollmentId,
+            @Valid @RequestBody EnrollmentRequestDTO.StatusUpdateRequest request) {
+        return ApiResponse.onSuccess(enrollmentService.updateStatus(enrollmentId, request));
+    }
 }

@@ -42,7 +42,7 @@ public class EnrollmentService {
         // 협상 상태 확인 (협상이 성공 상태인지)
         if (negotiation.getStatus() != NegotiationStatus.ACCEPTED) {
             throw new EnrollmentHandler(ErrorStatus.ENROLLMENT_INVALID_NEGOTIATION_STATUS);
-        }
+    }
 
         // 이미 진행중인 수업 확정 데이터가 있는지 확인
         if (negotiation.getEnrollment() != null) {
@@ -67,5 +67,20 @@ public class EnrollmentService {
         negotiationRepository.save(negotiation);
 
         return EnrollmentConverter.toResponseDTO(savedEnrollment);
+    }
+
+    @Transactional
+    public EnrollmentResponseDTO updateStatus(Long enrollmentId, EnrollmentRequestDTO.StatusUpdateRequest request) {
+        // 수강 신청 확인
+        Enrollment enrollment = enrollmentRepository.findById(enrollmentId)
+                .orElseThrow(() -> new EnrollmentHandler(ErrorStatus.ENROLLMENT_NOT_FOUND));
+
+        // 상태 변경
+        enrollment.setStatus(request.getStatus());
+
+        // 수강 신청 저장
+        Enrollment updatedEnrollment = enrollmentRepository.save(enrollment);
+
+        return EnrollmentConverter.toResponseDTO(updatedEnrollment);
     }
 }
