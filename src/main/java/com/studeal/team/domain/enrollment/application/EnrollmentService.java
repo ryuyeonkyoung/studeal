@@ -75,6 +75,14 @@ public class EnrollmentService {
         Enrollment enrollment = enrollmentRepository.findById(enrollmentId)
                 .orElseThrow(() -> new EnrollmentHandler(ErrorStatus.ENROLLMENT_NOT_FOUND));
 
+        // 비활성화된 수강 신청인지 확인
+        if (!enrollment.getIsActive()) {
+            throw new EnrollmentHandler(ErrorStatus.ENROLLMENT_INVALID_REQUEST, "비활성화된 수강 신청은 상태를 변경할 수 없습니다.");
+        }
+
+        // 상태 전환 유효성 검증
+        validateStatusTransition(enrollment.getStatus(), request.getStatus());
+
         // 상태 변경
         enrollment.setStatus(request.getStatus());
 
@@ -82,5 +90,41 @@ public class EnrollmentService {
         Enrollment updatedEnrollment = enrollmentRepository.save(enrollment);
 
         return EnrollmentConverter.toResponseDTO(updatedEnrollment);
+    }
+
+    /**
+     * 상태 전환이 유효한지 검증
+     * @param currentStatus 현재 상태
+     * @param newStatus 새로운 상태
+     */
+    private void validateStatusTransition(EnrollmentStatus currentStatus, EnrollmentStatus newStatus) {
+        if (currentStatus == newStatus) {
+            return; // 같은 상태로 변경하는 것은 허용
+        }
+
+        switch (currentStatus) {
+            case WAITING:
+                // WAITING에서는 CONFIRMED, CANCELED로 변경 가능
+                if (newStatus != EnrollmentStatus.CONFIRMED && newStatus != EnrollmentStatus.CANCELED) {
+                    throw new EnrollmentHandler(ErrorStatus.ENROLLMENT_INVALID_REQUEST,
+                            "대기 중인 수강 신청은 확정 또는 취소 상태로만 변경할 수 있습니다.");
+                }
+                break;
+            case CONFIRMED:
+                // CONFIRMED에서는 CANCELED로만 변경 가능
+                if (newStatus != EnrollmentStatus.CANCELED) {
+                    throw new EnrollmentHandler(ErrorStatus.ENROLLMENT_INVALID_REQUEST,
+                            "확정된 수강 신청은 취소 상태로만 변경할 수 있습니다.");
+                }
+                break;
+            case CANCELED:
+                // CANCELED 상태는 다른 상태로 변경 불가
+                throw new EnrollmentHandler(ErrorStatus.ENROLLMENT_INVALID_REQUEST,
+                        "취소된 수강 신청은 상태를 변경할 수 없습니다.");
+
+            default:
+                throw new EnrollmentHandler(ErrorStatus.ENROLLMENT_INVALID_REQUEST,
+                        "유효하지 않은 수강 신청 상태입니다.");
+        }
     }
 }

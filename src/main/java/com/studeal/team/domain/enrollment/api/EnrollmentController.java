@@ -42,6 +42,7 @@ public class EnrollmentController {
                     " 이 API를 통해 학생은 수업 참여 확정 상태를 업데이트할 수 있습니다.")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "ENROLLMENT404", description = "존재하지 않는 수강 신청입니다.", content = @Content(schema = @Schema(implementation = ApiResponse.class))),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "ENROLLMENT4002", description = "유효하지 않은 상태 변경 요청입니다.", content = @Content(schema = @Schema(implementation = ApiResponse.class)))
     })
     @PatchMapping("/{enrollmentId}/status")
     public ApiResponse<EnrollmentResponseDTO> updateStatus(
