@@ -10,9 +10,11 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 
-/*
- * AuctionBoard (게시글) → Negotiation (협상) → 성공 → Enrollment (수강 신청, WAITING) → Lesson (수업 생성) → Enrollment 상태 변경 (CONFIRMED)
-*/
+/**
+ * 수강 신청 도메인 엔티티
+ * <p>
+ * 프로세스 플로우: AuctionBoard (게시글) → Negotiation (협상) → 성공 → Enrollment (수강 신청, WAITING) → Lesson (수업 생성) → Enrollment 상태 변경 (CONFIRMED)
+ */
 
 /*
     * Enrollment (수강 신청) 엔티티는 학생이 협상에서 성공한 후, 수업 참여를 확정하는 상태를 나타냅니다.
