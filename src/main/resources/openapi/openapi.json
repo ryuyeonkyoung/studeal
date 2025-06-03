@@ -89,8 +89,8 @@
               }
             }
           },
-          "BOARD4001": {
-            "description": "게시글을 찾을 수 없습니다.",
+          "BOARD4003": {
+            "description": "게시글 수정 권한이 없습니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -99,8 +99,8 @@
               }
             }
           },
-          "BOARD4003": {
-            "description": "게시글 수정 권한이 없습니다.",
+          "BOARD4001": {
+            "description": "게시글을 찾을 수 없습니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -151,8 +151,8 @@
               }
             }
           },
-          "BOARD4001": {
-            "description": "게시글을 찾을 수 없습니다.",
+          "BOARD4002": {
+            "description": "게시글 작성자만 삭제할 수 있습니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -161,8 +161,8 @@
               }
             }
           },
-          "BOARD4002": {
-            "description": "게시글 작성자만 삭제할 수 있습니다.",
+          "BOARD4001": {
+            "description": "게시글을 찾을 수 없습니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -193,8 +193,8 @@
           "required": true
         },
         "responses": {
-          "USER404": {
-            "description": "존재하지 않는 학생 또는 강사입니다.",
+          "NEGOTIATION4001": {
+            "description": "유효하지 않은 가격 제안 요청입니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -203,8 +203,8 @@
               }
             }
           },
-          "NEGOTIATION4001": {
-            "description": "유효하지 않은 가격 제안 요청입니다.",
+          "USER404": {
+            "description": "존재하지 않는 학생 또는 강사입니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -245,16 +245,6 @@
           "required": true
         },
         "responses": {
-          "LESSON4003": {
-            "description": "강사 정보가 필요합니다.",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
-                }
-              }
-            }
-          },
           "COMMON200": {
             "description": "OK, 성공",
             "content": {
@@ -265,8 +255,8 @@
               }
             }
           },
-          "TEACHER4001": {
-            "description": "강사가 존재하지 않습니다.",
+          "LESSON4003": {
+            "description": "강사 정보가 필요합니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -285,8 +275,8 @@
               }
             }
           },
-          "LESSON4001": {
-            "description": "수업이 존재하지 않습니다.",
+          "LESSON4005": {
+            "description": "유효한 수업 가격이 필요합니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -295,8 +285,8 @@
               }
             }
           },
-          "LESSON4005": {
-            "description": "유효한 수업 가격이 필요합니다.",
+          "STUDENT4001": {
+            "description": "학생이 존재하지 않습니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -315,8 +305,18 @@
               }
             }
           },
-          "STUDENT4001": {
-            "description": "학생이 존재하지 않습니다.",
+          "TEACHER4001": {
+            "description": "강사가 존재하지 않습니다.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
+                }
+              }
+            }
+          },
+          "LESSON4001": {
+            "description": "수업이 존재하지 않습니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -334,7 +334,7 @@
           "수업 참여 확정"
         ],
         "summary": "최고가를 부른 학생과 선생님을 연결하는 API",
-        "description": "경매 종료 후, 최고가를 부른 학생과 선생님을 연결하는 API입니다. 이를 통해 학생은 낙찰받은 수업을 결제하여 거래를 성사하거나, 거절하여 최종 낙찰을 포기할 수 있습니다.",
+        "description": "경매 종료 후, 최고가를 부른 학생과 선생님을 연결하는 API입니다.이를 통해 학생은 낙찰받은 수업을 결제하여 거래를 성사하거나, 거절하여 최종 낙찰을 포기할 수 있습니다.",
         "operationId": "createEnrollment",
         "requestBody": {
           "content": {
@@ -357,8 +357,18 @@
               }
             }
           },
+          "NEGOTIATION404": {
+            "description": "존재하지 않는 협상입니다.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
+                }
+              }
+            }
+          },
           "ENROLLMENT4001": {
-            "description": "이미 수강 신청이 존재합니다.",
+            "description": "이미 Enrollment(학생의 수업 참여 확정 현황)가 존재합니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -369,16 +379,6 @@
           },
           "STUDENT4001": {
             "description": "존재하지 않는 학생입니다.",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
-                }
-              }
-            }
-          },
-          "NEGOTIATION404": {
-            "description": "존재하지 않는 협상입니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -473,8 +473,8 @@
           "required": true
         },
         "responses": {
-          "USER4005": {
-            "description": "이름은 필수입니다.",
+          "USER4004": {
+            "description": "유효하지 않은 비밀번호 형식입니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -483,18 +483,8 @@
               }
             }
           },
-          "COMMON200": {
-            "description": "OK, 성공",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponseCom.studeal.team.domain.user.dto.UserResponseDTO"
-                }
-              }
-            }
-          },
-          "USER4004": {
-            "description": "유효하지 않은 비밀번호 형식입니다.",
+          "USER4005": {
+            "description": "이름은 필수입니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -513,6 +503,16 @@
               }
             }
           },
+          "COMMON200": {
+            "description": "OK, 성공",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponseCom.studeal.team.domain.user.dto.UserResponseDTO"
+                }
+              }
+            }
+          },
           "USER4002": {
             "description": "이미 등록된 이메일입니다.",
             "content": {
@@ -525,6 +525,59 @@
           },
           "USER4003": {
             "description": "유효하지 않은 사용자 역할입니다.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/studeal/enrollments/{enrollmentId}/status": {
+      "patch": {
+        "tags": [
+          "수업 참여 확정"
+        ],
+        "summary": "수업 참여 확정 변경 API",
+        "description": "수업 참여 확정 상태를 변경하는 API입니다. (WAITING → CONFIRMED/CANCELED, CONFIRMED → CANCELED 변경 가능) 이 API를 통해 학생은 수업 참여 확정 상태를 업데이트할 수 있습니다.",
+        "operationId": "updateStatus",
+        "parameters": [
+          {
+            "name": "enrollmentId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/com.studeal.team.domain.enrollment.dto.EnrollmentRequestDTO$StatusUpdateRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "ENROLLMENT4002": {
+            "description": "유효하지 않은 상태 변경 요청입니다.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
+                }
+              }
+            }
+          },
+          "ENROLLMENT404": {
+            "description": "존재하지 않는 수강 신청입니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -1033,6 +1086,22 @@
           },
           "result": {
             "$ref": "#/components/schemas/com.studeal.team.domain.user.dto.UserResponseDTO"
+          }
+        }
+      },
+      "com.studeal.team.domain.enrollment.dto.EnrollmentRequestDTO$StatusUpdateRequest": {
+        "required": [
+          "status"
+        ],
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "WAITING",
+              "CONFIRMED",
+              "CANCELED"
+            ]
           }
         }
       },
