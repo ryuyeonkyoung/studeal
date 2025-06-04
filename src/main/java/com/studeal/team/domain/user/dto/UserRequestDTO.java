@@ -6,41 +6,72 @@ import com.studeal.team.global.validation.annotation.StrictEmail;
 import com.studeal.team.global.validation.annotation.StrongPassword;
 import com.studeal.team.global.validation.annotation.UniqueEmail;
 import com.studeal.team.domain.user.domain.validation.ValidMajorSubject;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * 사용자 요청 DTO 클래스
+ * 모든 사용자 관련 요청 DTO들의 컨테이너입니다.
+ */
+@Schema(description = "사용자 요청 DTO")
 public class UserRequestDTO {
 
+    /**
+     * 회원가입 요청 DTO
+     */
     @Getter
     @Setter
     @ValidMajorSubject
+    @Schema(description = "회원가입 요청")
     public static class SignupRequest {
         @NotBlank
         @Size(max = 50)
+        @Schema(description = "사용자 이름", example = "홍길동", required = true)
         private String name;
 
         @StrictEmail
         @NotBlank
         @UniqueEmail
         @Size(max = 100)
+        @Schema(description = "이메일", example = "user@example.com", required = true)
         private String email;
 
         @NotBlank
         @StrongPassword
         @Size(max = 255)
+        @Schema(description = "비밀번호", example = "StrongPassword1!", required = true)
         private String password;
 
         @NotNull
+        @Schema(description = "사용자 역할", example = "STUDENT", required = true)
         private UserRole role;
 
         @Size(max = 1000)
+        @Schema(description = "자기소개", example = "안녕하세요, 대학생 홍길동입니다.")
         private String bio;
 
         // Student 필드
+        @Schema(description = "전공 과목", example = "MATH")
         private MajorSubject major;
     }
-}
 
+    /**
+     * 로그인 요청 DTO
+     */
+    @Getter
+    @Setter
+    @Schema(name = "LoginRequest", description = "로그인 요청")
+    public static class LoginRequest {
+        @NotBlank(message = "이메일은 필수입니다")
+        @Schema(description = "이메일", example = "user@example.com", required = true)
+        private String email;
+
+        @NotBlank(message = "비밀번호는 필수입니다")
+        @Schema(description = "비밀번호", example = "StrongPassword1!", required = true)
+        private String password;
+    }
+}

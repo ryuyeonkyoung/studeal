@@ -10,7 +10,7 @@ import lombok.*;
 @Table(name = "FAVORITES")
 @Getter
 @Setter
-@NoArgsConstructor
+@NoArgsConstructor(access=AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
 public class Favorite extends BaseEntity {

@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Table(name = "BOARD_FILES")
 @Getter
 @Setter
-@NoArgsConstructor
+@NoArgsConstructor(access=AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
 public class AuctionBoardFile extends BaseEntity {

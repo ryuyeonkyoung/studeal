@@ -13,7 +13,7 @@ import java.util.Set;
 @DiscriminatorValue(value = "STUDENT")
 @Getter
 @Setter
-@NoArgsConstructor
+@NoArgsConstructor(access=AccessLevel.PROTECTED)
 @AllArgsConstructor
 @SuperBuilder
 public class Student extends User {

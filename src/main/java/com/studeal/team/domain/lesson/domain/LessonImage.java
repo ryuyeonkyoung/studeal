@@ -9,7 +9,7 @@ import lombok.*;
 @Table(name = "LESSON_FILES")
 @Getter
 @Setter
-@NoArgsConstructor
+@NoArgsConstructor(access=AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
 public class LessonImage extends BaseEntity {

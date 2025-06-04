@@ -29,14 +29,6 @@ public class ValidMajorSubjectValidator implements ConstraintValidator<ValidMajo
             }
             return true;
         }
-        // Student 역할일 경우 major 필드가 null이어야 함 (교사 전용 필드)
-        else if (request.getRole() == UserRole.STUDENT && request.getMajor() != null) {
-            // 오류 메시지 사용자 지정
-            context.disableDefaultConstraintViolation();
-            context.buildConstraintViolationWithTemplate("학생 역할에서는 전공 과목을 지정할 수 없습니다")
-                   .addConstraintViolation();
-            return false;
-        }
 
         return true;
     }
