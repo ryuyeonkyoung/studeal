@@ -9,7 +9,7 @@ import lombok.*;
 @Table(name = "GRADES")
 @Getter
 @Setter
-@NoArgsConstructor
+@NoArgsConstructor(access=AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
 public class Grade extends BaseEntity {

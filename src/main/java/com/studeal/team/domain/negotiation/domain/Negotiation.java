@@ -16,7 +16,7 @@ import lombok.*;
 @Table(name = "NEGOTIATIONS")
 @Getter
 @Setter
-@NoArgsConstructor
+@NoArgsConstructor(access=AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
 public class Negotiation extends BaseEntity {

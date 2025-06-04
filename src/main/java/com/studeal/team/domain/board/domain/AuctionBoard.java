@@ -17,7 +17,7 @@ import java.util.Set;
 @Table(name = "BOARDS")
 @Getter
 @Setter
-@NoArgsConstructor
+@NoArgsConstructor(access=AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
 public class AuctionBoard extends BaseEntity {

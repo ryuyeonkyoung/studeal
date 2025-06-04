@@ -14,7 +14,7 @@ import java.util.Set;
 @Table(name = "LESSONS")
 @Getter
 @Setter
-@NoArgsConstructor
+@NoArgsConstructor(access=AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
 public class Lesson extends BaseEntity {

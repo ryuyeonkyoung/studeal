@@ -12,7 +12,7 @@ import lombok.experimental.SuperBuilder;
 @DiscriminatorColumn(name = "role", discriminatorType = DiscriminatorType.STRING)
 @Getter
 @Setter
-@NoArgsConstructor
+@NoArgsConstructor(access=AccessLevel.PROTECTED)
 @AllArgsConstructor
 @SuperBuilder
 public class User {

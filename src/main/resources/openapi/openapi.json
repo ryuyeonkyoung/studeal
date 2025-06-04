@@ -79,6 +79,16 @@
           "required": true
         },
         "responses": {
+          "BOARD4001": {
+            "description": "게시글을 찾을 수 없습니다.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
+                }
+              }
+            }
+          },
           "COMMON200": {
             "description": "OK, 성공",
             "content": {
@@ -91,16 +101,6 @@
           },
           "BOARD4003": {
             "description": "게시글 수정 권한이 없습니다.",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
-                }
-              }
-            }
-          },
-          "BOARD4001": {
-            "description": "게시글을 찾을 수 없습니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -141,6 +141,16 @@
           }
         ],
         "responses": {
+          "BOARD4001": {
+            "description": "게시글을 찾을 수 없습니다.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
+                }
+              }
+            }
+          },
           "COMMON200": {
             "description": "OK, 성공",
             "content": {
@@ -153,16 +163,6 @@
           },
           "BOARD4002": {
             "description": "게시글 작성자만 삭제할 수 있습니다.",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
-                }
-              }
-            }
-          },
-          "BOARD4001": {
-            "description": "게시글을 찾을 수 없습니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -193,12 +193,12 @@
           "required": true
         },
         "responses": {
-          "NEGOTIATION4001": {
-            "description": "유효하지 않은 가격 제안 요청입니다.",
+          "COMMON200": {
+            "description": "OK, 성공",
             "content": {
               "*/*": {
                 "schema": {
-                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
+                  "$ref": "#/components/schemas/com.studeal.team.domain.negotiation.dto.NegotiationResponseDTO"
                 }
               }
             }
@@ -213,12 +213,12 @@
               }
             }
           },
-          "COMMON200": {
-            "description": "OK, 성공",
+          "NEGOTIATION4001": {
+            "description": "유효하지 않은 가격 제안 요청입니다.",
             "content": {
               "*/*": {
                 "schema": {
-                  "$ref": "#/components/schemas/com.studeal.team.domain.negotiation.dto.NegotiationResponseDTO"
+                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
                 }
               }
             }
@@ -265,26 +265,6 @@
               }
             }
           },
-          "LESSON4002": {
-            "description": "수업 제목은 필수입니다.",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
-                }
-              }
-            }
-          },
-          "LESSON4005": {
-            "description": "유효한 수업 가격이 필요합니다.",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
-                }
-              }
-            }
-          },
           "STUDENT4001": {
             "description": "학생이 존재하지 않습니다.",
             "content": {
@@ -317,6 +297,26 @@
           },
           "LESSON4001": {
             "description": "수업이 존재하지 않습니다.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
+                }
+              }
+            }
+          },
+          "LESSON4005": {
+            "description": "유효한 수업 가격이 필요합니다.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
+                }
+              }
+            }
+          },
+          "LESSON4002": {
+            "description": "수업 제목은 필수입니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -367,8 +367,8 @@
               }
             }
           },
-          "ENROLLMENT4001": {
-            "description": "이미 Enrollment(학생의 수업 참여 확정 현황)가 존재합니다.",
+          "STUDENT4001": {
+            "description": "존재하지 않는 학생입니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -377,8 +377,8 @@
               }
             }
           },
-          "STUDENT4001": {
-            "description": "존재하지 않는 학생입니다.",
+          "ENROLLMENT4001": {
+            "description": "이미 Enrollment(학생의 수업 참여 확정 현황)가 존재합니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -421,22 +421,22 @@
           "required": true
         },
         "responses": {
-          "COMMON200": {
-            "description": "OK, 성공",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponseBoardDetailResponse"
-                }
-              }
-            }
-          },
           "BOARD4001": {
             "description": "게시글을 찾을 수 없습니다.",
             "content": {
               "*/*": {
                 "schema": {
                   "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
+                }
+              }
+            }
+          },
+          "COMMON200": {
+            "description": "OK, 성공",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponseBoardDetailResponse"
                 }
               }
             }
@@ -473,18 +473,18 @@
           "required": true
         },
         "responses": {
-          "USER4004": {
-            "description": "유효하지 않은 비밀번호 형식입니다.",
+          "COMMON200": {
+            "description": "OK, 성공",
             "content": {
               "*/*": {
                 "schema": {
-                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
+                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponseCom.studeal.team.domain.user.dto.UserResponseDTO"
                 }
               }
             }
           },
-          "USER4005": {
-            "description": "이름은 필수입니다.",
+          "USER4004": {
+            "description": "유효하지 않은 비밀번호 형식입니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -503,12 +503,12 @@
               }
             }
           },
-          "COMMON200": {
-            "description": "OK, 성공",
+          "USER4005": {
+            "description": "이름은 필수입니다.",
             "content": {
               "*/*": {
                 "schema": {
-                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponseCom.studeal.team.domain.user.dto.UserResponseDTO"
+                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
                 }
               }
             }

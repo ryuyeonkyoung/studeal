@@ -25,7 +25,7 @@ import java.time.LocalDateTime;
 @Table(name = "ENROLLMENTS")
 @Getter
 @Setter
-@NoArgsConstructor
+@NoArgsConstructor(access=AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
 public class Enrollment extends BaseEntity {

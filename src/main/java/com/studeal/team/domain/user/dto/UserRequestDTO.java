@@ -42,5 +42,14 @@ public class UserRequestDTO {
         // Student 필드
         private MajorSubject major;
     }
-}
 
+    @Getter
+    @Setter
+    public static class LoginRequest {
+        @NotBlank(message = "이메일은 필수입니다")
+        private String email;
+
+        @NotBlank(message = "비밀번호는 필수입니다")
+        private String password;
+    }
+}
