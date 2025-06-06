@@ -58,8 +58,13 @@ public class UserService {
         // 실제 검증 (사용자 비밀번호 체크)
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
-        // JWT 토큰 생성
-        String accessToken = jwtTokenProvider.createAccessToken(authentication);
+        // 인증된 사용자의 ID 조회
+        var userDetails = userRepository.findByEmail(loginRequest.getEmail())
+                .orElseThrow(() -> new UserHandler(ErrorStatus.USER_NOT_FOUND));
+        Long userId = userDetails.getUserId();
+
+        // JWT 토큰 생성 (userId 포함)
+        String accessToken = jwtTokenProvider.createAccessToken(authentication, userId);
         String refreshToken = jwtTokenProvider.createRefreshToken(authentication);
 
         return TokenDTO.builder()

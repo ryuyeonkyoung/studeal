@@ -37,7 +37,7 @@ public class JwtTokenProvider {
     }
 
     // 액세스 토큰 생성
-    public String createAccessToken(Authentication authentication) {
+    public String createAccessToken(Authentication authentication, Long userId) {
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
@@ -47,6 +47,7 @@ public class JwtTokenProvider {
 
         return Jwts.builder()
                 .setSubject(authentication.getName())
+                .claim("userId", userId)
                 .claim("auth", authorities)
                 .claim("type", "access")
                 .signWith(key, SignatureAlgorithm.HS512)
@@ -98,13 +99,25 @@ public class JwtTokenProvider {
         }
     }
 
-    // 토큰에서 사용자 이메일(ID) 추출
-    public String getUserEmail(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(key)
-                .build()
-                .parseClaimsJws(token)
-                .getBody()
-                .getSubject();
+    // 토큰에서 사용자 ID 추출
+    public String extractUserIdAsString(String token) {
+        try {
+            Claims claims = Jwts.parserBuilder()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+
+            // userId 클레임에서 사용자 ID 추출
+            if (claims.get("userId") != null) {
+                return String.valueOf(claims.get("userId"));
+            }
+
+            return null;
+        } catch (JwtException | IllegalArgumentException e) {
+            log.info("Cannot extract user ID from JWT token: {}", e.getMessage());
+            return null;
+        }
     }
 }
+
