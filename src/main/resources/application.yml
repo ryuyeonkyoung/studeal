@@ -27,7 +27,7 @@ jwt:
 springdoc:
   use-fqn: true
   swagger-ui:
-    path: /swagger-ui.html
+    path: /api/swagger-ui.html
     disable-swagger-default-url: true
     default-models-expand-depth: 2
     default-model-expand-depth: 3
