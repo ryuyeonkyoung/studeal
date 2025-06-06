@@ -36,7 +36,8 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("ConstraintViolationException 추출 도중 에러 발생"));
 
-        return handleExceptionInternalConstraint(e, ErrorStatus.valueOf(errorMessage), HttpHeaders.EMPTY,request);
+        ErrorStatus errorStatus = ErrorStatus.valueOf(errorMessage);
+        return handleExceptionInternalConstraint(e, errorStatus, HttpHeaders.EMPTY, request);
     }
 
     // 2) MethodArgumentNotValidException 전용 처리
@@ -57,15 +58,17 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
 
     // 3) GeneralException (Custom Exception) 전용 처리
     @ExceptionHandler(value = GeneralException.class)
-    public ResponseEntity onThrowException(GeneralException generalException, HttpServletRequest request) {
+    public ResponseEntity<Object> onThrowException(GeneralException generalException, HttpServletRequest request) {
         ErrorReasonDTO errorReasonHttpStatus = generalException.getErrorReasonHttpStatus();
         return handleExceptionInternal(generalException,errorReasonHttpStatus,null,request);
     }
 
     private ResponseEntity<Object> handleExceptionInternal(Exception e, ErrorReasonDTO reason,
                                                            HttpHeaders headers, HttpServletRequest request) {
+        // 커스텀 코드로부터 적절한 HTTP 상태 코드 추출
+        HttpStatus httpStatus = determineHttpStatus(reason.getCode(), reason.getHttpStatus());
 
-        ApiResponse<Object> body = ApiResponse.onFailure(reason.getCode(),reason.getMessage(),null);
+        ApiResponse<Object> body = ApiResponse.onFailure(reason.getCode(), reason.getMessage(), null);
 //        e.printStackTrace();
 
         WebRequest webRequest = new ServletWebRequest(request);
@@ -73,7 +76,7 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
                 e,
                 body,
                 headers,
-                reason.getHttpStatus(),
+                httpStatus,
                 webRequest
         );
     }
@@ -83,42 +86,81 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> exception(Exception e, WebRequest request) {
         e.printStackTrace();
 
-        return handleExceptionInternalFalse(e, ErrorStatus._INTERNAL_SERVER_ERROR, HttpHeaders.EMPTY, ErrorStatus._INTERNAL_SERVER_ERROR.getHttpStatus(), request, e.getMessage());
+        HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+        return handleExceptionInternalFalse(e, ErrorStatus._INTERNAL_SERVER_ERROR, HttpHeaders.EMPTY, httpStatus, request, e.getMessage());
     }
 
     private ResponseEntity<Object> handleExceptionInternalFalse(Exception e, ErrorStatus errorCommonStatus,
                                                                 HttpHeaders headers, HttpStatus status, WebRequest request, String errorPoint) {
-        ApiResponse<Object> body = ApiResponse.onFailure(errorCommonStatus.getCode(),errorCommonStatus.getMessage(),errorPoint);
+        // 커스텀 코드로부터 적절한 HTTP 상태 코드 추출
+        HttpStatus httpStatus = determineHttpStatus(errorCommonStatus.getCode(), status);
+
+        ApiResponse<Object> body = ApiResponse.onFailure(errorCommonStatus.getCode(), errorCommonStatus.getMessage(), errorPoint);
         return super.handleExceptionInternal(
                 e,
                 body,
                 headers,
-                status,
+                httpStatus,
                 request
         );
     }
 
     private ResponseEntity<Object> handleExceptionInternalArgs(Exception e, HttpHeaders headers, ErrorStatus errorCommonStatus,
                                                                WebRequest request, Map<String, String> errorArgs) {
-        ApiResponse<Object> body = ApiResponse.onFailure(errorCommonStatus.getCode(),errorCommonStatus.getMessage(),errorArgs);
+        // 커스텀 코드로부터 적절한 HTTP 상태 코드 추출
+        HttpStatus httpStatus = determineHttpStatus(errorCommonStatus.getCode(), errorCommonStatus.getHttpStatus());
+
+        ApiResponse<Object> body = ApiResponse.onFailure(errorCommonStatus.getCode(), errorCommonStatus.getMessage(), errorArgs);
         return super.handleExceptionInternal(
                 e,
                 body,
                 headers,
-                errorCommonStatus.getHttpStatus(),
+                httpStatus,
                 request
         );
     }
 
     private ResponseEntity<Object> handleExceptionInternalConstraint(Exception e, ErrorStatus errorCommonStatus,
                                                                      HttpHeaders headers, WebRequest request) {
+        // 커스텀 코드로부터 적절한 HTTP 상태 코드 추출
+        HttpStatus httpStatus = determineHttpStatus(errorCommonStatus.getCode(), errorCommonStatus.getHttpStatus());
+
         ApiResponse<Object> body = ApiResponse.onFailure(errorCommonStatus.getCode(), errorCommonStatus.getMessage(), null);
         return super.handleExceptionInternal(
                 e,
                 body,
                 headers,
-                errorCommonStatus.getHttpStatus(),
+                httpStatus,
                 request
         );
+    }
+
+    // 커스텀 코드를 기반으로 표준 HTTP 상태 코드 결정
+    private HttpStatus determineHttpStatus(String customCode, HttpStatus defaultStatus) {
+        if (customCode == null) {
+            return defaultStatus;
+        }
+
+        if (customCode.startsWith("COMMON") || customCode.contains("200")) {
+            return HttpStatus.OK;
+        } else if (customCode.contains("400") ||
+                  customCode.contains("4001") ||
+                  customCode.contains("4002") ||
+                  customCode.contains("4004") ||
+                  customCode.contains("4005") ||
+                  customCode.contains("4006")) {
+            return HttpStatus.BAD_REQUEST;
+        } else if (customCode.contains("401")) {
+            return HttpStatus.UNAUTHORIZED;
+        } else if (customCode.contains("403") ||
+                  customCode.contains("4003")) {
+            return HttpStatus.FORBIDDEN;
+        } else if (customCode.contains("404")) {
+            return HttpStatus.NOT_FOUND;
+        } else if (customCode.contains("500")) {
+            return HttpStatus.INTERNAL_SERVER_ERROR;
+        } else {
+            return defaultStatus;
+        }
     }
 }
