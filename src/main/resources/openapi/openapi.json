@@ -6,11 +6,11 @@
     "contact": {
       "name": "Studeal Team"
     },
-    "version": "1.1.0"
+    "version": "2.1.0"
   },
   "servers": [
     {
-      "url": "http://localhost:8080",
+      "url": "http://localhost:8080/api",
       "description": "Generated server url"
     }
   ],
@@ -33,16 +33,54 @@
       "description": "과외 모집 게시판 관련 API"
     },
     {
-      "name": "수업",
-      "description": "수업 관련 API"
-    },
-    {
       "name": "가격 제안(협상)",
       "description": "학생의 가격 제안(협상) 관련 API"
     }
   ],
   "paths": {
-    "/boards/{boardId}/teachers/{teacherId}": {
+    "/boards/{boardId}": {
+      "get": {
+        "tags": [
+          "게시판 API"
+        ],
+        "summary": "게시글 상세 조회 - 선생님",
+        "description": "선생님이 조회하는 게시글 상세 정보 API. 게시글 정보와 입찰 순위 정보를 함께 제공합니다.",
+        "operationId": "getTeacherDetail",
+        "parameters": [
+          {
+            "name": "boardId",
+            "in": "path",
+            "description": "게시글 ID",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "게시글을 찾을 수 없습니다.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK, 성공",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponseDetailTeacherResponse"
+                }
+              }
+            }
+          }
+        }
+      },
       "put": {
         "tags": [
           "게시판 API"
@@ -55,16 +93,6 @@
             "name": "boardId",
             "in": "path",
             "description": "게시글 ID",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          },
-          {
-            "name": "teacherId",
-            "in": "path",
-            "description": "선생님 ID",
             "required": true,
             "schema": {
               "type": "integer",
@@ -83,7 +111,7 @@
           "required": true
         },
         "responses": {
-          "COMMON200": {
+          "200": {
             "description": "OK, 성공",
             "content": {
               "*/*": {
@@ -93,18 +121,8 @@
               }
             }
           },
-          "BOARD4003": {
+          "400": {
             "description": "게시글 수정 권한이 없습니다.",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
-                }
-              }
-            }
-          },
-          "BOARD4001": {
-            "description": "게시글을 찾을 수 없습니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -132,20 +150,10 @@
               "type": "integer",
               "format": "int64"
             }
-          },
-          {
-            "name": "teacherId",
-            "in": "path",
-            "description": "선생님 ID",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
           }
         ],
         "responses": {
-          "COMMON200": {
+          "200": {
             "description": "OK, 성공",
             "content": {
               "*/*": {
@@ -155,18 +163,8 @@
               }
             }
           },
-          "BOARD4002": {
+          "400": {
             "description": "게시글 작성자만 삭제할 수 있습니다.",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
-                }
-              }
-            }
-          },
-          "BOARD4001": {
-            "description": "게시글을 찾을 수 없습니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -197,7 +195,7 @@
           "required": true
         },
         "responses": {
-          "COMMON200": {
+          "200": {
             "description": "OK, 성공",
             "content": {
               "*/*": {
@@ -207,17 +205,7 @@
               }
             }
           },
-          "NEGOTIATION4001": {
-            "description": "유효하지 않은 가격 제안 요청입니다.",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
-                }
-              }
-            }
-          },
-          "USER404": {
+          "404": {
             "description": "존재하지 않는 학생 또는 강사입니다.",
             "content": {
               "*/*": {
@@ -226,101 +214,9 @@
                 }
               }
             }
-          }
-        }
-      }
-    },
-    "/lessons": {
-      "post": {
-        "tags": [
-          "수업"
-        ],
-        "summary": "수업 개설 API",
-        "description": "새로운 수업을 개설하는 API입니다. 강사와 학생 정보가 필요합니다.",
-        "operationId": "createLesson",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/com.studeal.team.domain.lesson.dto.LessonRequestDTO$CreateRequest"
-              }
-            }
           },
-          "required": true
-        },
-        "responses": {
-          "LESSON4001": {
-            "description": "수업이 존재하지 않습니다.",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
-                }
-              }
-            }
-          },
-          "LESSON4002": {
-            "description": "수업 제목은 필수입니다.",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
-                }
-              }
-            }
-          },
-          "LESSON4005": {
-            "description": "유효한 수업 가격이 필요합니다.",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
-                }
-              }
-            }
-          },
-          "COMMON200": {
-            "description": "OK, 성공",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponseCom.studeal.team.domain.lesson.dto.LessonResponseDTO$CreateResponse"
-                }
-              }
-            }
-          },
-          "LESSON4004": {
-            "description": "최소 한 명 이상의 학생이 필요합니다.",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
-                }
-              }
-            }
-          },
-          "TEACHER4001": {
-            "description": "강사가 존재하지 않습니다.",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
-                }
-              }
-            }
-          },
-          "LESSON4003": {
-            "description": "강사 정보가 필요합니다.",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
-                }
-              }
-            }
-          },
-          "STUDENT4001": {
-            "description": "학생이 존재하지 않습니다.",
+          "400": {
+            "description": "유효하지 않은 가격 제안 요청입니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -351,27 +247,7 @@
           "required": true
         },
         "responses": {
-          "NEGOTIATION404": {
-            "description": "존재하지 않는 협상입니다.",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
-                }
-              }
-            }
-          },
-          "STUDENT4001": {
-            "description": "존재하지 않는 학생입니다.",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
-                }
-              }
-            }
-          },
-          "ENROLLMENT4001": {
+          "400": {
             "description": "이미 Enrollment(학생의 수업 참여 확정 현황)가 존재합니다.",
             "content": {
               "*/*": {
@@ -381,8 +257,8 @@
               }
             }
           },
-          "ENROLLMENT4003": {
-            "description": "협상이 성공 상태가 아닙니다.",
+          "404": {
+            "description": "존재하지 않는 협상입니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -394,7 +270,7 @@
         }
       }
     },
-    "/boards/teachers/{teacherId}": {
+    "/boards": {
       "post": {
         "tags": [
           "게시판 API"
@@ -402,18 +278,6 @@
         "summary": "게시글 생성",
         "description": "선생님이 과외 모집 게시글을 작성합니다.",
         "operationId": "createBoard",
-        "parameters": [
-          {
-            "name": "teacherId",
-            "in": "path",
-            "description": "선생님 ID",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -425,7 +289,7 @@
           "required": true
         },
         "responses": {
-          "COMMON200": {
+          "200": {
             "description": "OK, 성공",
             "content": {
               "*/*": {
@@ -435,17 +299,7 @@
               }
             }
           },
-          "BOARD4001": {
-            "description": "게시글을 찾을 수 없습니다.",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
-                }
-              }
-            }
-          },
-          "TEACHER4001": {
+          "400": {
             "description": "선생님을 찾을 수 없습니다.",
             "content": {
               "*/*": {
@@ -477,27 +331,7 @@
           "required": true
         },
         "responses": {
-          "USER4003": {
-            "description": "유효하지 않은 사용자 역할입니다.",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
-                }
-              }
-            }
-          },
-          "COMMON200": {
-            "description": "OK, 성공",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponseCom.studeal.team.domain.user.dto.UserResponseDTO"
-                }
-              }
-            }
-          },
-          "USER4002": {
+          "400": {
             "description": "이미 등록된 이메일입니다.",
             "content": {
               "*/*": {
@@ -507,32 +341,12 @@
               }
             }
           },
-          "USER4004": {
-            "description": "유효하지 않은 비밀번호 형식입니다.",
+          "200": {
+            "description": "OK, 성공",
             "content": {
               "*/*": {
                 "schema": {
-                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
-                }
-              }
-            }
-          },
-          "USER4005": {
-            "description": "이름은 필수입니다.",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
-                }
-              }
-            }
-          },
-          "USER4006": {
-            "description": "유효한 이메일 형식이 아닙니다.",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
+                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponseCom.studeal.team.domain.user.dto.UserResponseDTO"
                 }
               }
             }
@@ -549,7 +363,7 @@
         "description": "현재 인증된 사용자를 로그아웃 처리합니다.",
         "operationId": "logout",
         "responses": {
-          "COMMON200": {
+          "200": {
             "description": "OK, 성공",
             "content": {
               "*/*": {
@@ -581,7 +395,7 @@
           "required": true
         },
         "responses": {
-          "COMMON200": {
+          "200": {
             "description": "OK, 성공",
             "content": {
               "*/*": {
@@ -591,7 +405,7 @@
               }
             }
           },
-          "USER4001": {
+          "400": {
             "description": "잘못된 인증 정보입니다.",
             "content": {
               "*/*": {
@@ -634,8 +448,8 @@
           "required": true
         },
         "responses": {
-          "ENROLLMENT404": {
-            "description": "존재하지 않는 수강 신청입니다.",
+          "400": {
+            "description": "유효하지 않은 상태 변경 요청입니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -644,8 +458,8 @@
               }
             }
           },
-          "ENROLLMENT4002": {
-            "description": "유효하지 않은 상태 변경 요청입니다.",
+          "404": {
+            "description": "존재하지 않는 수강 신청입니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -677,22 +491,22 @@
           }
         ],
         "responses": {
-          "NEGOTIATION404": {
-            "description": "존재하지 않는 협상입니다.",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
-                }
-              }
-            }
-          },
-          "COMMON200": {
+          "200": {
             "description": "OK, 성공",
             "content": {
               "*/*": {
                 "schema": {
                   "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponseJava.lang.Void"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "존재하지 않는 협상입니다.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
                 }
               }
             }
@@ -731,12 +545,12 @@
             "description": "게시글 유형",
             "example": "MATH",
             "enum": [
-              "MATH",
-              "SCIENCE",
-              "ENGLISH",
-              "KOREAN",
-              "HISTORY",
-              "CODING"
+              "수학",
+              "과학",
+              "영어",
+              "국어",
+              "역사",
+              "코딩"
             ]
           },
           "expectedPrice": {
@@ -763,9 +577,15 @@
             "description": "성공 여부",
             "example": true
           },
+          "httpStatusCode": {
+            "type": "integer",
+            "description": "HTTP 상태 코드",
+            "format": "int32",
+            "example": 200
+          },
           "code": {
             "type": "string",
-            "description": "응답 코드",
+            "description": "커스텀 응답 코드",
             "example": "COMMON200"
           },
           "message": {
@@ -815,12 +635,12 @@
             "description": "게시글 유형",
             "example": "MATH",
             "enum": [
-              "MATH",
-              "SCIENCE",
-              "ENGLISH",
-              "KOREAN",
-              "HISTORY",
-              "CODING"
+              "수학",
+              "과학",
+              "영어",
+              "국어",
+              "역사",
+              "코딩"
             ]
           },
           "expectedPrice": {
@@ -860,9 +680,15 @@
             "description": "성공 여부",
             "example": true
           },
+          "httpStatusCode": {
+            "type": "integer",
+            "description": "HTTP 상태 코드",
+            "format": "int32",
+            "example": 200
+          },
           "code": {
             "type": "string",
-            "description": "응답 코드",
+            "description": "커스텀 응답 코드",
             "example": "COMMON200"
           },
           "message": {
@@ -927,88 +753,6 @@
           }
         }
       },
-      "com.studeal.team.domain.lesson.dto.LessonRequestDTO$CreateRequest": {
-        "required": [
-          "negotiationId",
-          "price",
-          "studentId",
-          "teacherId",
-          "title"
-        ],
-        "type": "object",
-        "properties": {
-          "title": {
-            "maxLength": 200,
-            "minLength": 0,
-            "type": "string"
-          },
-          "negotiationId": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "studentId": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "teacherId": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "description": {
-            "maxLength": 1000,
-            "minLength": 0,
-            "type": "string"
-          },
-          "price": {
-            "type": "integer",
-            "format": "int64"
-          }
-        }
-      },
-      "com.studeal.team.domain.lesson.dto.LessonResponseDTO$CreateResponse": {
-        "type": "object",
-        "properties": {
-          "lessonId": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "title": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string"
-          },
-          "price": {
-            "type": "integer",
-            "format": "int64"
-          }
-        },
-        "description": "응답 데이터"
-      },
-      "com.studeal.team.global.error.ApiResponseCom.studeal.team.domain.lesson.dto.LessonResponseDTO$CreateResponse": {
-        "type": "object",
-        "properties": {
-          "isSuccess": {
-            "type": "boolean",
-            "description": "성공 여부",
-            "example": true
-          },
-          "code": {
-            "type": "string",
-            "description": "응답 코드",
-            "example": "COMMON200"
-          },
-          "message": {
-            "type": "string",
-            "description": "응답 메시지",
-            "example": "성공입니다."
-          },
-          "result": {
-            "$ref": "#/components/schemas/com.studeal.team.domain.lesson.dto.LessonResponseDTO$CreateResponse"
-          }
-        },
-        "description": "API 응답 형식"
-      },
       "com.studeal.team.domain.enrollment.dto.EnrollmentRequestDTO$CreateRequest": {
         "required": [
           "negotiationId",
@@ -1054,12 +798,12 @@
             "description": "과외 과목",
             "example": "MATH",
             "enum": [
-              "MATH",
-              "SCIENCE",
-              "ENGLISH",
-              "KOREAN",
-              "HISTORY",
-              "CODING"
+              "수학",
+              "과학",
+              "영어",
+              "국어",
+              "역사",
+              "코딩"
             ]
           },
           "startPrice": {
@@ -1129,12 +873,12 @@
             "description": "전공 과목",
             "example": "MATH",
             "enum": [
-              "MATH",
-              "SCIENCE",
-              "ENGLISH",
-              "KOREAN",
-              "HISTORY",
-              "CODING"
+              "수학",
+              "과학",
+              "영어",
+              "국어",
+              "역사",
+              "코딩"
             ]
           }
         },
@@ -1166,12 +910,12 @@
           "major": {
             "type": "string",
             "enum": [
-              "MATH",
-              "SCIENCE",
-              "ENGLISH",
-              "KOREAN",
-              "HISTORY",
-              "CODING"
+              "수학",
+              "과학",
+              "영어",
+              "국어",
+              "역사",
+              "코딩"
             ]
           }
         },
@@ -1185,9 +929,15 @@
             "description": "성공 여부",
             "example": true
           },
+          "httpStatusCode": {
+            "type": "integer",
+            "description": "HTTP 상태 코드",
+            "format": "int32",
+            "example": 200
+          },
           "code": {
             "type": "string",
-            "description": "응답 코드",
+            "description": "커스텀 응답 코드",
             "example": "COMMON200"
           },
           "message": {
@@ -1209,9 +959,15 @@
             "description": "성공 여부",
             "example": true
           },
+          "httpStatusCode": {
+            "type": "integer",
+            "description": "HTTP 상태 코드",
+            "format": "int32",
+            "example": 200
+          },
           "code": {
             "type": "string",
-            "description": "응답 코드",
+            "description": "커스텀 응답 코드",
             "example": "COMMON200"
           },
           "message": {
@@ -1273,9 +1029,15 @@
             "description": "성공 여부",
             "example": true
           },
+          "httpStatusCode": {
+            "type": "integer",
+            "description": "HTTP 상태 코드",
+            "format": "int32",
+            "example": 200
+          },
           "code": {
             "type": "string",
-            "description": "응답 코드",
+            "description": "커스텀 응답 코드",
             "example": "COMMON200"
           },
           "message": {
@@ -1305,6 +1067,107 @@
           }
         }
       },
+      "BidResponse": {
+        "type": "object",
+        "properties": {
+          "rank": {
+            "type": "integer",
+            "description": "순위",
+            "format": "int32",
+            "example": 1
+          },
+          "price": {
+            "type": "integer",
+            "description": "가격",
+            "format": "int64",
+            "example": 60000
+          },
+          "bidder": {
+            "type": "string",
+            "description": "입찰자",
+            "example": "김입찰자"
+          }
+        },
+        "description": "입찰 응답"
+      },
+      "DetailTeacherResponse": {
+        "type": "object",
+        "properties": {
+          "negotiationId": {
+            "type": "integer",
+            "description": "협상 ID",
+            "format": "int64",
+            "example": 1
+          },
+          "title": {
+            "type": "string",
+            "description": "게시글 제목",
+            "example": "고등 수학 과외 모집합니다"
+          },
+          "subject": {
+            "type": "string",
+            "description": "과목",
+            "example": "MATH",
+            "enum": [
+              "수학",
+              "과학",
+              "영어",
+              "국어",
+              "역사",
+              "코딩"
+            ]
+          },
+          "description": {
+            "type": "string",
+            "description": "상세 설명",
+            "example": "수학 전공 대학생이 고등 수학 과외를 모집합니다."
+          },
+          "priceRange": {
+            "type": "string",
+            "description": "가격 범위",
+            "example": "50000-70000"
+          },
+          "bids": {
+            "$ref": "#/components/schemas/BidResponse"
+          },
+          "status": {
+            "type": "string",
+            "description": "상태",
+            "example": "ACTIVE"
+          }
+        },
+        "description": "선생님 상세 조회 응답"
+      },
+      "com.studeal.team.global.error.ApiResponseDetailTeacherResponse": {
+        "type": "object",
+        "properties": {
+          "isSuccess": {
+            "type": "boolean",
+            "description": "성공 여부",
+            "example": true
+          },
+          "httpStatusCode": {
+            "type": "integer",
+            "description": "HTTP 상태 코드",
+            "format": "int32",
+            "example": 200
+          },
+          "code": {
+            "type": "string",
+            "description": "커스텀 응답 코드",
+            "example": "COMMON200"
+          },
+          "message": {
+            "type": "string",
+            "description": "응답 메시지",
+            "example": "성공입니다."
+          },
+          "result": {
+            "$ref": "#/components/schemas/DetailTeacherResponse"
+          }
+        },
+        "description": "API 응답 형식"
+      },
       "com.studeal.team.global.error.ApiResponseJava.lang.Void": {
         "type": "object",
         "properties": {
@@ -1313,9 +1176,15 @@
             "description": "성공 여부",
             "example": true
           },
+          "httpStatusCode": {
+            "type": "integer",
+            "description": "HTTP 상태 코드",
+            "format": "int32",
+            "example": 200
+          },
           "code": {
             "type": "string",
-            "description": "응답 코드",
+            "description": "커스텀 응답 코드",
             "example": "COMMON200"
           },
           "message": {
@@ -1338,9 +1207,15 @@
             "description": "성공 여부",
             "example": true
           },
+          "httpStatusCode": {
+            "type": "integer",
+            "description": "HTTP 상태 코드",
+            "format": "int32",
+            "example": 200
+          },
           "code": {
             "type": "string",
-            "description": "응답 코드",
+            "description": "커스텀 응답 코드",
             "example": "COMMON200"
           },
           "message": {
