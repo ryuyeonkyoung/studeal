@@ -23,9 +23,9 @@ public class NegotiationController {
 
     @Operation(summary = "학생 가격 제안(협상) 생성 API", description = "학생이 강사에게 가격 제안을 생성하는 API입니다.")
     @ApiResponses({
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공", content = @Content(schema = @Schema(implementation = NegotiationResponseDTO.class))),
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "USER404", description = "존재하지 않는 학생 또는 강사입니다.", content = @Content(schema = @Schema(implementation = ApiResponse.class))),
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "NEGOTIATION4001", description = "유효하지 않은 가격 제안 요청입니다.", content = @Content(schema = @Schema(implementation = ApiResponse.class)))
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON_200", description = "OK, 성공", content = @Content(schema = @Schema(implementation = NegotiationResponseDTO.class))),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "USER_400_01", description = "사용자가 없습니다.", content = @Content(schema = @Schema(implementation = ApiResponse.class))),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "NEGOTIATION_400_01", description = "유효하지 않은 가격 제안 요청입니다.", content = @Content(schema = @Schema(implementation = ApiResponse.class)))
     })
     @PostMapping
     public ApiResponse<NegotiationResponseDTO> createNegotiation(
@@ -35,8 +35,8 @@ public class NegotiationController {
 
     @Operation(summary = "학생 가격 제안(협상) 삭제 API", description = "협상 ID로 학생의 가격 제안(협상)을 삭제하는 API입니다.")
     @ApiResponses({
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "NEGOTIATION404", description = "존재하지 않는 협상입니다.", content = @Content(schema = @Schema(implementation = ApiResponse.class)))
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON_200", description = "OK, 성공"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "NEGOTIATION_404_01", description = "존재하지 않는 협상입니다.", content = @Content(schema = @Schema(implementation = ApiResponse.class)))
     })
     @DeleteMapping("/{negotiationId}")
     public ApiResponse<Void> deleteNegotiation(@PathVariable Long negotiationId) {
@@ -44,4 +44,3 @@ public class NegotiationController {
         return ApiResponse.onSuccess(null);
     }
 }
-

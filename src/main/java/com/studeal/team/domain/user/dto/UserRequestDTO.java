@@ -47,7 +47,8 @@ public class UserRequestDTO {
         private String password;
 
         @NotNull
-        @Schema(description = "사용자 역할", example = "STUDENT", required = true)
+        @Schema(description = "사용자 역할", example = "학생",
+               allowableValues = {"학생", "선생님"}, required = true)
         private UserRole role;
 
         @Size(max = 1000)
@@ -55,7 +56,8 @@ public class UserRequestDTO {
         private String bio;
 
         // Student 필드
-        @Schema(description = "전공 과목", example = "MATH")
+        @Schema(description = "전공 과목", example = "수학",
+               allowableValues = {"수학", "과학", "영어", "국어", "역사", "코딩"})
         private MajorSubject major;
     }
 
@@ -67,7 +69,7 @@ public class UserRequestDTO {
     @Schema(name = "LoginRequest", description = "로그인 요청")
     public static class LoginRequest {
         @NotBlank(message = "이메일은 필수입니다")
-        @Schema(description = "이메일", example = "user@example.com", required = true)
+        @Schema(description = "이메일", example = "teacher@example.com", required = true)
         private String email;
 
         @NotBlank(message = "비밀번호는 필수입니다")
