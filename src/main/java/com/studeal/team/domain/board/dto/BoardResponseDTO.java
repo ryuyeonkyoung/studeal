@@ -128,4 +128,56 @@ public class BoardResponseDTO {
         @Schema(description = "마지막 페이지 여부", example = "false")
         private boolean last;
     }
+
+    /**
+     * 선생님 상세 조회 응답 DTO
+     * 게시글 상세 조회 시 선생님 정보 포함하여 조회
+     */
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Schema(name = "DetailTeacherResponse", description = "선생님 상세 조회 응답")
+    public static class DetailTeacherResponse {
+        @Schema(description = "협상 ID", example = "1")
+        private Long negotiationId;
+
+        @Schema(description = "게시글 제목", example = "고등 수학 과외 모집합니다")
+        private String title;
+
+        @Schema(description = "과목", example = "MATH")
+        private MajorSubject subject;
+
+        @Schema(description = "상세 설명", example = "수학 전공 대학생이 고등 수학 과외를 모집합니다.")
+        private String description;
+
+        @Schema(description = "가격 범위", example = "50000-70000")
+        private String priceRange;
+
+        @Schema(description = "입찰 목록", implementation = BidResponse.class)
+        private List<BidResponse> bids;
+
+        @Schema(description = "상태", example = "ACTIVE")
+        private String status;
+    }
+
+    /**
+     * 입찰 응답 DTO
+     * 선생님 상세 조회 시 입찰 정보 포함
+     */
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Schema(name = "BidResponse", description = "입찰 응답")
+    public static class BidResponse {
+        @Schema(description = "순위", example = "1")
+        private int rank;
+
+        @Schema(description = "가격", example = "60000")
+        private Long price;
+
+        @Schema(description = "입찰자", example = "김입찰자")
+        private String bidder;
+    }
 }

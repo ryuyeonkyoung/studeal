@@ -4,8 +4,8 @@ import com.studeal.team.domain.board.application.BoardCommandService;
 import com.studeal.team.domain.board.application.BoardQueryService;
 import com.studeal.team.domain.board.dto.BoardRequestDTO;
 import com.studeal.team.domain.board.dto.BoardResponseDTO;
-import com.studeal.team.global.error.ApiResponse;
 import com.studeal.team.domain.user.domain.validation.ExistTeacher;
+import com.studeal.team.global.error.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -70,5 +70,19 @@ public class BoardController {
             @Parameter(description = "선생님 ID (인증 정보에서 추출)", hidden = true) @RequestAttribute("userId") @ExistTeacher Long teacherId) {
         boardCommandService.deleteBoard(boardId, teacherId);
         return ApiResponse.onSuccess(null);
+    }
+
+    @Operation(summary = "게시글 상세 조회 - 선생님", description = "선생님이 조회하는 게시글 상세 정보 API. 게시글 정보와 입찰 순위 정보를 함께 제공합니다.")
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "BOARD4001", description = "게시글을 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ApiResponse.class))),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "NEGOTIATION4001", description = "협상 정보를 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ApiResponse.class)))
+    })
+    @GetMapping("/{boardId}")
+    public ApiResponse<BoardResponseDTO.DetailTeacherResponse> getTeacherDetail(
+            @Parameter(description = "게시글 ID") @PathVariable Long boardId,
+            @Parameter(description = "선생님 ID (인증 정보에서 추출)", hidden = true) @RequestAttribute("userId") @ExistTeacher Long teacherId) {
+        BoardResponseDTO.DetailTeacherResponse response = boardQueryService.getTeacherDetailBoard(boardId, teacherId);
+        return ApiResponse.onSuccess(response);
     }
 }
