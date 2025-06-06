@@ -23,7 +23,7 @@ import java.util.Map;
     info = @Info(
         title = "Studeal API",
         description = "Studeal의 API 명세서 🌱",
-        version = "2.1.0",
+        version = "2.1.1",
         contact = @Contact(name = "Studeal Team")
     ),
     security = {
