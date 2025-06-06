@@ -1,6 +1,8 @@
 # application.yml
 server:
   port: 8080
+  servlet:
+    context-path: /api
 
 spring:
   profiles:
@@ -38,8 +40,12 @@ springdoc:
   show-actuator: true
   packages-to-scan: com.studeal.team.domain
   paths-to-match:
-    - /studeal/**
-    - /api/v1/**
+    - /boards/**
+    - /teachers/**
+    - /auth/**
+    - /students/**
+    - /negotiations/**
+    - /v1/**
 
 # 로깅 레벨
 logging:

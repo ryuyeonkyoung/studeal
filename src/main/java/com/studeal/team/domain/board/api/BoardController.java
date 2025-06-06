@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @Tag(name = "게시판 API", description = "과외 모집 게시판 관련 API")
 @RestController
-@RequestMapping("/studeal/boards")
+@RequestMapping("/boards")
 @RequiredArgsConstructor
 public class BoardController {
 

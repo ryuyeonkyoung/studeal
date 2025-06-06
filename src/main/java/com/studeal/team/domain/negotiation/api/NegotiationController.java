@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/studeal/negotiations")
+@RequestMapping("/negotiations")
 @Tag(name = "가격 제안(협상)", description = "학생의 가격 제안(협상) 관련 API")
 public class NegotiationController {
 
