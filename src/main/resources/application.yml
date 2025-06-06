@@ -45,7 +45,9 @@ springdoc:
     - /auth/**
     - /students/**
     - /negotiations/**
-    - /v1/**
+    - /lessons/**
+    - /enrollments/**
+    - /users/**
 
 # 로깅 레벨
 logging:
