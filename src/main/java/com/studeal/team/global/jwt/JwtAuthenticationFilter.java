@@ -27,6 +27,20 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
             Authentication authentication = tokenProvider.getAuthentication(jwt);
             SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            // 사용자 ID를 요청 속성으로 추가
+            String userIdStr = tokenProvider.extractUserIdAsString(jwt);
+            if (StringUtils.hasText(userIdStr)) {
+                try {
+                    // userId 클레임에서 추출한 값을 Long으로 변환하여 설정
+                    Long userId = Long.parseLong(userIdStr);
+                    request.setAttribute("userId", userId);
+                    log.debug("Request에 userId={} 속성 추가", userId);
+                } catch (NumberFormatException e) {
+                    log.warn("JWT 토큰에서 userId를 추출하지 못했습니다.: {}", userIdStr);
+                }
+            }
+
             log.debug("Security Context에 '{}' 인증 정보를 저장했습니다", authentication.getName());
         } else {
             log.debug("유효한 JWT 토큰이 없습니다");
