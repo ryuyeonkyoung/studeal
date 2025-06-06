@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import com.studeal.team.domain.lesson.converter.LessonConverter;
 
 @RestController
-@RequestMapping("/studeal/lessons")
+@RequestMapping("/lessons")
 @Tag(name = "수업", description = "수업 관련 API")
 public class LessonController {
 

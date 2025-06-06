@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @Tag(name = "게시판 API", description = "과외 모집 게시판 관련 API")
 @RestController
-@RequestMapping("/studeal/boards")
+@RequestMapping("/boards")
 @RequiredArgsConstructor
 public class BoardController {
 
@@ -35,9 +35,9 @@ public class BoardController {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "BOARD4001", description = "게시글을 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ApiResponse.class))),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "TEACHER4001", description = "선생님을 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ApiResponse.class)))
     })
-    @PostMapping("/teachers/{teacherId}")
+    @PostMapping
     public ApiResponse<BoardResponseDTO.DetailResponse> createBoard(
-            @Parameter(description = "선생님 ID") @PathVariable @ExistTeacher Long teacherId,
+            @Parameter(description = "선생님 ID (인증 정보에서 추출)", hidden = true) @RequestAttribute("userId") @ExistTeacher Long teacherId,
             @Valid @RequestBody BoardRequestDTO.CreateRequest request) {
         BoardResponseDTO.DetailResponse response = boardCommandService.createBoard(teacherId, request);
         return ApiResponse.onSuccess(response);
@@ -49,10 +49,10 @@ public class BoardController {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "BOARD4001", description = "게시글을 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ApiResponse.class))),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "BOARD4003", description = "게시글 수정 권한이 없습니다.", content = @Content(schema = @Schema(implementation = ApiResponse.class)))
     })
-    @PutMapping("/{boardId}/teachers/{teacherId}")
+    @PutMapping("/{boardId}")
     public ApiResponse<BoardResponseDTO.DetailResponse> updateBoard(
             @Parameter(description = "게시글 ID") @PathVariable Long boardId,
-            @Parameter(description = "선생님 ID") @PathVariable @ExistTeacher Long teacherId,
+            @Parameter(description = "선생님 ID (인증 정보에서 추출)", hidden = true) @RequestAttribute("userId") @ExistTeacher Long teacherId,
             @Valid @RequestBody BoardRequestDTO.UpdateRequest request) {
         BoardResponseDTO.DetailResponse response = boardCommandService.updateBoard(boardId, teacherId, request);
         return ApiResponse.onSuccess(response);
@@ -64,10 +64,10 @@ public class BoardController {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "BOARD4001", description = "게시글을 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ApiResponse.class))),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "BOARD4002", description = "게시글 작성자만 삭제할 수 있습니다.", content = @Content(schema = @Schema(implementation = ApiResponse.class)))
     })
-    @DeleteMapping("/{boardId}/teachers/{teacherId}")
+    @DeleteMapping("/{boardId}")
     public ApiResponse<?> deleteBoard(
             @Parameter(description = "게시글 ID") @PathVariable Long boardId,
-            @Parameter(description = "선생님 ID") @PathVariable @ExistTeacher Long teacherId) {
+            @Parameter(description = "선생님 ID (인증 정보에서 추출)", hidden = true) @RequestAttribute("userId") @ExistTeacher Long teacherId) {
         boardCommandService.deleteBoard(boardId, teacherId);
         return ApiResponse.onSuccess(null);
     }
