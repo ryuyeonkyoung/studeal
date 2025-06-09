@@ -99,4 +99,14 @@ public class BoardController {
         BoardResponseDTO.DetailTeacherResponse response = boardQueryService.getTeacherDetailBoard(boardId, teacherId);
         return ApiResponse.onSuccess(response);
     }
+
+    @Operation(summary = "게시글 목록 조회", description = "모든 과외 모집 게시글 목록을 조회합니다.")
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON_200", description = "OK, 성공")
+    })
+    @GetMapping
+    public ApiResponse<BoardResponseDTO.ListResponse> getAllBoards() {
+        BoardResponseDTO.ListResponse response = boardQueryService.getAllBoards();
+        return ApiResponse.onSuccess(response);
+    }
 }

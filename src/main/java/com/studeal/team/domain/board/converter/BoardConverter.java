@@ -33,14 +33,14 @@ public class BoardConverter {
         // 선생님 정보 세팅 - User 클래스에서 상속받은 필드를 사용
         if (auctionBoard.getTeacher() != null) {
             builder.teacherId(auctionBoard.getTeacher().getUserId())
-                   .teacherName(auctionBoard.getTeacher().getName());
+                    .teacherName(auctionBoard.getTeacher().getName());
         }
 
         // 썸네일 이미지가 있는 경우 URL 세팅
         auctionBoard.getFiles().stream()
-            .filter(AuctionBoardFile::getIsThumbnail)
-            .findFirst()
-            .ifPresent(file -> builder.thumbnailUrl(file.getFilePath()));
+                .filter(AuctionBoardFile::getIsThumbnail)
+                .findFirst()
+                .ifPresent(file -> builder.thumbnailUrl(file.getFilePath()));
 
         return builder.build();
     }
@@ -64,9 +64,9 @@ public class BoardConverter {
 
         // 썸네일 이미지가 있는 경우 URL 세팅
         auctionBoard.getFiles().stream()
-            .filter(AuctionBoardFile::getIsThumbnail)
-            .findFirst()
-            .ifPresent(file -> builder.thumbnailUrl(file.getFilePath()));
+                .filter(AuctionBoardFile::getIsThumbnail)
+                .findFirst()
+                .ifPresent(file -> builder.thumbnailUrl(file.getFilePath()));
 
         return builder.build();
     }
@@ -118,5 +118,37 @@ public class BoardConverter {
         if (auctionBoard.getFiles() == null) {
             auctionBoard.setFiles(new ArrayList<>());
         }
+    }
+
+    /**
+     * AuctionBoard 엔티티를 BoardListItem DTO로 변환
+     * 게시글 목록 조회 API용 간략한 정보만 포함
+     */
+    public static BoardResponseDTO.BoardListItem toBoardListItem(AuctionBoard auctionBoard) {
+        String majorString = auctionBoard.getMajor() != null ?
+                String.valueOf(auctionBoard.getMajor()) : "기타";
+
+        String teacherName = auctionBoard.getTeacher() != null ?
+                auctionBoard.getTeacher().getName() : "Unknown";
+
+        String price = auctionBoard.getExpectedPrice() != null ?
+                formatPrice(auctionBoard.getExpectedPrice()) + "~" : "가격 미정";
+
+        return BoardResponseDTO.BoardListItem.builder()
+                .id(auctionBoard.getBoardId())
+                .major(majorString)
+                .specMajor(auctionBoard.getSpecMajor())
+                .title(auctionBoard.getTitle())
+                .teacher(teacherName)
+                .price(price)
+                .build();
+    }
+
+    /**
+     * 가격 포맷팅 메서드
+     */
+    private static String formatPrice(Long price) {
+        if (price == null) return "";
+        return String.format("%,d", price);
     }
 }

@@ -33,6 +33,7 @@ public class BoardQueryService {
 
     /**
      * 게시글 상세 조회
+     *
      * @param boardId 게시글 ID
      * @return 게시글 응답 DTO
      */
@@ -47,6 +48,7 @@ public class BoardQueryService {
 
     /**
      * 게시글 목록 조회 (페이징)
+     *
      * @param pageable 페이징 정보
      * @return 게시글 목록 페이징 응답 DTO
      */
@@ -61,7 +63,8 @@ public class BoardQueryService {
     /**
      * 게시글 상세 조회 - 선생님 용
      * 게시글 정보와 입찰(협상) 정보를 함께 조회합니다.
-     * @param boardId 게시글 ID
+     *
+     * @param boardId   게시글 ID
      * @param teacherId 선생님 ID (인증 정보에서 추출)
      * @return 선생님용 게시글 상세 응답 DTO
      */
@@ -97,6 +100,26 @@ public class BoardQueryService {
                 .priceRange(priceRange)
                 .bids(bids)
                 .status("OPEN") // 현재는 고정값으로 설정, 필요시 상태 관리 로직 추가
+                .build();
+    }
+
+    /**
+     * 모든 게시글 목록 조회
+     * 페이징 없이 전체 게시글 목록을 반환합니다.
+     *
+     * @return 게시글 목록 응답 DTO
+     */
+    public BoardResponseDTO.ListResponse getAllBoards() {
+        List<AuctionBoard> boards = boardRepository.findAllWithTeacher();
+
+        log.info("전체 게시글 목록 조회 완료. 게시글 수: {}", boards.size());
+
+        List<BoardResponseDTO.BoardListItem> boardListItems = boards.stream()
+                .map(BoardConverter::toBoardListItem)
+                .toList();
+
+        return BoardResponseDTO.ListResponse.builder()
+                .boards(boardListItems)
                 .build();
     }
 }

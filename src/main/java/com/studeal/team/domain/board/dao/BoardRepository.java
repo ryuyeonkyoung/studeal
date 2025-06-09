@@ -39,4 +39,10 @@ public interface BoardRepository extends JpaRepository<AuctionBoard, Long> {
      */
     @Query("SELECT b FROM AuctionBoard b LEFT JOIN FETCH b.teacher WHERE b.boardId = :boardId")
     Optional<AuctionBoard> findByIdWithTeacher(Long boardId);
+
+    /**
+     * 모든 게시글 조회 (선생님 정보 포함) - Eager 로딩 사용
+     */
+    @Query("SELECT b FROM AuctionBoard b LEFT JOIN FETCH b.teacher ORDER BY b.createdAt DESC")
+    List<AuctionBoard> findAllWithTeacher();
 }

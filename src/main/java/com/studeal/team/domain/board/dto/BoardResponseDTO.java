@@ -63,6 +63,35 @@ public class BoardResponseDTO {
     }
 
     /**
+     * 게시글 목록 항목 DTO
+     * 게시글 목록 조회 시 사용되는 개별 게시글 정보
+     */
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Schema(name = "BoardListItemResponse", description = "게시글 목록 항목 응답")
+    public static class BoardListItem {
+        @Schema(description = "게시글 ID", example = "1")
+        private Long id;
+
+        @Schema(description = "과목 분류", example = "수학")
+        private String major;
+
+        @Schema(description = "구체적인 과외 주제", example = "고등 수학 - 미적분")
+        private String specMajor;
+
+        @Schema(description = "게시글 제목", example = "제목ㅋㅋㅋㅋㅋ")
+        private String title;
+
+        @Schema(description = "선생님 이름", example = "김선생")
+        private String teacher;
+
+        @Schema(description = "가격 정보", example = "200,000~")
+        private String price;
+    }
+
+    /**
      * 게시글 목록 항목 응답 DTO
      * 게시글 목록 조회 시 사용
      */
@@ -179,5 +208,19 @@ public class BoardResponseDTO {
 
         @Schema(description = "입찰자", example = "김입찰자")
         private String bidder;
+    }
+
+    /**
+     * 게시글 목록 조회 응답 DTO
+     * 게시글 목록 조회 API의 응답으로 사용
+     */
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Schema(name = "BoardListResponse", description = "게시글 목록 조회 응답")
+    public static class ListResponse {
+        @ArraySchema(schema = @Schema(implementation = BoardListItem.class))
+        private List<BoardListItem> boards;
     }
 }
