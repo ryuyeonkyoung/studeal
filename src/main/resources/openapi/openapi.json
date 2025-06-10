@@ -107,16 +107,6 @@
           "required": true
         },
         "responses": {
-          "400": {
-            "description": "게시글을 찾을 수 없습니다.",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
-                }
-              }
-            }
-          },
           "403": {
             "description": "게시글 권한이 없습니다.",
             "content": {
@@ -133,6 +123,16 @@
               "*/*": {
                 "schema": {
                   "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponseBoardDetailResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "게시글을 찾을 수 없습니다.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
                 }
               }
             }
@@ -159,16 +159,6 @@
           }
         ],
         "responses": {
-          "400": {
-            "description": "게시글을 찾을 수 없습니다.",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
-                }
-              }
-            }
-          },
           "403": {
             "description": "게시글 권한이 없습니다.",
             "content": {
@@ -185,6 +175,16 @@
               "*/*": {
                 "schema": {
                   "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponseJava.lang.Object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "게시글을 찾을 수 없습니다.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
                 }
               }
             }
@@ -264,7 +264,7 @@
         },
         "responses": {
           "400": {
-            "description": "선생님을 찾을 수 없습니다.",
+            "description": "게시글을 찾을 수 없습니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -305,8 +305,8 @@
           "required": true
         },
         "responses": {
-          "400": {
-            "description": "이름은 필수입니다.",
+          "403": {
+            "description": "유효하지 않은 사용자 역할입니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -315,8 +315,8 @@
               }
             }
           },
-          "403": {
-            "description": "유효하지 않은 사용자 역할입니다.",
+          "400": {
+            "description": "이미 등록된 이메일입니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -432,8 +432,8 @@
           "required": true
         },
         "responses": {
-          "404": {
-            "description": "존재하지 않는 수강 신청입니다.",
+          "400": {
+            "description": "유효하지 않은 수강 신청 요청입니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -442,8 +442,8 @@
               }
             }
           },
-          "400": {
-            "description": "유효하지 않은 수강 신청 요청입니다.",
+          "404": {
+            "description": "존재하지 않는 수강 신청입니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -458,6 +458,97 @@
               "*/*": {
                 "schema": {
                   "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponseCom.studeal.team.domain.enrollment.dto.EnrollmentResponseDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/boards/offset": {
+      "get": {
+        "tags": [
+          "게시판 API"
+        ],
+        "summary": "게시글 목록 조회 (오프셋 페이징)",
+        "description": "모든 과외 모집 게시글 목록을 오프셋 기반 페이징으로 조회합니다.",
+        "operationId": "getBoardsByOffset",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "페이지 번호 (0부터 시작)",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "description": "페이지 크기 (기본값: 10)",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK, 성공",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponseBoardOffsetPageResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/boards/cursor": {
+      "get": {
+        "tags": [
+          "게시판 API"
+        ],
+        "summary": "게시글 목록 조회 (커서 페이징)",
+        "description": "모든 과외 모집 게시글 목록을 커서 기반 페이징으로 조회합니다.",
+        "operationId": "getBoardsByCursor",
+        "parameters": [
+          {
+            "name": "cursorId",
+            "in": "query",
+            "description": "커서 ID (이전 페이지의 마지막 게시글 ID, 첫 페이지는 null)",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "description": "페이지 크기 (기본값: 10)",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK, 성공",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponseBoardCursorPageResponse"
                 }
               }
             }
@@ -1215,6 +1306,234 @@
           },
           "result": {
             "$ref": "#/components/schemas/DetailTeacherResponse"
+          }
+        },
+        "description": "API 응답 형식"
+      },
+      "BoardOffsetItemResponse": {
+        "type": "object",
+        "properties": {
+          "boardId": {
+            "type": "integer",
+            "description": "게시글 ID",
+            "format": "int64",
+            "example": 1
+          },
+          "title": {
+            "type": "string",
+            "description": "게시글 제목",
+            "example": "고등 수학 과외 모집합니다"
+          },
+          "teacherName": {
+            "type": "string",
+            "description": "선생님 이름",
+            "example": "김선생"
+          },
+          "major": {
+            "type": "string",
+            "description": "게시글 유형",
+            "example": "MATH",
+            "enum": [
+              "수학",
+              "과학",
+              "영어",
+              "국어",
+              "역사",
+              "코딩"
+            ]
+          },
+          "expectedPrice": {
+            "type": "integer",
+            "description": "예상 수업 가격",
+            "format": "int64",
+            "example": 50000
+          },
+          "specMajor": {
+            "type": "string",
+            "description": "구체적인 과외 주제",
+            "example": "고등 수학 - 미적분"
+          },
+          "createdAt": {
+            "type": "string",
+            "description": "생성 일시",
+            "format": "date-time"
+          },
+          "thumbnailUrl": {
+            "type": "string",
+            "description": "썸네일 이미지 URL",
+            "example": "/images/thumbnails/math-123.jpg"
+          }
+        },
+        "description": "오프셋 페이징 게시글 목록 항목"
+      },
+      "BoardOffsetPageResponse": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BoardOffsetItemResponse"
+            }
+          },
+          "pageNumber": {
+            "type": "integer",
+            "description": "현재 페이지 번호",
+            "format": "int32",
+            "example": 0
+          },
+          "pageSize": {
+            "type": "integer",
+            "description": "페이지 크기",
+            "format": "int32",
+            "example": 10
+          },
+          "totalElements": {
+            "type": "integer",
+            "description": "전체 항목 수",
+            "format": "int64",
+            "example": 42
+          },
+          "totalPages": {
+            "type": "integer",
+            "description": "전체 페이지 수",
+            "format": "int32",
+            "example": 5
+          },
+          "first": {
+            "type": "boolean",
+            "description": "첫 페이지 여부",
+            "example": false
+          },
+          "last": {
+            "type": "boolean",
+            "description": "마지막 페이지 여부",
+            "example": false
+          }
+        },
+        "description": "오프셋 페이징 게시글 목록 응답"
+      },
+      "com.studeal.team.global.error.ApiResponseBoardOffsetPageResponse": {
+        "type": "object",
+        "properties": {
+          "isSuccess": {
+            "type": "boolean",
+            "description": "성공 여부",
+            "example": true
+          },
+          "httpStatusCode": {
+            "type": "integer",
+            "description": "HTTP 상태 코드",
+            "format": "int32",
+            "example": 200
+          },
+          "code": {
+            "type": "string",
+            "description": "커스텀 응답 코드",
+            "example": "COMMON200"
+          },
+          "message": {
+            "type": "string",
+            "description": "응답 메시지",
+            "example": "성공입니다."
+          },
+          "result": {
+            "$ref": "#/components/schemas/BoardOffsetPageResponse"
+          }
+        },
+        "description": "API 응답 형식"
+      },
+      "BoardCursorItemResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "게시글 ID",
+            "format": "int64",
+            "example": 1
+          },
+          "major": {
+            "type": "string",
+            "description": "과목 분류",
+            "example": "수학"
+          },
+          "specMajor": {
+            "type": "string",
+            "description": "구체적인 과외 주제",
+            "example": "고등 수학 - 미적분"
+          },
+          "title": {
+            "type": "string",
+            "description": "게시글 제목",
+            "example": "제목ㅋㅋㅋㅋㅋ"
+          },
+          "teacher": {
+            "type": "string",
+            "description": "선생님 이름",
+            "example": "김선생"
+          },
+          "price": {
+            "type": "string",
+            "description": "가격 정보",
+            "example": "200,000~"
+          }
+        },
+        "description": "커서 페이징 게시글 목록 항목"
+      },
+      "BoardCursorPageResponse": {
+        "type": "object",
+        "properties": {
+          "boards": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BoardCursorItemResponse"
+            }
+          },
+          "nextCursor": {
+            "type": "integer",
+            "description": "다음 페이지 커서 값",
+            "format": "int64",
+            "example": 1654321
+          },
+          "hasNext": {
+            "type": "boolean",
+            "description": "다음 페이지 존재 여부",
+            "example": true
+          },
+          "count": {
+            "type": "integer",
+            "description": "조회된 게시글 수",
+            "format": "int32",
+            "example": 10
+          }
+        },
+        "description": "커서 페이징 게시글 목록 응답"
+      },
+      "com.studeal.team.global.error.ApiResponseBoardCursorPageResponse": {
+        "type": "object",
+        "properties": {
+          "isSuccess": {
+            "type": "boolean",
+            "description": "성공 여부",
+            "example": true
+          },
+          "httpStatusCode": {
+            "type": "integer",
+            "description": "HTTP 상태 코드",
+            "format": "int32",
+            "example": 200
+          },
+          "code": {
+            "type": "string",
+            "description": "커스텀 응답 코드",
+            "example": "COMMON200"
+          },
+          "message": {
+            "type": "string",
+            "description": "응답 메시지",
+            "example": "성공입니다."
+          },
+          "result": {
+            "$ref": "#/components/schemas/BoardCursorPageResponse"
           }
         },
         "description": "API 응답 형식"
