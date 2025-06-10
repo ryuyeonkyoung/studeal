@@ -51,10 +51,10 @@ public interface BoardRepository extends JpaRepository<AuctionBoard, Long> {
      * 커서 기반 페이징으로 게시글 조회 (선생님 및 파일 정보 포함)
      *
      * @param cursorId 마지막으로 조회한 게시글 ID (첫 페이지는 null)
-     * @param pageSize 조회할 게시글 수
+     * @param pageable 페이징 정보
      * @return 게시글 목록
      */
-    @Query(value = "SELECT DISTINCT b FROM AuctionBoard b " +
+    @Query("SELECT DISTINCT b FROM AuctionBoard b " +
             "LEFT JOIN FETCH b.teacher " +
             "LEFT JOIN FETCH b.files " +
             "WHERE (:cursorId IS NULL OR b.boardId < :cursorId) " +
@@ -62,7 +62,19 @@ public interface BoardRepository extends JpaRepository<AuctionBoard, Long> {
     List<AuctionBoard> findBoardsByCursor(@Param("cursorId") Long cursorId, Pageable pageable);
 
     /**
-     * 특정 ID보다 작은 게시글이 존재하는지 확인 (다음 페이지 확인용)
+     * 특정 ID보다 작은 게시글이 존재하는지 확인 (커서 페이징 다음 페이지 확인용)
      */
     boolean existsByBoardIdLessThan(Long boardId);
+
+    /**
+     * 오프셋 기반 페이징용 게시글 목록 조회 (선생님 및 파일 정보 포함)
+     *
+     * @param pageable 페이징 정보
+     * @return 게시글 페이지
+     */
+    @Query(value = "SELECT DISTINCT b FROM AuctionBoard b " +
+            "LEFT JOIN FETCH b.teacher " +
+            "LEFT JOIN FETCH b.files",
+            countQuery = "SELECT COUNT(b) FROM AuctionBoard b")
+    Page<AuctionBoard> findBoardsByOffset(Pageable pageable);
 }

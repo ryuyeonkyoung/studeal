@@ -151,4 +151,49 @@ public class BoardConverter {
         if (price == null) return "";
         return String.format("%,d", price);
     }
+
+    /**
+     * AuctionBoard 엔티티를 CursorBoardItem DTO로 변환
+     * 커서 기반 페이징 API용 게시글 항목
+     */
+    public static BoardResponseDTO.CursorBoardItem toCursorBoardItem(AuctionBoard auctionBoard) {
+        String majorString = auctionBoard.getMajor() != null ?
+                String.valueOf(auctionBoard.getMajor()) : "기타";
+
+        String teacherName = auctionBoard.getTeacher() != null ?
+                auctionBoard.getTeacher().getName() : "Unknown";
+
+        String price = auctionBoard.getExpectedPrice() != null ?
+                formatPrice(auctionBoard.getExpectedPrice()) + "~" : "가격 미정";
+
+        return BoardResponseDTO.CursorBoardItem.builder()
+                .id(auctionBoard.getBoardId())
+                .major(majorString)
+                .specMajor(auctionBoard.getSpecMajor())
+                .title(auctionBoard.getTitle())
+                .teacher(teacherName)
+                .price(price)
+                .build();
+    }
+
+    /**
+     * AuctionBoard 엔티티를 OffsetBoardItem DTO로 변환
+     * 오프셋 기반 페이징 API용 게시글 항목
+     */
+    public static BoardResponseDTO.OffsetBoardItem toOffsetBoardItem(AuctionBoard auctionBoard) {
+        return BoardResponseDTO.OffsetBoardItem.builder()
+                .boardId(auctionBoard.getBoardId())
+                .title(auctionBoard.getTitle())
+                .teacherName(auctionBoard.getTeacher() != null ? auctionBoard.getTeacher().getName() : "Unknown")
+                .major(auctionBoard.getMajor())
+                .expectedPrice(auctionBoard.getExpectedPrice())
+                .specMajor(auctionBoard.getSpecMajor())
+                .createdAt(auctionBoard.getCreatedAt())
+                .thumbnailUrl(auctionBoard.getFiles().stream()
+                        .filter(file -> file.getIsThumbnail())
+                        .findFirst()
+                        .map(file -> file.getFilePath())
+                        .orElse(null))
+                .build();
+    }
 }

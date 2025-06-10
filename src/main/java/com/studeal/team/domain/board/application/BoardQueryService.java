@@ -105,33 +105,13 @@ public class BoardQueryService {
     }
 
     /**
-     * 모든 게시글 목록 조회
-     * 페이징 없이 전체 게시글 목록을 반환합니다.
-     *
-     * @return 게시글 목록 응답 DTO
-     */
-    public BoardResponseDTO.ListResponse getAllBoards() {
-        List<AuctionBoard> boards = boardRepository.findAllWithTeacher();
-
-        log.info("전체 게시글 목록 조회 완료. 게시글 수: {}", boards.size());
-
-        List<BoardResponseDTO.BoardListItem> boardListItems = boards.stream()
-                .map(BoardConverter::toBoardListItem)
-                .toList();
-
-        return BoardResponseDTO.ListResponse.builder()
-                .boards(boardListItems)
-                .build();
-    }
-
-    /**
      * 게시글 목록을 커서 기반 페이징으로 조회
      *
      * @param cursorId 커서 ID (이전 페이지의 마지막 게시글 ID, 첫 페이지는 null)
      * @param size     페이지 크기
      * @return 커서 페이징 결과 응답 DTO
      */
-    public BoardResponseDTO.CursorResponse getBoardsWithCursor(Long cursorId, Integer size) {
+    public BoardResponseDTO.CursorPageResponse getBoardsByCursor(Long cursorId, Integer size) {
         // 페이지 크기 기본값 설정
         int pageSize = (size == null || size <= 0) ? 10 : size;
 
@@ -150,8 +130,8 @@ public class BoardQueryService {
         }
 
         // 게시글을 DTO로 변환
-        List<BoardResponseDTO.BoardListItem> boardItems = boards.stream()
-                .map(BoardConverter::toBoardListItem)
+        List<BoardResponseDTO.CursorBoardItem> boardItems = boards.stream()
+                .map(BoardConverter::toCursorBoardItem)
                 .toList();
 
         // 다음 커서 설정
@@ -169,11 +149,38 @@ public class BoardQueryService {
         log.info("커서 기반 게시글 목록 조회 완료. 커서 ID: {}, 조회된 게시글 수: {}, 다음 페이지 존재: {}",
                 cursorId, boardItems.size(), hasNext);
 
-        return BoardResponseDTO.CursorResponse.builder()
+        return BoardResponseDTO.CursorPageResponse.builder()
                 .boards(boardItems)
-                .nextCursor(nextCursor)
                 .hasNext(hasNext)
+                .nextCursor(nextCursor)
                 .count(boardItems.size())
+                .build();
+    }
+
+    /**
+     * 게시글 목록을 오프셋 기반 페이징으로 조회
+     *
+     * @param pageable 페이징 정보
+     * @return 오프셋 페이징 결과 응답 DTO
+     */
+    public BoardResponseDTO.OffsetPageResponse getBoardsByOffset(Pageable pageable) {
+        Page<AuctionBoard> boardPage = boardRepository.findAll(pageable);
+
+        log.info("오프셋 기반 게시글 목록 조회 완료. 페이지: {}, 사이즈: {}",
+                pageable.getPageNumber(), pageable.getPageSize());
+
+        List<BoardResponseDTO.OffsetBoardItem> boardItems = boardPage.getContent().stream()
+                .map(BoardConverter::toOffsetBoardItem)
+                .toList();
+
+        return BoardResponseDTO.OffsetPageResponse.builder()
+                .content(boardItems)
+                .pageNumber(boardPage.getNumber())
+                .pageSize(boardPage.getSize())
+                .totalElements(boardPage.getTotalElements())
+                .totalPages(boardPage.getTotalPages())
+                .first(boardPage.isFirst())
+                .last(boardPage.isLast())
                 .build();
     }
 }
