@@ -20,23 +20,23 @@ import java.util.Map;
 
 @Configuration
 @OpenAPIDefinition(
-    info = @Info(
-        title = "Studeal API",
-        description = "Studeal의 API 명세서 🌱",
-        version = "2.1.1",
-        contact = @Contact(name = "Studeal Team")
-    ),
-    security = {
-        @SecurityRequirement(name = "bearerAuth")
-    }
+        info = @Info(
+                title = "Studeal API",
+                description = "Studeal의 API 명세서 🌱",
+                version = "2.2.0",
+                contact = @Contact(name = "Studeal Team")
+        ),
+        security = {
+                @SecurityRequirement(name = "bearerAuth")
+        }
 )
 @SecurityScheme(
-    name = "bearerAuth",
-    type = SecuritySchemeType.HTTP,
-    scheme = "bearer",
-    bearerFormat = "JWT",
-    in = SecuritySchemeIn.HEADER,
-    description = "JWT 인증 토큰을 입력해주세요. 'Bearer [토큰]' 형식으로 입력"
+        name = "bearerAuth",
+        type = SecuritySchemeType.HTTP,
+        scheme = "bearer",
+        bearerFormat = "JWT",
+        in = SecuritySchemeIn.HEADER,
+        description = "JWT 인증 토큰을 입력해주세요. 'Bearer [토큰]' 형식으로 입력"
 )
 public class SwaggerConfig {
 
@@ -95,16 +95,16 @@ public class SwaggerConfig {
         if (customCode.startsWith("COMMON") || customCode.contains("200")) {
             return "200"; // OK
         } else if (customCode.contains("400") ||
-                  customCode.contains("4001") ||
-                  customCode.contains("4002") ||
-                  customCode.contains("4004") ||
-                  customCode.contains("4005") ||
-                  customCode.contains("4006")) {
+                customCode.contains("4001") ||
+                customCode.contains("4002") ||
+                customCode.contains("4004") ||
+                customCode.contains("4005") ||
+                customCode.contains("4006")) {
             return "400"; // Bad Request
         } else if (customCode.contains("401")) {
             return "401"; // Unauthorized
         } else if (customCode.contains("403") ||
-                  customCode.contains("4003")) {
+                customCode.contains("4003")) {
             return "403"; // Forbidden
         } else if (customCode.contains("404")) {
             return "404"; // Not Found
