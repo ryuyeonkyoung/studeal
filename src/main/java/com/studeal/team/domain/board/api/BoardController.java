@@ -100,13 +100,19 @@ public class BoardController {
         return ApiResponse.onSuccess(response);
     }
 
-    @Operation(summary = "게시글 목록 조회", description = "모든 과외 모집 게시글 목록을 조회합니다.")
+    @Operation(summary = "게시글 목록 조회", description = "모든 과외 모집 게시글 목록을 커서 기반 페이징으로 조회합니다.")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON_200", description = "OK, 성공")
     })
     @GetMapping
-    public ApiResponse<BoardResponseDTO.ListResponse> getAllBoards() {
-        BoardResponseDTO.ListResponse response = boardQueryService.getAllBoards();
+    public ApiResponse<BoardResponseDTO.CursorResponse> getBoardsWithCursor(
+            @Parameter(description = "커서 ID (이전 페이지의 마지막 게시글 ID, 첫 페이지는 null)")
+            @RequestParam(required = false) Long cursorId,
+
+            @Parameter(description = "페이지 크기 (기본값: 10)")
+            @RequestParam(required = false, defaultValue = "10") Integer size) {
+
+        BoardResponseDTO.CursorResponse response = boardQueryService.getBoardsWithCursor(cursorId, size);
         return ApiResponse.onSuccess(response);
     }
 }

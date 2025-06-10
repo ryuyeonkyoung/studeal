@@ -11,6 +11,7 @@ import com.studeal.team.global.error.exception.handler.BoardHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -120,6 +121,59 @@ public class BoardQueryService {
 
         return BoardResponseDTO.ListResponse.builder()
                 .boards(boardListItems)
+                .build();
+    }
+
+    /**
+     * 게시글 목록을 커서 기반 페이징으로 조회
+     *
+     * @param cursorId 커서 ID (이전 페이지의 마지막 게시글 ID, 첫 페이지는 null)
+     * @param size     페이지 크기
+     * @return 커서 페이징 결과 응답 DTO
+     */
+    public BoardResponseDTO.CursorResponse getBoardsWithCursor(Long cursorId, Integer size) {
+        // 페이지 크기 기본값 설정
+        int pageSize = (size == null || size <= 0) ? 10 : size;
+
+        // 커서 기반 페이징으로 게시글 조회
+        Pageable pageable = PageRequest.of(0, pageSize + 1); // 다음 페이지 존재 여부 확인을 위해 +1
+        List<AuctionBoard> boards = boardRepository.findBoardsByCursor(cursorId, pageable);
+
+        boolean hasNext = false;
+        Long nextCursor = null;
+
+        // 요청한 페이지 크기보다 많이 조회되었다면 다음 페이지가 존재
+        if (boards.size() > pageSize) {
+            hasNext = true;
+            // 마지막 항목은 다음 페이지 존재 여부 확인용이므로 제거
+            boards.remove(boards.size() - 1);
+        }
+
+        // 게시글을 DTO로 변환
+        List<BoardResponseDTO.BoardListItem> boardItems = boards.stream()
+                .map(BoardConverter::toBoardListItem)
+                .toList();
+
+        // 다음 커서 설정
+        if (!boards.isEmpty() && hasNext) {
+            nextCursor = boards.get(boards.size() - 1).getBoardId();
+        } else if (!boards.isEmpty()) {
+            // 현재 페이지의 마지막 ID보다 작은 ID를 가진 게시글이 있는지 확인
+            Long lastBoardId = boards.get(boards.size() - 1).getBoardId();
+            hasNext = boardRepository.existsByBoardIdLessThan(lastBoardId);
+            if (hasNext) {
+                nextCursor = lastBoardId;
+            }
+        }
+
+        log.info("커서 기반 게시글 목록 조회 완료. 커서 ID: {}, 조회된 게시글 수: {}, 다음 페이지 존재: {}",
+                cursorId, boardItems.size(), hasNext);
+
+        return BoardResponseDTO.CursorResponse.builder()
+                .boards(boardItems)
+                .nextCursor(nextCursor)
+                .hasNext(hasNext)
+                .count(boardItems.size())
                 .build();
     }
 }

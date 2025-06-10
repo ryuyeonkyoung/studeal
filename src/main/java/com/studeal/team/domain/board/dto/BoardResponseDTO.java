@@ -223,4 +223,27 @@ public class BoardResponseDTO {
         @ArraySchema(schema = @Schema(implementation = BoardListItem.class))
         private List<BoardListItem> boards;
     }
+
+    /**
+     * 게시글 목록 조회 커서 페이징 응답 DTO
+     * 커서 기반 페이징을 위한 응답
+     */
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Schema(name = "BoardCursorResponse", description = "게시글 목록 커서 페이징 응답")
+    public static class CursorResponse {
+        @ArraySchema(schema = @Schema(implementation = BoardListItem.class))
+        private List<BoardListItem> boards;
+
+        @Schema(description = "다음 페이지 커서 값", example = "1654321")
+        private Long nextCursor;
+
+        @Schema(description = "다음 페이지 존재 여부", example = "true")
+        private boolean hasNext;
+
+        @Schema(description = "조회된 게시글 수", example = "10")
+        private int count;
+    }
 }
