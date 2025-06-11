@@ -1,12 +1,13 @@
 package com.studeal.team.domain.negotiation.dto;
 
+import com.studeal.team.domain.negotiation.domain.enums.NegotiationStatus;
+import com.studeal.team.domain.user.domain.validation.ValidStudentId;
+import com.studeal.team.domain.user.domain.validation.ValidTeacherId;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.Getter;
 import lombok.Setter;
-import com.studeal.team.domain.user.domain.validation.ValidStudentId;
-import com.studeal.team.domain.user.domain.validation.ValidTeacherId;
 
 @Schema(description = "협상 요청 DTO")
 public class NegotiationRequestDTO {
@@ -29,5 +30,14 @@ public class NegotiationRequestDTO {
         @Positive
         @Schema(description = "제안 가격", example = "50000", required = true)
         private Long proposedPrice;
+    }
+
+    @Getter
+    @Setter
+    @Schema(description = "협상 상태 변경 요청")
+    public static class UpdateStatusRequest {
+        @NotNull
+        @Schema(description = "변경할 협상 상태", example = "ACCEPTED", required = true)
+        private NegotiationStatus status;
     }
 }
