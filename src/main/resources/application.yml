@@ -44,8 +44,8 @@ springdoc:
     - /teachers/**
     - /auth/**
     - /students/**
-#    - /negotiations/**
-#    - /lessons/**
+    - /negotiations/**
+    #    - /lessons/**
     - /enrollments/**
     - /users/**
 

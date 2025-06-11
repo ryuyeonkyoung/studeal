@@ -1,8 +1,8 @@
 package com.studeal.team.domain.negotiation.api;
 
+import com.studeal.team.domain.negotiation.application.NegotiationService;
 import com.studeal.team.domain.negotiation.dto.NegotiationRequestDTO;
 import com.studeal.team.domain.negotiation.dto.NegotiationResponseDTO;
-import com.studeal.team.domain.negotiation.application.NegotiationService;
 import com.studeal.team.global.error.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -31,6 +31,18 @@ public class NegotiationController {
     public ApiResponse<NegotiationResponseDTO> createNegotiation(
             @Valid @RequestBody NegotiationRequestDTO.CreateRequest request) {
         return ApiResponse.onSuccess(negotiationService.initiateNegotiation(request));
+    }
+
+    @Operation(summary = "학생 가격 제안(협상) 상태 변경 API", description = "협상 ID로 학생의 가격 제안(협상) 상태를 변경하는 API입니다. 상태가 ACCEPTED로 변경될 경우 자동으로 Enrollment가 생성됩니다.")
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON_200", description = "OK, 성공", content = @Content(schema = @Schema(implementation = NegotiationResponseDTO.class))),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "NEGOTIATION_404_01", description = "존재하지 않는 협상입니다.", content = @Content(schema = @Schema(implementation = ApiResponse.class)))
+    })
+    @PatchMapping("/{negotiationId}/status")
+    public ApiResponse<NegotiationResponseDTO> updateNegotiationStatus(
+            @PathVariable Long negotiationId,
+            @Valid @RequestBody NegotiationRequestDTO.UpdateStatusRequest request) {
+        return ApiResponse.onSuccess(negotiationService.updateNegotiationStatus(negotiationId, request.getStatus()));
     }
 
     @Operation(summary = "학생 가격 제안(협상) 삭제 API", description = "협상 ID로 학생의 가격 제안(협상)을 삭제하는 API입니다.")

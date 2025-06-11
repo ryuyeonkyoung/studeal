@@ -22,6 +22,10 @@ public class EnrollmentRequestDTO {
         @NotNull(message = "학생 ID는 필수입니다.")
         @Schema(description = "학생 ID", example = "1", required = true)
         private Long studentId;
+
+        @NotNull(message = "결제 금액은 필수입니다.")
+        @Schema(description = "결제 금액", example = "10000", required = true)
+        private Long paidAmount;
     }
 
     @Getter
@@ -33,7 +37,7 @@ public class EnrollmentRequestDTO {
     public static class StatusUpdateRequest {
         @NotNull(message = "변경할 상태는 필수입니다.")
         @Schema(description = "변경할 상태", example = "확정",
-               allowableValues = {"대기", "확정", "취소"}, required = true)
+                allowableValues = {"대기", "확정", "취소"}, required = true)
         private EnrollmentStatus status;
     }
 }

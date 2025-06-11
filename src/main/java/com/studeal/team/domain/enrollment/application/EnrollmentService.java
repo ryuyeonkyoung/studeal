@@ -42,7 +42,7 @@ public class EnrollmentService {
         // 협상 상태 확인 (협상이 성공 상태인지)
         if (negotiation.getStatus() != NegotiationStatus.ACCEPTED) {
             throw new EnrollmentHandler(ErrorStatus.ENROLLMENT_INVALID_NEGOTIATION_STATUS);
-    }
+        }
 
         // 이미 진행중인 수업 확정 데이터가 있는지 확인
         if (negotiation.getEnrollment() != null) {
@@ -92,10 +92,15 @@ public class EnrollmentService {
         return EnrollmentConverter.toResponseDTO(updatedEnrollment);
     }
 
+
+    // TODO: 상태 전환 검증 로직을 별도의 유틸리티 클래스로 분리할 수 있음
+    // TODO: 모든 상태 변환 API에 대해 상태변환 흐름 검즌 적용하기
+
     /**
      * 상태 전환이 유효한지 검증
+     *
      * @param currentStatus 현재 상태
-     * @param newStatus 새로운 상태
+     * @param newStatus     새로운 상태
      */
     private void validateStatusTransition(EnrollmentStatus currentStatus, EnrollmentStatus newStatus) {
         if (currentStatus == newStatus) {
