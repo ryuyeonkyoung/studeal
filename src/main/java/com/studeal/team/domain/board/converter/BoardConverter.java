@@ -100,7 +100,7 @@ public class BoardConverter {
                 .teacher(teacher)
                 .major(request.getMajor())
                 .expectedPrice(request.getStartPrice())
-                .specMajor(request.getSubject())
+                .specMajor(request.getSpecMajor())
                 .files(new ArrayList<>())
                 .build();
     }
@@ -113,7 +113,7 @@ public class BoardConverter {
         auctionBoard.setContent(request.getContent());
         auctionBoard.setMajor(request.getMajor());
         auctionBoard.setExpectedPrice(request.getExpectedPrice());
-        auctionBoard.setSpecMajor(request.getSubject());
+        auctionBoard.setSpecMajor(request.getSpecMajor());
 
         if (auctionBoard.getFiles() == null) {
             auctionBoard.setFiles(new ArrayList<>());

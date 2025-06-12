@@ -47,7 +47,7 @@ public class BoardRequestDTO {
         @NotBlank(message = "수업 주제는 필수 입력값입니다")
         @Size(max = 100, message = "수업 주제는 최대 100자까지 가능합니다")
         @Schema(description = "수업 주제", example = "고등 수학 - 미적분", required = true)
-        private String subject;
+        private String specMajor;
     }
 
     /**
@@ -80,7 +80,7 @@ public class BoardRequestDTO {
         @NotBlank(message = "수업 주제는 필수 입력값입니다")
         @Size(max = 100, message = "수업 주제는 최대 100자까지 가능합니다")
         @Schema(description = "수업 주제", example = "고등 수학 - 미적분과 통계", required = true)
-        private String subject;
+        private String specMajor;
     }
 
     /**
@@ -106,7 +106,7 @@ public class BoardRequestDTO {
         private Long maxPrice;
 
         @Schema(description = "수업 주제", example = "미적분")
-        private String subject;
+        private String specMajor;
 
         @Schema(description = "선생님 ID", example = "1")
         private Long teacherId;

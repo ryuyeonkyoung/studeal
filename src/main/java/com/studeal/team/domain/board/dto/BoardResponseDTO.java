@@ -175,7 +175,10 @@ public class BoardResponseDTO {
         private String title;
 
         @Schema(description = "과목", example = "MATH")
-        private MajorSubject subject;
+        private MajorSubject major;
+
+        @Schema(description = "구체적인 과외 주제", example = "고등 수학 - 미적분")
+        private String specMajor;
 
         @Schema(description = "상세 설명", example = "수학 전공 대학생이 고등 수학 과외를 모집합니다.")
         private String description;
