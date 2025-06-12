@@ -96,7 +96,8 @@ public class BoardQueryService {
         return BoardResponseDTO.DetailTeacherResponse.builder()
                 .negotiationId(negotiations.isEmpty() ? null : negotiations.get(0).getNegotiationId())
                 .title(auctionBoard.getTitle())
-                .subject(auctionBoard.getTeacher().getMajor()) // Teacher의 major 필드 사용
+                .major(auctionBoard.getTeacher().getMajor())
+                .specMajor(auctionBoard.getSpecMajor())
                 .description(auctionBoard.getContent())
                 .priceRange(priceRange)
                 .bids(bids)
