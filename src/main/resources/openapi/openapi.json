@@ -6,7 +6,7 @@
     "contact": {
       "name": "Studeal Team"
     },
-    "version": "2.3.0"
+    "version": "3.0.0"
   },
   "servers": [
     {
@@ -111,6 +111,16 @@
           "required": true
         },
         "responses": {
+          "400": {
+            "description": "게시글을 찾을 수 없습니다.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
+                }
+              }
+            }
+          },
           "403": {
             "description": "게시글 권한이 없습니다.",
             "content": {
@@ -127,16 +137,6 @@
               "*/*": {
                 "schema": {
                   "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponseBoardDetailResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "게시글을 찾을 수 없습니다.",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
                 }
               }
             }
@@ -163,6 +163,16 @@
           }
         ],
         "responses": {
+          "400": {
+            "description": "게시글을 찾을 수 없습니다.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
+                }
+              }
+            }
+          },
           "403": {
             "description": "게시글 권한이 없습니다.",
             "content": {
@@ -179,16 +189,6 @@
               "*/*": {
                 "schema": {
                   "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponseJava.lang.Object"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "게시글을 찾을 수 없습니다.",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
                 }
               }
             }
@@ -215,22 +215,22 @@
           "required": true
         },
         "responses": {
-          "400": {
-            "description": "사용자가 없습니다.",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
-                }
-              }
-            }
-          },
           "200": {
             "description": "OK, 성공",
             "content": {
               "*/*": {
                 "schema": {
                   "$ref": "#/components/schemas/com.studeal.team.domain.negotiation.dto.NegotiationResponseDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "유효하지 않은 가격 제안 요청입니다.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
                 }
               }
             }
@@ -310,7 +310,7 @@
         },
         "responses": {
           "400": {
-            "description": "게시글을 찾을 수 없습니다.",
+            "description": "선생님을 찾을 수 없습니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -351,8 +351,8 @@
           "required": true
         },
         "responses": {
-          "400": {
-            "description": "이미 등록된 이메일입니다.",
+          "403": {
+            "description": "유효하지 않은 사용자 역할입니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -362,7 +362,7 @@
             }
           },
           "400": {
-            "description": "이미 등록된 이메일입니다.",
+            "description": "유효한 이메일 형식이 아닙니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -478,22 +478,22 @@
           "required": true
         },
         "responses": {
-          "404": {
-            "description": "존재하지 않는 협상입니다.",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
-                }
-              }
-            }
-          },
           "200": {
             "description": "OK, 성공",
             "content": {
               "*/*": {
                 "schema": {
                   "$ref": "#/components/schemas/com.studeal.team.domain.negotiation.dto.NegotiationResponseDTO"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "존재하지 않는 협상입니다.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
                 }
               }
             }
@@ -531,16 +531,6 @@
           "required": true
         },
         "responses": {
-          "400": {
-            "description": "유효하지 않은 수강 신청 요청입니다.",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
-                }
-              }
-            }
-          },
           "404": {
             "description": "존재하지 않는 수강 신청입니다.",
             "content": {
@@ -557,6 +547,16 @@
               "*/*": {
                 "schema": {
                   "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponseCom.studeal.team.domain.enrollment.dto.EnrollmentResponseDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "유효하지 않은 수강 신청 요청입니다.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
                 }
               }
             }
@@ -691,97 +691,6 @@
               "*/*": {
                 "schema": {
                   "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponseJava.lang.Void"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/boards/offset": {
-      "get": {
-        "tags": [
-          "게시판 API"
-        ],
-        "summary": "게시글 목록 조회 (오프셋 페이징)",
-        "description": "모든 과외 모집 게시글 목록을 오프셋 기반 페이징으로 조회합니다.",
-        "operationId": "getBoardsByOffset",
-        "parameters": [
-          {
-            "name": "page",
-            "in": "query",
-            "description": "페이지 번호 (0부터 시작)",
-            "required": false,
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 0
-            }
-          },
-          {
-            "name": "size",
-            "in": "query",
-            "description": "페이지 크기 (기본값: 10)",
-            "required": false,
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 10
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK, 성공",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponseBoardOffsetPageResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/boards/cursor": {
-      "get": {
-        "tags": [
-          "게시판 API"
-        ],
-        "summary": "게시글 목록 조회 (커서 페이징)",
-        "description": "모든 과외 모집 게시글 목록을 커서 기반 페이징으로 조회합니다.",
-        "operationId": "getBoardsByCursor",
-        "parameters": [
-          {
-            "name": "cursorId",
-            "in": "query",
-            "description": "커서 ID (이전 페이지의 마지막 게시글 ID, 첫 페이지는 null)",
-            "required": false,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          },
-          {
-            "name": "size",
-            "in": "query",
-            "description": "페이지 크기 (기본값: 10)",
-            "required": false,
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 10
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK, 성공",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponseBoardCursorPageResponse"
                 }
               }
             }
@@ -1577,7 +1486,7 @@
             "description": "게시글 제목",
             "example": "고등 수학 과외 모집합니다"
           },
-          "subject": {
+          "major": {
             "type": "string",
             "description": "과목",
             "example": "MATH",
@@ -1589,6 +1498,11 @@
               "역사",
               "코딩"
             ]
+          },
+          "specMajor": {
+            "type": "string",
+            "description": "구체적인 과외 주제",
+            "example": "고등 수학 - 미적분"
           },
           "description": {
             "type": "string",
