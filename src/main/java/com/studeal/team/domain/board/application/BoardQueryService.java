@@ -96,7 +96,7 @@ public class BoardQueryService {
         return BoardResponseDTO.DetailTeacherResponse.builder()
                 .negotiationId(negotiations.isEmpty() ? null : negotiations.get(0).getNegotiationId())
                 .title(auctionBoard.getTitle())
-                .major(auctionBoard.getTeacher().getMajor())
+                .major(auctionBoard.getMajor())
                 .specMajor(auctionBoard.getSpecMajor())
                 .description(auctionBoard.getContent())
                 .priceRange(priceRange)
