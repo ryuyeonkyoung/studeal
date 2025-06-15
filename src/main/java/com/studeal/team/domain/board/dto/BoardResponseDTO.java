@@ -193,6 +193,42 @@ public class BoardResponseDTO {
         private String status;
     }
 
+
+    /**
+     * 학생 상세 조회 응답 DTO
+     * 게시글 상세 조회 시 학생에게 필요한 정보 포함
+     */
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Schema(name = "DetailStudentResponse", description = "학생 상세 조회 응답")
+    public static class DetailStudentResponse {
+        @Schema(description = "게시글 제목", example = "고등 수학 과외 모집합니다")
+        private String title;
+
+        @Schema(description = "과목", example = "MATH")
+        private MajorSubject major;
+
+        @Schema(description = "구체적인 과외 주제", example = "고등 수학 - 미적분")
+        private String specMajor;
+
+        @Schema(description = "상세 설명", example = "수학 전공 대학생이 고등 수학 과외를 모집합니다.")
+        private String description;
+
+        @Schema(description = "가격 범위", example = "50000-70000")
+        private String priceRange;
+
+        @Schema(description = "선생님 이름", example = "김선생")
+        private String teacherName;
+
+        @Schema(description = "선생님 이메일", example = "teacher@studeal.com")
+        private String teacherEmail;
+
+        @Schema(description = "상태", example = "OPEN")
+        private String status;
+    }
+
     /**
      * 입찰 응답 DTO
      * 선생님 상세 조회 시 입찰 정보 포함

@@ -41,6 +41,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 }
             }
 
+            // 사용자 역할을 요청 속성으로 추가
+            String role = tokenProvider.extractRole(jwt);
+            if (StringUtils.hasText(role)) {
+                request.setAttribute("userRole", role);
+                log.debug("Request에 userRole={} 속성 추가", role);
+            } else {
+                log.warn("JWT 토큰에서 role을 추출하지 못했습니다.");
+            }
+
             log.debug("Security Context에 '{}' 인증 정보를 저장했습니다", authentication.getName());
         } else {
             log.debug("유효한 JWT 토큰이 없습니다");

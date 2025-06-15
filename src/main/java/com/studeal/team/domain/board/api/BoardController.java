@@ -88,18 +88,32 @@ public class BoardController {
         return ApiResponse.onSuccess(null);
     }
 
-    @Operation(summary = "게시글 상세 조회 - 선생님", description = "선생님이 조회하는 게시글 상세 정보 API. 게시글 정보와 입찰 순위 정보를 함께 제공합니다.")
+    @Operation(summary = "게시글 상세 조회 (역할 기반)", description = "JWT 토큰의 역할(선생님/학생)에 따라 게시글 상세 정보를 다르게 제공합니다. 선생님은 입찰 정보를, 학생은 선생님 정보를 추가로 확인할 수 있습니다.")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON_200", description = "OK, 성공"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "BOARD_400_01", description = "게시글을 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ApiResponse.class))),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "NEGOTIATION_400_01", description = "유효하지 않은 가격 제안 요청입니다.", content = @Content(schema = @Schema(implementation = ApiResponse.class)))
     })
     @GetMapping("/{boardId}")
-    public ApiResponse<BoardResponseDTO.DetailTeacherResponse> getTeacherDetail(
+    public ApiResponse<?> getBoardDetail(
             @Parameter(description = "게시글 ID") @PathVariable Long boardId,
-            @Parameter(description = "선생님 ID (인증 정보에서 추출)", hidden = true) @RequestAttribute("userId") @ExistTeacher Long teacherId) {
-        BoardResponseDTO.DetailTeacherResponse response = boardQueryService.getTeacherDetailBoard(boardId, teacherId);
-        return ApiResponse.onSuccess(response);
+            @Parameter(description = "사용자 ID (인증 정보에서 추출)", hidden = true) @RequestAttribute("userId") Long userId,
+            @Parameter(description = "사용자 역할 (인증 정보에서 추출)", hidden = true) @RequestAttribute(value = "userRole", required = false) String userRole) {
+
+        // 역할에 따라 다른 응답 제공
+        if ("TEACHER".equalsIgnoreCase(userRole)) {
+            BoardResponseDTO.DetailTeacherResponse response =
+                    boardQueryService.getTeacherDetailBoard(boardId, userId);
+            return ApiResponse.onSuccess(response);
+        } else if ("STUDENT".equalsIgnoreCase(userRole)) {
+            BoardResponseDTO.DetailStudentResponse response =
+                    boardQueryService.getStudentDetailBoard(boardId, userId);
+            return ApiResponse.onSuccess(response);
+        } else {
+            // 기본 응답 (역할이 없거나 알 수 없는 경우)
+            BoardResponseDTO.DetailResponse response = boardQueryService.getBoard(boardId);
+            return ApiResponse.onSuccess(response);
+        }
     }
 
     @Operation(summary = "게시글 목록 조회 (커서 페이징)", description = "모든 과외 모집 게시글 목록을 커서 기반 페이징으로 조회합니다.")
