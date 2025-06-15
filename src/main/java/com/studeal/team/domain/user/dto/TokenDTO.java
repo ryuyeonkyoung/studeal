@@ -14,4 +14,5 @@ public class TokenDTO {
     private String accessToken;
     private String refreshToken;
     private Long accessTokenExpiresIn;
+    private String role;       // 사용자 권한 역할
 }
