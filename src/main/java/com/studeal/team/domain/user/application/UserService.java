@@ -63,6 +63,9 @@ public class UserService {
                 .orElseThrow(() -> new UserHandler(ErrorStatus.USER_NOT_FOUND));
         Long userId = userDetails.getUserId();
 
+        // 사용자 역할 정보 가져오기
+        String userRole = userDetails.getRole().toString();
+
         // JWT 토큰 생성 (userId 포함)
         String accessToken = jwtTokenProvider.createAccessToken(authentication, userId);
         String refreshToken = jwtTokenProvider.createRefreshToken(authentication);
@@ -72,6 +75,7 @@ public class UserService {
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .accessTokenExpiresIn(3600000L)
+                .role(userRole)  // 사용자 역할 정보 추가
                 .build();
     }
 }
