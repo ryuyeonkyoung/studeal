@@ -1,6 +1,9 @@
 package com.studeal.team.global.jwt;
 
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -42,6 +45,14 @@ public class JwtTokenProvider {
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
 
+        // 권한 정보에서 역할(ROLE_) 추출
+        String role = authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .filter(auth -> auth.startsWith("ROLE_"))
+                .findFirst()
+                .map(auth -> auth.replace("ROLE_", ""))
+                .orElse("UNKNOWN");
+
         long now = (new Date()).getTime();
         Date validity = new Date(now + accessTokenValidity);
 
@@ -49,6 +60,7 @@ public class JwtTokenProvider {
                 .setSubject(authentication.getName())
                 .claim("userId", userId)
                 .claim("auth", authorities)
+                .claim("role", role)  // role 클레임 추가
                 .claim("type", "access")
                 .signWith(key, SignatureAlgorithm.HS512)
                 .setIssuedAt(new Date(now))
@@ -119,5 +131,25 @@ public class JwtTokenProvider {
             return null;
         }
     }
-}
 
+    // 토큰에서 사용자 역할 추출
+    public String extractRole(String token) {
+        try {
+            Claims claims = Jwts.parserBuilder()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+
+            // role 클레임에서 사용자 역할 추출
+            if (claims.get("role") != null) {
+                return String.valueOf(claims.get("role"));
+            }
+
+            return null;
+        } catch (JwtException | IllegalArgumentException e) {
+            log.info("Cannot extract role from JWT token: {}", e.getMessage());
+            return null;
+        }
+    }
+}
