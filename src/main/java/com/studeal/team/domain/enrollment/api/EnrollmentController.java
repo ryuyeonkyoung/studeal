@@ -3,6 +3,7 @@ package com.studeal.team.domain.enrollment.api;
 import com.studeal.team.domain.enrollment.application.EnrollmentCommandService;
 import com.studeal.team.domain.enrollment.dto.EnrollmentRequestDTO;
 import com.studeal.team.domain.enrollment.dto.EnrollmentResponseDTO;
+import com.studeal.team.global.common.util.SecurityUtils;
 import com.studeal.team.global.error.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -11,12 +12,14 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/enrollments")
 @Tag(name = "수업 참여 확정", description = "학생의 수업 참여 확정 관련 API")
+@Slf4j
 public class EnrollmentController {
 
     private final EnrollmentCommandService enrollmentCommandService;
@@ -35,6 +38,10 @@ public class EnrollmentController {
     })
     @PostMapping
     public ApiResponse<EnrollmentResponseDTO> createEnrollment(@Valid @RequestBody EnrollmentRequestDTO.CreateRequest request) {
+        // SecurityContextHolder에서 현재 사용자 ID 조회
+        Long currentUserId = SecurityUtils.getCurrentUserId();
+        log.info("수강 신청 생성 요청: 사용자 ID {}", currentUserId);
+
         return ApiResponse.onSuccess(enrollmentCommandService.createEnrollment(request));
     }
 
@@ -55,6 +62,10 @@ public class EnrollmentController {
     public ApiResponse<EnrollmentResponseDTO> updateStatus(
             @PathVariable Long enrollmentId,
             @Valid @RequestBody EnrollmentRequestDTO.StatusUpdateRequest request) {
+        // SecurityContextHolder에서 현재 사용자 ID 조회
+        Long currentUserId = SecurityUtils.getCurrentUserId();
+        log.info("수강 신청 상태 변경 요청: 수강 신청 ID {}, 사용자 ID {}", enrollmentId, currentUserId);
+
         return ApiResponse.onSuccess(enrollmentCommandService.updateStatus(enrollmentId, request));
     }
 }

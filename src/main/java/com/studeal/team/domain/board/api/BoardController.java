@@ -4,7 +4,7 @@ import com.studeal.team.domain.board.application.BoardCommandService;
 import com.studeal.team.domain.board.application.BoardQueryService;
 import com.studeal.team.domain.board.dto.BoardRequestDTO;
 import com.studeal.team.domain.board.dto.BoardResponseDTO;
-import com.studeal.team.domain.user.domain.validation.ExistTeacher;
+import com.studeal.team.global.common.util.SecurityUtils;
 import com.studeal.team.global.error.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/boards")
 @RequiredArgsConstructor
+@Slf4j
 public class BoardController {
 
     private final BoardQueryService boardQueryService;
@@ -46,8 +48,11 @@ public class BoardController {
     })
     @PostMapping
     public ApiResponse<BoardResponseDTO.DetailResponse> createBoard(
-            @Parameter(description = "선생님 ID (인증 정보에서 추출)", hidden = true) @RequestAttribute("userId") @ExistTeacher Long teacherId,
             @Valid @RequestBody BoardRequestDTO.CreateRequest request) {
+        // SecurityContextHolder에서 현재 사용자 ID 추출
+        Long teacherId = SecurityUtils.getCurrentUserId();
+        log.info("게시글 생성 요청: 사용자 ID {}", teacherId);
+
         BoardResponseDTO.DetailResponse response = boardCommandService.createBoard(teacherId, request);
         return ApiResponse.onSuccess(response);
     }
@@ -68,8 +73,11 @@ public class BoardController {
     @PutMapping("/{boardId}")
     public ApiResponse<BoardResponseDTO.DetailResponse> updateBoard(
             @Parameter(description = "게시글 ID") @PathVariable Long boardId,
-            @Parameter(description = "선생님 ID (인증 정보에서 추출)", hidden = true) @RequestAttribute("userId") @ExistTeacher Long teacherId,
             @Valid @RequestBody BoardRequestDTO.UpdateRequest request) {
+        // SecurityContextHolder에서 현재 사용자 ID 추출
+        Long teacherId = SecurityUtils.getCurrentUserId();
+        log.info("게시글 수정 요청: 게시글 ID {}, 사용자 ID {}", boardId, teacherId);
+
         BoardResponseDTO.DetailResponse response = boardCommandService.updateBoard(boardId, teacherId, request);
         return ApiResponse.onSuccess(response);
     }
@@ -82,13 +90,16 @@ public class BoardController {
     })
     @DeleteMapping("/{boardId}")
     public ApiResponse<?> deleteBoard(
-            @Parameter(description = "게시글 ID") @PathVariable Long boardId,
-            @Parameter(description = "선생님 ID (인증 정보에서 추출)", hidden = true) @RequestAttribute("userId") @ExistTeacher Long teacherId) {
+            @Parameter(description = "게시글 ID") @PathVariable Long boardId) {
+        // SecurityContextHolder에서 현재 사용자 ID 추출
+        Long teacherId = SecurityUtils.getCurrentUserId();
+        log.info("게시글 삭제 요청: 게시글 ID {}, 사용자 ID {}", boardId, teacherId);
+
         boardCommandService.deleteBoard(boardId, teacherId);
         return ApiResponse.onSuccess(null);
     }
 
-    @Operation(summary = "게시글 상세 조회 (역할 기반)", description = "JWT 토큰의 역할(선생님/학생)에 따라 게시글 상세 정보를 다르게 제공합니다. 선생님은 입찰 정보를, 학생은 선생님 정보를 추가로 확인할 수 있습니다.")
+    @Operation(summary = "게시글 상세 조회 (역할 기반)", description = "사용자의 역할(선생님/학생)에 따라 게시글 상세 정보를 다르게 제공합니다. 선생님은 입찰 정보를, 학생은 선생님 정보를 추가로 확인할 수 있습니다.")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON_200", description = "OK, 성공"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "BOARD_400_01", description = "게시글을 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ApiResponse.class))),
@@ -96,16 +107,21 @@ public class BoardController {
     })
     @GetMapping("/{boardId}")
     public ApiResponse<?> getBoardDetail(
-            @Parameter(description = "게시글 ID") @PathVariable Long boardId,
-            @Parameter(description = "사용자 ID (인증 정보에서 추출)", hidden = true) @RequestAttribute("userId") Long userId,
-            @Parameter(description = "사용자 역할 (인증 정보에서 추출)", hidden = true) @RequestAttribute(value = "userRole", required = false) String userRole) {
+            @Parameter(description = "게시글 ID") @PathVariable Long boardId) {
+        // SecurityContextHolder에서 현재 사용자 ID 추출
+        Long userId = SecurityUtils.getCurrentUserId();
+        log.info("게시글 상세 조회 요청: 게시글 ID {}, 사용자 ID {}", boardId, userId);
+
+        // SecurityUtils를 사용하여 사용자 역할 확인
+        boolean isTeacher = SecurityUtils.isTeacher();
+        boolean isStudent = SecurityUtils.isStudent();
 
         // 역할에 따라 다른 응답 제공
-        if ("TEACHER".equalsIgnoreCase(userRole)) {
+        if (isTeacher) {
             BoardResponseDTO.DetailTeacherResponse response =
                     boardQueryService.getTeacherDetailBoard(boardId, userId);
             return ApiResponse.onSuccess(response);
-        } else if ("STUDENT".equalsIgnoreCase(userRole)) {
+        } else if (isStudent) {
             BoardResponseDTO.DetailStudentResponse response =
                     boardQueryService.getStudentDetailBoard(boardId, userId);
             return ApiResponse.onSuccess(response);
