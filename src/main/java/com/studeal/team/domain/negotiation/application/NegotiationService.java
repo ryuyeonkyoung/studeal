@@ -34,9 +34,15 @@ public class NegotiationService {
     private final EnrollmentService enrollmentService;
 
     @Transactional
-    public NegotiationResponseDTO initiateNegotiation(NegotiationRequestDTO.CreateRequest request) {
-        Student student = studentRepository.findById(request.getStudentId())
+    public NegotiationResponseDTO initiateNegotiation(NegotiationRequestDTO.CreateRequest request, Long studentId) {
+        // 사용자가 존재하는지 검증
+        Student student = studentRepository.findById(studentId)
                 .orElseThrow(() -> new StudentHandler(ErrorStatus.USER_NOT_FOUND));
+
+//        // 현재 사용자가 STUDENT 역할을 가지고 있는지 검증
+//        if (student.getRole() != UserRole.STUDENT) {
+//            throw new StudentHandler(ErrorStatus.USER_NOT_STUDENT);
+//        }
 
         AuctionBoard board = boardRepository.findById(request.getBoardId())
                 .orElseThrow(() -> new BoardHandler(ErrorStatus.BOARD_NOT_FOUND));

@@ -27,7 +27,6 @@ public final class NegotiationConverter {
     public static NegotiationResponseDTO toResponseDTO(Negotiation negotiation) {
         return NegotiationResponseDTO.builder()
                 .negotiationId(negotiation.getNegotiationId())
-                .studentId(negotiation.getStudent().getUserId())
                 .boardId(negotiation.getAuctionBoard().getBoardId())
                 .proposedPrice(negotiation.getProposedPrice())
                 .status(negotiation.getStatus())
