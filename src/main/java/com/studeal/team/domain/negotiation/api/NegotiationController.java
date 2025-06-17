@@ -5,11 +5,13 @@ import com.studeal.team.domain.negotiation.dto.NegotiationRequestDTO;
 import com.studeal.team.domain.negotiation.dto.NegotiationResponseDTO;
 import com.studeal.team.global.common.util.SecurityUtils;
 import com.studeal.team.global.error.ApiResponse;
+import com.studeal.team.global.jwt.JwtTokenProvider;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 public class NegotiationController {
 
     private final NegotiationService negotiationService;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Operation(summary = "학생 가격 제안(협상) 생성 API",
             description = "학생이 강사에게 가격 제안을 생성하는 API입니다.\n\n SecurityContext에서 현재 인증된 학생 ID를 자동으로 사용합니다.")
@@ -61,5 +64,16 @@ public class NegotiationController {
     public ApiResponse<Void> deleteNegotiation(@PathVariable Long negotiationId) {
         negotiationService.deleteNegotiation(negotiationId);
         return ApiResponse.onSuccess(null);
+    }
+
+    /**
+     * HttpServletRequest에서 토큰을 추출합니다.
+     */
+    private String resolveToken(HttpServletRequest request) {
+        String bearerToken = request.getHeader("Authorization");
+        if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
+            return bearerToken.substring(7);
+        }
+        return null;
     }
 }
