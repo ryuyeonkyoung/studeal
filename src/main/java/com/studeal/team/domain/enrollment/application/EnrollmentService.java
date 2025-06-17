@@ -14,7 +14,7 @@ import com.studeal.team.domain.user.domain.entity.Student;
 import com.studeal.team.global.error.code.status.ErrorStatus;
 import com.studeal.team.global.error.exception.handler.EnrollmentHandler;
 import com.studeal.team.global.error.exception.handler.NegotiationHandler;
-import com.studeal.team.global.error.exception.handler.StudentHandler;
+import com.studeal.team.global.error.exception.handler.UserHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,9 +31,9 @@ public class EnrollmentService {
 
     @Transactional
     public EnrollmentResponseDTO createEnrollment(EnrollmentRequestDTO.CreateRequest request) {
-        // 학생 확인
+
         Student student = studentRepository.findById(request.getStudentId())
-                .orElseThrow(() -> new StudentHandler(ErrorStatus.STUDENT_NOT_FOUND));
+                .orElseThrow(() -> new UserHandler(ErrorStatus.USER_NOT_FOUND));
 
         // 협상(negotiation) 확인
         Negotiation negotiation = negotiationRepository.findById(request.getNegotiationId())

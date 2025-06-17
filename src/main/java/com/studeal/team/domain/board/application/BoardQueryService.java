@@ -6,8 +6,12 @@ import com.studeal.team.domain.board.domain.AuctionBoard;
 import com.studeal.team.domain.board.dto.BoardResponseDTO;
 import com.studeal.team.domain.negotiation.dao.NegotiationRepository;
 import com.studeal.team.domain.negotiation.domain.Negotiation;
+import com.studeal.team.domain.user.dao.TeacherRepository;
+import com.studeal.team.domain.user.domain.entity.Teacher;
+import com.studeal.team.domain.user.domain.entity.enums.UserRole;
 import com.studeal.team.global.error.code.status.ErrorStatus;
 import com.studeal.team.global.error.exception.handler.BoardHandler;
+import com.studeal.team.global.error.exception.handler.UserHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -31,6 +35,7 @@ public class BoardQueryService {
 
     private final BoardRepository boardRepository;
     private final NegotiationRepository negotiationRepository;
+    private final TeacherRepository teacherRepository;
 
     /**
      * 게시글 상세 조회
@@ -70,6 +75,15 @@ public class BoardQueryService {
      * @return 선생님용 게시글 상세 응답 DTO
      */
     public BoardResponseDTO.DetailTeacherResponse getTeacherDetailBoard(Long boardId, Long teacherId) {
+
+        Teacher teacher = teacherRepository.findById(teacherId)
+                .orElseThrow(() -> new UserHandler(ErrorStatus.USER_NOT_FOUND));
+
+        // 교사 역할인지 검증
+        if (teacher.getRole() != UserRole.TEACHER) {
+            throw new UserHandler(ErrorStatus.USER_NOT_TEACHER);
+        }
+
         // 게시글 조회
         AuctionBoard auctionBoard = boardRepository.findByIdWithTeacher(boardId)
                 .orElseThrow(() -> new BoardHandler(ErrorStatus.BOARD_NOT_FOUND));

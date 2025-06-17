@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.*;
  * 게시판 API 컨트롤러
  * 과외 모집 게시글 관련 엔드포인트 제공
  */
-@Tag(name = "게시판 API", description = "과외 모집 게시판 관련 API")
+@Tag(name = "게시판 API", description = "선생님의 과외 모집 게시판 관련 API")
 @RestController
 @RequestMapping("/boards")
 @RequiredArgsConstructor

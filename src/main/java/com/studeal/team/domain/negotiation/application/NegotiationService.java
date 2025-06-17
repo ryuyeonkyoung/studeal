@@ -14,10 +14,11 @@ import com.studeal.team.domain.negotiation.dto.NegotiationResponseDTO;
 import com.studeal.team.domain.user.dao.StudentRepository;
 import com.studeal.team.domain.user.domain.entity.Student;
 import com.studeal.team.domain.user.domain.entity.Teacher;
+import com.studeal.team.domain.user.domain.entity.enums.UserRole;
 import com.studeal.team.global.error.code.status.ErrorStatus;
 import com.studeal.team.global.error.exception.handler.BoardHandler;
 import com.studeal.team.global.error.exception.handler.NegotiationHandler;
-import com.studeal.team.global.error.exception.handler.StudentHandler;
+import com.studeal.team.global.error.exception.handler.UserHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -35,14 +36,14 @@ public class NegotiationService {
 
     @Transactional
     public NegotiationResponseDTO initiateNegotiation(NegotiationRequestDTO.CreateRequest request, Long studentId) {
-        // 사용자가 존재하는지 검증
-        Student student = studentRepository.findById(studentId)
-                .orElseThrow(() -> new StudentHandler(ErrorStatus.USER_NOT_FOUND));
 
-//        // 현재 사용자가 STUDENT 역할을 가지고 있는지 검증
-//        if (student.getRole() != UserRole.STUDENT) {
-//            throw new StudentHandler(ErrorStatus.USER_NOT_STUDENT);
-//        }
+        Student student = studentRepository.findById(studentId)
+                .orElseThrow(() -> new UserHandler(ErrorStatus.USER_NOT_FOUND));
+
+        // 현재 사용자가 STUDENT 역할을 가지고 있는지 검증
+        if (student.getRole() != UserRole.STUDENT) {
+            throw new UserHandler(ErrorStatus.USER_NOT_STUDENT);
+        }
 
         AuctionBoard board = boardRepository.findById(request.getBoardId())
                 .orElseThrow(() -> new BoardHandler(ErrorStatus.BOARD_NOT_FOUND));
@@ -63,7 +64,6 @@ public class NegotiationService {
 
     @Transactional
     public NegotiationResponseDTO updateNegotiationStatus(Long negotiationId, NegotiationStatus newStatus) {
-
         Negotiation negotiation = negotiationRepository.findById(negotiationId)
                 .orElseThrow(() -> new NegotiationHandler(ErrorStatus.NEGOTIATION_NOT_FOUND));
 
