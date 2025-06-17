@@ -14,13 +14,13 @@ import com.studeal.team.domain.negotiation.dto.NegotiationResponseDTO;
 import com.studeal.team.domain.user.dao.StudentRepository;
 import com.studeal.team.domain.user.domain.entity.Student;
 import com.studeal.team.domain.user.domain.entity.Teacher;
-import com.studeal.team.domain.user.domain.entity.enums.UserRole;
 import com.studeal.team.global.error.code.status.ErrorStatus;
 import com.studeal.team.global.error.exception.handler.BoardHandler;
 import com.studeal.team.global.error.exception.handler.NegotiationHandler;
 import com.studeal.team.global.error.exception.handler.UserHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,16 +34,12 @@ public class NegotiationService {
     private final BoardRepository boardRepository;
     private final EnrollmentService enrollmentService;
 
+    @PreAuthorize("hasRole('STUDENT')")
     @Transactional
     public NegotiationResponseDTO initiateNegotiation(NegotiationRequestDTO.CreateRequest request, Long studentId) {
 
         Student student = studentRepository.findById(studentId)
                 .orElseThrow(() -> new UserHandler(ErrorStatus.USER_NOT_FOUND));
-
-        // 현재 사용자가 STUDENT 역할을 가지고 있는지 검증
-        if (student.getRole() != UserRole.STUDENT) {
-            throw new UserHandler(ErrorStatus.USER_NOT_STUDENT);
-        }
 
         AuctionBoard board = boardRepository.findById(request.getBoardId())
                 .orElseThrow(() -> new BoardHandler(ErrorStatus.BOARD_NOT_FOUND));
@@ -62,6 +58,7 @@ public class NegotiationService {
         return NegotiationConverter.toResponseDTO(negotiationRepository.save(negotiation));
     }
 
+    @PreAuthorize("hasRole('STUDENT')")
     @Transactional
     public NegotiationResponseDTO updateNegotiationStatus(Long negotiationId, NegotiationStatus newStatus) {
         Negotiation negotiation = negotiationRepository.findById(negotiationId)
@@ -103,6 +100,7 @@ public class NegotiationService {
         enrollmentService.createEnrollment(enrollmentRequest);
     }
 
+    @PreAuthorize("hasRole('STUDENT')")
     @Transactional
     public void deleteNegotiation(Long negotiationId) {
         Negotiation negotiation = negotiationRepository.findById(negotiationId)

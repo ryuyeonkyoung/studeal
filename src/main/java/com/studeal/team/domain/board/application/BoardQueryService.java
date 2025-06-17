@@ -17,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -74,6 +75,7 @@ public class BoardQueryService {
      * @param teacherId 선생님 ID (인증 정보에서 추출)
      * @return 선생님용 게시글 상세 응답 DTO
      */
+    @PreAuthorize("hasRole('TEACHER')")
     public BoardResponseDTO.DetailTeacherResponse getTeacherDetailBoard(Long boardId, Long teacherId) {
 
         Teacher teacher = teacherRepository.findById(teacherId)
@@ -133,6 +135,7 @@ public class BoardQueryService {
      * @param studentId 학생 ID (인증 정보에서 추출)
      * @return 학생용 게시글 상세 응답 DTO
      */
+    @PreAuthorize("hasRole('STUDENT')")
     public BoardResponseDTO.DetailStudentResponse getStudentDetailBoard(Long boardId, Long studentId) {
         // 게시글 조회
         AuctionBoard auctionBoard = boardRepository.findByIdWithTeacher(boardId)
