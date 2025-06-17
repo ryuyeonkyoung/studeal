@@ -17,19 +17,25 @@ import com.studeal.team.global.error.exception.handler.NegotiationHandler;
 import com.studeal.team.global.error.exception.handler.UserHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
-public class EnrollmentService {
+@Transactional // 클래스 레벨에서 기본 트랜잭션 설정
+public class EnrollmentCommandService {
 
     private final EnrollmentRepository enrollmentRepository;
     private final NegotiationRepository negotiationRepository;
     private final StudentRepository studentRepository;
 
-    @Transactional
+    /**
+     * 수강 신청 생성 메서드
+     * NegotiationService에서 호출될 때 트랜잭션 전파를 위해 REQUIRED 설정 (기본값)
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
     public EnrollmentResponseDTO createEnrollment(EnrollmentRequestDTO.CreateRequest request) {
 
         Student student = studentRepository.findById(request.getStudentId())
@@ -69,7 +75,6 @@ public class EnrollmentService {
         return EnrollmentConverter.toResponseDTO(savedEnrollment);
     }
 
-    @Transactional
     public EnrollmentResponseDTO updateStatus(Long enrollmentId, EnrollmentRequestDTO.StatusUpdateRequest request) {
         // 수강 신청 확인
         Enrollment enrollment = enrollmentRepository.findById(enrollmentId)
@@ -83,15 +88,11 @@ public class EnrollmentService {
         // 상태 전환 유효성 검증
         validateStatusTransition(enrollment.getStatus(), request.getStatus());
 
-        // 상태 변경
+        // 상태 업데이트
         enrollment.setStatus(request.getStatus());
 
-        // 수강 신청 저장
-        Enrollment updatedEnrollment = enrollmentRepository.save(enrollment);
-
-        return EnrollmentConverter.toResponseDTO(updatedEnrollment);
+        return EnrollmentConverter.toResponseDTO(enrollmentRepository.save(enrollment));
     }
-
 
     // TODO: 상태 전환 검증 로직을 별도의 유틸리티 클래스로 분리할 수 있음
     // TODO: 모든 상태 변환 API에 대해 상태변환 흐름 검즌 적용하기

@@ -1,9 +1,9 @@
-// NegotiationService.java
+// NegotiationCommandService.java
 package com.studeal.team.domain.negotiation.application;
 
 import com.studeal.team.domain.board.dao.BoardRepository;
 import com.studeal.team.domain.board.domain.AuctionBoard;
-import com.studeal.team.domain.enrollment.application.EnrollmentService;
+import com.studeal.team.domain.enrollment.application.EnrollmentCommandService;
 import com.studeal.team.domain.enrollment.dto.EnrollmentRequestDTO;
 import com.studeal.team.domain.negotiation.converter.NegotiationConverter;
 import com.studeal.team.domain.negotiation.dao.NegotiationRepository;
@@ -27,15 +27,15 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class NegotiationService {
+@Transactional // 클래스 레벨에서 기본 트랜잭션 설정
+public class NegotiationCommandService {
 
     private final NegotiationRepository negotiationRepository;
     private final StudentRepository studentRepository;
     private final BoardRepository boardRepository;
-    private final EnrollmentService enrollmentService;
+    private final EnrollmentCommandService enrollmentCommandService;
 
     @PreAuthorize("hasRole('STUDENT')")
-    @Transactional
     public NegotiationResponseDTO initiateNegotiation(NegotiationRequestDTO.CreateRequest request, Long studentId) {
 
         Student student = studentRepository.findById(studentId)
@@ -59,7 +59,6 @@ public class NegotiationService {
     }
 
     @PreAuthorize("hasRole('STUDENT')")
-    @Transactional
     public NegotiationResponseDTO updateNegotiationStatus(Long negotiationId, NegotiationStatus newStatus) {
         Negotiation negotiation = negotiationRepository.findById(negotiationId)
                 .orElseThrow(() -> new NegotiationHandler(ErrorStatus.NEGOTIATION_NOT_FOUND));
@@ -83,6 +82,7 @@ public class NegotiationService {
 
     /**
      * 수락된 협상에 대해 자동으로 Enrollment를 생성하는 메서드
+     * 이미 트랜잭션 내에서 실행되므로 별도 트랜잭션 없이 실행
      */
     private void createEnrollmentForAcceptedNegotiation(Negotiation negotiation) {
         // 이미 Enrollment가 생성되어 있는 경우 스킵
@@ -97,14 +97,19 @@ public class NegotiationService {
                 .paidAmount(negotiation.getProposedPrice())  // 협상된 가격으로 설정
                 .build();
 
-        enrollmentService.createEnrollment(enrollmentRequest);
+        enrollmentCommandService.createEnrollment(enrollmentRequest);
     }
 
     @PreAuthorize("hasRole('STUDENT')")
-    @Transactional
     public void deleteNegotiation(Long negotiationId) {
         Negotiation negotiation = negotiationRepository.findById(negotiationId)
                 .orElseThrow(() -> new NegotiationHandler(ErrorStatus.NEGOTIATION_NOT_FOUND));
         negotiationRepository.delete(negotiation);
+    }
+
+    @Transactional(readOnly = true)
+    public Negotiation getNegotiationById(Long negotiationId) {
+        return negotiationRepository.findById(negotiationId)
+                .orElseThrow(() -> new NegotiationHandler(ErrorStatus.NEGOTIATION_NOT_FOUND));
     }
 }

@@ -1,6 +1,6 @@
 package com.studeal.team.domain.negotiation.api;
 
-import com.studeal.team.domain.negotiation.application.NegotiationService;
+import com.studeal.team.domain.negotiation.application.NegotiationCommandService;
 import com.studeal.team.domain.negotiation.dto.NegotiationRequestDTO;
 import com.studeal.team.domain.negotiation.dto.NegotiationResponseDTO;
 import com.studeal.team.global.common.util.SecurityUtils;
@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "가격 제안(협상)", description = "학생의 가격 제안(협상) 관련 API")
 public class NegotiationController {
 
-    private final NegotiationService negotiationService;
+    private final NegotiationCommandService negotiationCommandService;
     private final JwtTokenProvider jwtTokenProvider;
 
     @Operation(summary = "학생 가격 제안(협상) 생성 API",
@@ -40,7 +40,7 @@ public class NegotiationController {
         // SecurityContextHolder에서 현재 사용자 ID 조회
         Long currentUserId = SecurityUtils.getCurrentUserId();
 
-        return ApiResponse.onSuccess(negotiationService.initiateNegotiation(request, currentUserId));
+        return ApiResponse.onSuccess(negotiationCommandService.initiateNegotiation(request, currentUserId));
     }
 
     @Operation(summary = "학생 가격 제안(협상) 상태 변경 API", description = "협상 ID로 학생의 가격 제안(협상) 상태를 변경하는 API입니다. 상태가 ACCEPTED로 변경될 경우 자동으로 Enrollment가 생성됩니다.")
@@ -52,7 +52,7 @@ public class NegotiationController {
     public ApiResponse<NegotiationResponseDTO> updateNegotiationStatus(
             @PathVariable Long negotiationId,
             @Valid @RequestBody NegotiationRequestDTO.UpdateStatusRequest request) {
-        return ApiResponse.onSuccess(negotiationService.updateNegotiationStatus(negotiationId, request.getStatus()));
+        return ApiResponse.onSuccess(negotiationCommandService.updateNegotiationStatus(negotiationId, request.getStatus()));
     }
 
     @Operation(summary = "학생 가격 제안(협상) 삭제 API", description = "협상 ID로 학생의 가격 제안(협상)을 삭제하는 API입니다.")
@@ -62,7 +62,7 @@ public class NegotiationController {
     })
     @DeleteMapping("/{negotiationId}")
     public ApiResponse<Void> deleteNegotiation(@PathVariable Long negotiationId) {
-        negotiationService.deleteNegotiation(negotiationId);
+        negotiationCommandService.deleteNegotiation(negotiationId);
         return ApiResponse.onSuccess(null);
     }
 
