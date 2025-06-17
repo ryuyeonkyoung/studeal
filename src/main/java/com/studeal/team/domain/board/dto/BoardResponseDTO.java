@@ -191,6 +191,9 @@ public class BoardResponseDTO {
 
         @Schema(description = "상태", example = "ACTIVE")
         private String status;
+
+        @Schema(description = "현재 로그인한 사용자가 게시글 작성자인지 여부", example = "true")
+        private Boolean isAuthor;
     }
 
 

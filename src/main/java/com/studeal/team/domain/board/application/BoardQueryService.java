@@ -90,6 +90,10 @@ public class BoardQueryService {
         AuctionBoard auctionBoard = boardRepository.findByIdWithTeacher(boardId)
                 .orElseThrow(() -> new BoardHandler(ErrorStatus.BOARD_NOT_FOUND));
 
+        // 현재 로그인한 사용자가 게시글 작성자인지 확인
+        boolean isAuthor = auctionBoard.getTeacher() != null &&
+                auctionBoard.getTeacher().getUserId().equals(teacherId);
+
         // 게시글에 관련된 모든 협상(입찰) 정보를 가격 높은 순으로 조회
         List<Negotiation> negotiations = negotiationRepository.findByBoardIdOrderByProposedPriceDesc(boardId);
 
@@ -114,7 +118,7 @@ public class BoardQueryService {
             status = negotiations.get(0).getStatus().name();
         }
 
-        // 응답 DTO 생성
+        // 응답 DTO 생성 및 isAuthor 설정
         return BoardResponseDTO.DetailTeacherResponse.builder()
                 .negotiationId(negotiations.isEmpty() ? null : negotiations.get(0).getNegotiationId())
                 .title(auctionBoard.getTitle())
@@ -124,6 +128,7 @@ public class BoardQueryService {
                 .priceRange(priceRange)
                 .bids(bids)
                 .status(status)
+                .isAuthor(isAuthor) // 작성자 여부 추가
                 .build();
     }
 
