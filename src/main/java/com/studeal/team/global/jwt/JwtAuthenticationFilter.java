@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -26,7 +27,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
             Authentication authentication = tokenProvider.getAuthentication(jwt);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
 
             // 사용자 ID를 요청 속성으로 추가
             String userIdStr = tokenProvider.extractUserIdAsString(jwt);
@@ -35,6 +35,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     // userId 클레임에서 추출한 값을 Long으로 변환하여 설정
                     Long userId = Long.parseLong(userIdStr);
                     request.setAttribute("userId", userId);
+
+                    // Authentication 객체의 details 필드에 userId 설정 (SecurityUtils에서 사용)
+                    WebAuthenticationDetailsSource detailsSource = new WebAuthenticationDetailsSource();
+                    authentication = new JwtAuthenticationToken(
+                            authentication.getPrincipal(),
+                            authentication.getCredentials(),
+                            authentication.getAuthorities(),
+                            userId
+                    );
+
                     log.debug("Request에 userId={} 속성 추가", userId);
                 } catch (NumberFormatException e) {
                     log.warn("JWT 토큰에서 userId를 추출하지 못했습니다.: {}", userIdStr);
@@ -50,6 +60,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 log.warn("JWT 토큰에서 role을 추출하지 못했습니다.");
             }
 
+            SecurityContextHolder.getContext().setAuthentication(authentication);
             log.debug("Security Context에 '{}' 인증 정보를 저장했습니다", authentication.getName());
         } else {
             log.debug("유효한 JWT 토큰이 없습니다");

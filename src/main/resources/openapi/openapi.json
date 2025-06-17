@@ -6,7 +6,7 @@
     "contact": {
       "name": "Studeal Team"
     },
-    "version": "3.2.0"
+    "version": "4.0.0"
   },
   "servers": [
     {
@@ -21,16 +21,16 @@
   ],
   "tags": [
     {
+      "name": "게시판 API",
+      "description": "선생님의 과외 모집 게시판 관련 API"
+    },
+    {
       "name": "수업 참여 확정",
       "description": "학생의 수업 참여 확정 관련 API"
     },
     {
       "name": "사용자 인증",
       "description": "회원가입 및 로그인 관련 API"
-    },
-    {
-      "name": "게시판 API",
-      "description": "과외 모집 게시판 관련 API"
     },
     {
       "name": "가격 제안(협상)",
@@ -202,7 +202,7 @@
           "가격 제안(협상)"
         ],
         "summary": "학생 가격 제안(협상) 생성 API",
-        "description": "학생이 강사에게 가격 제안을 생성하는 API입니다.",
+        "description": "학생이 강사에게 가격 제안을 생성하는 API입니다.\n\n SecurityContext에서 현재 인증된 학생 ID를 자동으로 사용합니다.",
         "operationId": "createNegotiation",
         "requestBody": {
           "content": {
@@ -215,22 +215,32 @@
           "required": true
         },
         "responses": {
-          "200": {
-            "description": "OK, 성공",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/com.studeal.team.domain.negotiation.dto.NegotiationResponseDTO"
-                }
-              }
-            }
-          },
           "400": {
             "description": "유효하지 않은 가격 제안 요청입니다.",
             "content": {
               "*/*": {
                 "schema": {
                   "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "해당 사용자는 학생이 아닙니다.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK, 성공",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.studeal.team.domain.negotiation.dto.NegotiationResponseDTO"
                 }
               }
             }
@@ -243,8 +253,8 @@
         "tags": [
           "수업 참여 확정"
         ],
-        "summary": "최고가를 부른 학생과 선생님을 연결하는 API",
-        "description": "경매 종료 후, 최고가를 부른 학생과 선생님을 연결하는 API입니다.이를 통해 학생은 낙찰받은 수업을 결제하여 거래를 성사하거나, 거절하여 최종 낙찰을 포기할 수 있습니다.",
+        "summary": "(테스트용) 최고가를 부른 학생과 선생님을 연결하는 API",
+        "description": "(테스트용) 경매 종료 후, 최고가를 부른 학생과 선생님을 연결하는 API입니다.\n\n이를 통해 학생은 낙찰받은 수업을 결제하여 거래를 성사하거나, 거절하여 최종 낙찰을 포기할 수 있습니다.\n이 API는 테스트용으로, 실제 서비스에서는 경매 종료 후 자동으로 연결됩니다.",
         "operationId": "createEnrollment",
         "requestBody": {
           "content": {
@@ -257,8 +267,8 @@
           "required": true
         },
         "responses": {
-          "400": {
-            "description": "존재하지 않는 학생입니다.",
+          "404": {
+            "description": "존재하지 않는 협상입니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -267,8 +277,8 @@
               }
             }
           },
-          "404": {
-            "description": "존재하지 않는 협상입니다.",
+          "400": {
+            "description": "존재하지 않는 학생입니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -351,8 +361,8 @@
           "required": true
         },
         "responses": {
-          "400": {
-            "description": "유효한 이메일 형식이 아닙니다.",
+          "403": {
+            "description": "유효하지 않은 사용자 역할입니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -361,8 +371,8 @@
               }
             }
           },
-          "403": {
-            "description": "유효하지 않은 사용자 역할입니다.",
+          "400": {
+            "description": "유효한 이메일 형식이 아닙니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -478,22 +488,22 @@
           "required": true
         },
         "responses": {
-          "200": {
-            "description": "OK, 성공",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/com.studeal.team.domain.negotiation.dto.NegotiationResponseDTO"
-                }
-              }
-            }
-          },
           "404": {
             "description": "존재하지 않는 협상입니다.",
             "content": {
               "*/*": {
                 "schema": {
                   "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK, 성공",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.studeal.team.domain.negotiation.dto.NegotiationResponseDTO"
                 }
               }
             }
@@ -531,8 +541,8 @@
           "required": true
         },
         "responses": {
-          "404": {
-            "description": "존재하지 않는 수강 신청입니다.",
+          "400": {
+            "description": "유효하지 않은 수강 신청 요청입니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -541,8 +551,8 @@
               }
             }
           },
-          "400": {
-            "description": "유효하지 않은 수강 신청 요청입니다.",
+          "404": {
+            "description": "존재하지 않는 수강 신청입니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -888,29 +898,22 @@
       },
       "com.studeal.team.domain.negotiation.dto.NegotiationRequestDTO$CreateRequest": {
         "required": [
-          "proposedPrice",
-          "studentId",
-          "teacherId"
+          "boardId",
+          "proposedPrice"
         ],
         "type": "object",
         "properties": {
-          "studentId": {
-            "type": "integer",
-            "description": "학생 ID",
-            "format": "int64",
-            "example": 1
-          },
-          "teacherId": {
-            "type": "integer",
-            "description": "선생님 ID",
-            "format": "int64",
-            "example": 2
-          },
           "proposedPrice": {
             "type": "integer",
             "description": "제안 가격",
             "format": "int64",
             "example": 50000
+          },
+          "boardId": {
+            "type": "integer",
+            "description": "경매 게시판 ID",
+            "format": "int64",
+            "example": 41
           }
         },
         "description": "협상 생성 요청"
@@ -924,17 +927,11 @@
             "format": "int64",
             "example": 1
           },
-          "studentId": {
+          "boardId": {
             "type": "integer",
-            "description": "학생 ID",
+            "description": "경매 게시판 ID",
             "format": "int64",
             "example": 1
-          },
-          "teacherId": {
-            "type": "integer",
-            "description": "선생님 ID",
-            "format": "int64",
-            "example": 2
           },
           "proposedPrice": {
             "type": "integer",

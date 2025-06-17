@@ -3,6 +3,7 @@ package com.studeal.team.domain.negotiation.api;
 import com.studeal.team.domain.negotiation.application.NegotiationService;
 import com.studeal.team.domain.negotiation.dto.NegotiationRequestDTO;
 import com.studeal.team.domain.negotiation.dto.NegotiationResponseDTO;
+import com.studeal.team.global.common.util.SecurityUtils;
 import com.studeal.team.global.error.ApiResponse;
 import com.studeal.team.global.jwt.JwtTokenProvider;
 import io.swagger.v3.oas.annotations.Operation;
@@ -24,20 +25,20 @@ public class NegotiationController {
     private final NegotiationService negotiationService;
     private final JwtTokenProvider jwtTokenProvider;
 
-    @Operation(summary = "학생 가격 제안(협상) 생성 API", description = "학생이 강사에게 가격 제안을 생성하는 API입니다. JWT 토큰에서 추출한 학생 ID를 사용합니다.")
+    @Operation(summary = "학생 가격 제안(협상) 생성 API",
+            description = "학생이 강사에게 가격 제안을 생성하는 API입니다.\n\n SecurityContext에서 현재 인증된 학생 ID를 자동으로 사용합니다.")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON_200", description = "OK, 성공", content = @Content(schema = @Schema(implementation = NegotiationResponseDTO.class))),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "USER_400_01", description = "사용자가 없습니다.", content = @Content(schema = @Schema(implementation = ApiResponse.class))),
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "NEGOTIATION_400_01", description = "유효하지 않은 가격 제안 요청입니다.", content = @Content(schema = @Schema(implementation = ApiResponse.class)))
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "NEGOTIATION_400_01", description = "유효하지 않은 가격 제안 요청입니다.", content = @Content(schema = @Schema(implementation = ApiResponse.class))),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "USER_403_02", description = "해당 사용자는 학생이 아닙니다.", content = @Content(schema = @Schema(implementation = ApiResponse.class)))
     })
     @PostMapping
     public ApiResponse<NegotiationResponseDTO> createNegotiation(
-            @Valid @RequestBody NegotiationRequestDTO.CreateRequest request,
-            HttpServletRequest httpServletRequest) {
+            @Valid @RequestBody NegotiationRequestDTO.CreateRequest request) {
 
-        // JWT 토큰에서 userId 추출
-        String token = resolveToken(httpServletRequest);
-        Long currentUserId = Long.parseLong(jwtTokenProvider.extractUserIdAsString(token));
+        // SecurityContextHolder에서 현재 사용자 ID 조회
+        Long currentUserId = SecurityUtils.getCurrentUserId();
 
         return ApiResponse.onSuccess(negotiationService.initiateNegotiation(request, currentUserId));
     }

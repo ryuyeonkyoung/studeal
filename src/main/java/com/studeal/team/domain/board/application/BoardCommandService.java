@@ -7,13 +7,14 @@ import com.studeal.team.domain.board.dto.BoardRequestDTO;
 import com.studeal.team.domain.board.dto.BoardResponseDTO;
 import com.studeal.team.domain.user.dao.TeacherRepository;
 import com.studeal.team.domain.user.domain.entity.Teacher;
-import com.studeal.team.domain.user.domain.entity.enums.UserRole;
 import com.studeal.team.global.error.code.status.ErrorStatus;
 import com.studeal.team.global.error.exception.handler.BoardHandler;
-import com.studeal.team.global.error.exception.handler.TeacherHandler;
+import com.studeal.team.global.error.exception.handler.UserHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 게시판 명령 서비스 클래스
@@ -22,7 +23,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-//@Transactional
+@Transactional
 public class BoardCommandService {
 
     private final BoardRepository boardRepository;
@@ -30,20 +31,17 @@ public class BoardCommandService {
 
     /**
      * 게시글 생성
+     *
      * @param teacherId 선생님 ID
-     * @param request 게시글 요청 DTO
+     * @param request   게시글 요청 DTO
      * @return 생성된 게시글 응답 DTO
      */
     // TODO: JPA 성능 최적화 필요 - N+1 문제 고려
+    @PreAuthorize("hasRole('TEACHER')")
     public BoardResponseDTO.DetailResponse createBoard(Long teacherId, BoardRequestDTO.CreateRequest request) {
-        // 선생님 정보 조회
-        Teacher teacher = teacherRepository.findById(teacherId)
-                .orElseThrow(() -> new TeacherHandler(ErrorStatus.TEACHER_NOT_FOUND));
 
-        // 학생인 경우 게시글 작성 불가 검증
-        if (teacher.getRole() == UserRole.STUDENT) {
-            throw new BoardHandler(ErrorStatus.BOARD_STUDENT_FORBIDDEN);
-        }
+        Teacher teacher = teacherRepository.findById(teacherId)
+                .orElseThrow(() -> new UserHandler(ErrorStatus.USER_NOT_FOUND));
 
         // 게시글 생성 및 저장
         AuctionBoard auctionBoard = BoardConverter.toEntity(request, teacher);
@@ -56,11 +54,13 @@ public class BoardCommandService {
 
     /**
      * 게시글 수정
-     * @param boardId 게시글 ID
+     *
+     * @param boardId   게시글 ID
      * @param teacherId 선생님 ID (작성자 확인용)
-     * @param request 게시글 요청 DTO
+     * @param request   게시글 요청 DTO
      * @return 수정된 게시글 응답 DTO
      */
+    @PreAuthorize("hasRole('TEACHER')")
     public BoardResponseDTO.DetailResponse updateBoard(Long boardId, Long teacherId, BoardRequestDTO.UpdateRequest request) {
         // 게시글 조회
         AuctionBoard auctionBoard = boardRepository.findById(boardId)
@@ -69,11 +69,6 @@ public class BoardCommandService {
         // 게시글 작성자 확인
         if (!auctionBoard.getTeacher().getUserId().equals(teacherId)) {
             throw new BoardHandler(ErrorStatus.BOARD_UNAUTHORIZED);
-        }
-
-        // 학생인 경우 게시글 수정 불가 검증
-        if (auctionBoard.getTeacher().getRole() == UserRole.STUDENT) {
-            throw new BoardHandler(ErrorStatus.BOARD_STUDENT_FORBIDDEN);
         }
 
         // 게시글 정보 업데이트
@@ -89,9 +84,11 @@ public class BoardCommandService {
 
     /**
      * 게시글 삭제
-     * @param boardId 게시글 ID
+     *
+     * @param boardId   게시글 ID
      * @param teacherId 선생님 ID (작성자 확인용)
      */
+    @PreAuthorize("hasRole('TEACHER')")
     public void deleteBoard(Long boardId, Long teacherId) {
         // 게시글 조회
         AuctionBoard auctionBoard = boardRepository.findById(boardId)
@@ -102,9 +99,8 @@ public class BoardCommandService {
             throw new BoardHandler(ErrorStatus.BOARD_UNAUTHORIZED);
         }
 
-        // 게시글 삭제 (연관된 파일도 함께 삭제됨 - cascade 설정)
+        // 게시글 삭제
         boardRepository.delete(auctionBoard);
-
         log.info("게시글 삭제 완료. 게시글 ID: {}", boardId);
     }
 }
