@@ -1,6 +1,6 @@
 package com.studeal.team.domain.enrollment.api;
 
-import com.studeal.team.domain.enrollment.application.EnrollmentService;
+import com.studeal.team.domain.enrollment.application.EnrollmentCommandService;
 import com.studeal.team.domain.enrollment.dto.EnrollmentRequestDTO;
 import com.studeal.team.domain.enrollment.dto.EnrollmentResponseDTO;
 import com.studeal.team.global.error.ApiResponse;
@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "수업 참여 확정", description = "학생의 수업 참여 확정 관련 API")
 public class EnrollmentController {
 
-    private final EnrollmentService enrollmentService;
+    private final EnrollmentCommandService enrollmentCommandService;
 
     @Operation(
             summary = "(테스트용) 최고가를 부른 학생과 선생님을 연결하는 API",
@@ -35,7 +35,7 @@ public class EnrollmentController {
     })
     @PostMapping
     public ApiResponse<EnrollmentResponseDTO> createEnrollment(@Valid @RequestBody EnrollmentRequestDTO.CreateRequest request) {
-        return ApiResponse.onSuccess(enrollmentService.createEnrollment(request));
+        return ApiResponse.onSuccess(enrollmentCommandService.createEnrollment(request));
     }
 
     @Operation(
@@ -55,6 +55,6 @@ public class EnrollmentController {
     public ApiResponse<EnrollmentResponseDTO> updateStatus(
             @PathVariable Long enrollmentId,
             @Valid @RequestBody EnrollmentRequestDTO.StatusUpdateRequest request) {
-        return ApiResponse.onSuccess(enrollmentService.updateStatus(enrollmentId, request));
+        return ApiResponse.onSuccess(enrollmentCommandService.updateStatus(enrollmentId, request));
     }
 }

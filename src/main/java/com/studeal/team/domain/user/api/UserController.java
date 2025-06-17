@@ -1,6 +1,6 @@
 package com.studeal.team.domain.user.api;
 
-import com.studeal.team.domain.user.application.UserService;
+import com.studeal.team.domain.user.application.UserCommandService;
 import com.studeal.team.domain.user.dto.TokenDTO;
 import com.studeal.team.domain.user.dto.UserRequestDTO;
 import com.studeal.team.domain.user.dto.UserResponseDTO;
@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "사용자 인증", description = "회원가입 및 로그인 관련 API")
 public class UserController {
 
-    private final UserService userService;
+    private final UserCommandService userCommandService;
 
     @Operation(summary = "회원가입 API", description = "사용자 회원가입을 처리하는 API입니다. 학생/강사 역할에 따라 처리됩니다.\n\n" +
             "가능한 UserRole(사용자 역할) 값:\n" +
@@ -51,7 +51,7 @@ public class UserController {
     @PostMapping("/signup")
     public ApiResponse<UserResponseDTO> signupUser(
             @Valid @RequestBody UserRequestDTO.SignupRequest request) {
-        return ApiResponse.onSuccess(userService.registerUser(request));
+        return ApiResponse.onSuccess(userCommandService.registerUser(request));
     }
 
     @Operation(summary = "로그인 API", description = "이메일과 비밀번호로 로그인하여 JWT 토큰을 발급받습니다.")
@@ -61,7 +61,7 @@ public class UserController {
     })
     @PostMapping("/login")
     public ApiResponse<TokenDTO> login(@Valid @RequestBody UserRequestDTO.LoginRequest request) {
-        return ApiResponse.onSuccess(userService.login(request));
+        return ApiResponse.onSuccess(userCommandService.login(request));
     }
 
     @Operation(summary = "로그아웃 API", description = "현재 인증된 사용자를 로그아웃 처리합니다.")

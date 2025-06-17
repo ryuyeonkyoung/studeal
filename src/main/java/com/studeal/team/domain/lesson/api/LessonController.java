@@ -1,6 +1,7 @@
 package com.studeal.team.domain.lesson.api;
 
-import com.studeal.team.domain.lesson.applicationn.LessonService;
+import com.studeal.team.domain.lesson.applicationn.LessonCommandService;
+import com.studeal.team.domain.lesson.converter.LessonConverter;
 import com.studeal.team.domain.lesson.domain.Lesson;
 import com.studeal.team.domain.lesson.dto.LessonRequestDTO;
 import com.studeal.team.domain.lesson.dto.LessonResponseDTO;
@@ -11,18 +12,20 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import org.springframework.web.bind.annotation.*;
-import com.studeal.team.domain.lesson.converter.LessonConverter;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/lessons")
 @Tag(name = "수업", description = "수업 관련 API")
 public class LessonController {
 
-    private final LessonService lessonService;
+    private final LessonCommandService lessonCommandService;
 
-    public LessonController(LessonService lessonService) {
-        this.lessonService = lessonService;
+    public LessonController(LessonCommandService lessonCommandService) {
+        this.lessonCommandService = lessonCommandService;
     }
 
     @Operation(summary = "수업 개설 API", description = "새로운 수업을 개설하는 API입니다. 강사와 학생 정보가 필요합니다.")
@@ -37,7 +40,7 @@ public class LessonController {
     })
     @PostMapping
     public ApiResponse<LessonResponseDTO.CreateResponse> createLesson(@RequestBody @Valid LessonRequestDTO.CreateRequest request) {
-        Lesson createdLesson = lessonService.createLesson(request);
+        Lesson createdLesson = lessonCommandService.createLesson(request);
         return ApiResponse.onSuccess(LessonConverter.toCreateResponseDTO(createdLesson));
     }
 }

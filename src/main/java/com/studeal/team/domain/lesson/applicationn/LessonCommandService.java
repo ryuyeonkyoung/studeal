@@ -26,7 +26,7 @@ import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
-public class LessonService {
+public class LessonCommandService {
 
     private final LessonRepository lessonRepository;
     private final TeacherRepository teacherRepository;
