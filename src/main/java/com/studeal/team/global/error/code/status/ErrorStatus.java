@@ -30,10 +30,12 @@ public enum ErrorStatus implements BaseErrorCode {
 
     // BOARD(경매 게시판) 관련 에러
     BOARD_NOT_FOUND(HttpStatus.BAD_REQUEST, "BOARD_400_01", "게시글을 찾을 수 없습니다."),
-    BOARD_TITLE_EMPTY(HttpStatus.BAD_REQUEST, "BOARD_400_02", "게시글 제목은 필수입니다."),
+    BOARD_SEARCH_INVALID_PARAMS(HttpStatus.BAD_REQUEST, "BOARD_400_02", "검색어나 검색 유형이 유효하지 않습니다."),
+    BOARD_SEARCH_INVALID_TYPE(HttpStatus.BAD_REQUEST, "BOARD_400_03", "올바르지 않은 검색 유형입니다."),
+    BOARD_SEARCH_INVALID_MAJOR(HttpStatus.BAD_REQUEST, "BOARD_400_04", "올바르지 않은 전공 과목입니다."),
+    BOARD_TITLE_EMPTY(HttpStatus.BAD_REQUEST, "BOARD_400_05", "게시글 제목은 필수입니다."),
     BOARD_UNAUTHORIZED(HttpStatus.FORBIDDEN, "BOARD_403_01", "게시글 권한이 없습니다."),
-    BOARD_INVALID_TYPE(HttpStatus.BAD_REQUEST, "BOARD_400_03", "유효하지 않은 게시글 유형입니다."),
-    BOARD_SUBJECT_EMPTY(HttpStatus.BAD_REQUEST, "BOARD_400_04", "수업 주제는 필수입니다."),
+    BOARD_SUBJECT_EMPTY(HttpStatus.BAD_REQUEST, "BOARD_400_06", "수업 주제는 필수입니다."),
 
     // Lesson(수업) 관련 에러
     LESSON_NOT_FOUND(HttpStatus.BAD_REQUEST, "LESSON_400_01", "수업이 존재하지 않습니다."),

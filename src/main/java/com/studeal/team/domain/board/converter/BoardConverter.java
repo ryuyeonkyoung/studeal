@@ -196,4 +196,44 @@ public class BoardConverter {
                         .orElse(null))
                 .build();
     }
+
+    /**
+     * AuctionBoard 엔티티와 최고 입찰가를 SearchItemResponse DTO로 변환
+     */
+    public static BoardResponseDTO.SearchItemResponse toSearchItemResponse(AuctionBoard auctionBoard, Long highestBid) {
+        return BoardResponseDTO.SearchItemResponse.builder()
+                .boardId(auctionBoard.getBoardId())
+                .title(auctionBoard.getTitle())
+                .major(auctionBoard.getMajor())
+                .specMajor(auctionBoard.getSpecMajor())
+                .teacherName(auctionBoard.getTeacher() != null ? auctionBoard.getTeacher().getName() : "Unknown")
+                .highestBid(highestBid)
+                .build();
+    }
+
+    /**
+     * AuctionBoard Page 객체를 SearchPageResponse DTO로 변환
+     * 각 게시글의 최고 입찰가를 포함하여 변환
+     */
+    public static BoardResponseDTO.SearchPageResponse toSearchPageResponse(Page<AuctionBoard> boardPage,
+                                                                           List<Long> highestBids) {
+        List<BoardResponseDTO.SearchItemResponse> items = new ArrayList<>();
+
+        List<AuctionBoard> boards = boardPage.getContent();
+        for (int i = 0; i < boards.size(); i++) {
+            AuctionBoard board = boards.get(i);
+            Long highestBid = (i < highestBids.size()) ? highestBids.get(i) : null;
+            items.add(toSearchItemResponse(board, highestBid));
+        }
+
+        return BoardResponseDTO.SearchPageResponse.builder()
+                .content(items)
+                .pageNumber(boardPage.getNumber())
+                .pageSize(boardPage.getSize())
+                .totalElements(boardPage.getTotalElements())
+                .totalPages(boardPage.getTotalPages())
+                .first(boardPage.isFirst())
+                .last(boardPage.isLast())
+                .build();
+    }
 }

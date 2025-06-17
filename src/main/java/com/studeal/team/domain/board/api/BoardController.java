@@ -164,4 +164,36 @@ public class BoardController {
         BoardResponseDTO.OffsetPageResponse response = boardQueryService.getBoardsByOffset(pageable);
         return ApiResponse.onSuccess(response);
     }
+
+    @Operation(summary = "게시글 검색", description = "게시글을 검색 유형과 키워드로 검색합니다.\n\n" +
+            "검색 유형(searchType) 옵션:\n" +
+            "- MAJOR: 전공 과목으로 검색 (MATH, SCIENCE, ENGLISH, KOREAN, HISTORY, CODING)\n" +
+            "- TEACHER_NAME: 선생님 이름으로 검색\n" +
+            "- SPEC_MAJOR: 세부 전공으로 검색")
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON_200", description = "OK, 성공"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "BOARD_400_02", description = "검색어나 검색 유형이 유효하지 않습니다.", content = @Content(schema = @Schema(implementation = ApiResponse.class))),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "BOARD_400_03", description = "올바르지 않은 검색 유형입니다.", content = @Content(schema = @Schema(implementation = ApiResponse.class))),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "BOARD_400_04", description = "올바르지 않은 전공 과목입니다.", content = @Content(schema = @Schema(implementation = ApiResponse.class)))
+    })
+    @GetMapping("/search")
+    public ApiResponse<BoardResponseDTO.SearchPageResponse> searchBoards(
+            @Parameter(description = "검색 유형 (MAJOR, TEACHER_NAME, SPEC_MAJOR)")
+            @RequestParam String searchType,
+
+            @Parameter(description = "검색어")
+            @RequestParam String keyword,
+
+            @Parameter(description = "페이지 번호 (0부터 시작)")
+            @RequestParam(required = false, defaultValue = "0") Integer page,
+
+            @Parameter(description = "페이지 크기 (기본값: 10)")
+            @RequestParam(required = false, defaultValue = "10") Integer size) {
+
+        log.info("게시글 검색 요청: 검색 유형={}, 검색어={}", searchType, keyword);
+
+        Pageable pageable = PageRequest.of(page, size);
+        BoardResponseDTO.SearchPageResponse response = boardQueryService.searchBoards(searchType, keyword, pageable);
+        return ApiResponse.onSuccess(response);
+    }
 }

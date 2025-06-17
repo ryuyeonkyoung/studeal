@@ -75,6 +75,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         // 인증 없이 접근 가능한 API 경로 설정
                         .requestMatchers("/auth/login", "/auth/signup").permitAll()
+                        // 게시글 검색 API는 인증 없이 접근 가능
+                        .requestMatchers("/boards/search").permitAll()
                         // Swagger UI 관련 경로 허용
                         .requestMatchers("/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**",
                                 "/swagger-resources/**", "/webjars/**").permitAll()

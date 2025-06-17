@@ -8,6 +8,7 @@ import com.studeal.team.domain.negotiation.dao.NegotiationRepository;
 import com.studeal.team.domain.negotiation.domain.Negotiation;
 import com.studeal.team.domain.user.dao.TeacherRepository;
 import com.studeal.team.domain.user.domain.entity.Teacher;
+import com.studeal.team.domain.user.domain.entity.enums.MajorSubject;
 import com.studeal.team.domain.user.domain.entity.enums.UserRole;
 import com.studeal.team.global.error.code.status.ErrorStatus;
 import com.studeal.team.global.error.exception.handler.BoardHandler;
@@ -167,7 +168,7 @@ public class BoardQueryService {
         // 선생님 정보 조회
         String teacherName = auctionBoard.getTeacher().getName();
         String teacherEmail = auctionBoard.getTeacher().getEmail();
-        
+
         // Negotiation 상태 조회 (협상이 없는 경우 기본값 "OPEN" 사용)
         String status = "OPEN";
         if (!negotiations.isEmpty()) {
@@ -268,5 +269,55 @@ public class BoardQueryService {
                 .first(boardPage.isFirst())
                 .last(boardPage.isLast())
                 .build();
+    }
+
+    /**
+     * 게시글 검색 기능
+     * 검색 유형(major, teacherName, specMajor)에 따라 다른 검색 로직 적용
+     *
+     * @param searchType 검색 유형 (MAJOR, TEACHER_NAME, SPEC_MAJOR)
+     * @param keyword    검색어
+     * @param pageable   페이징 정보
+     * @return 검색 결과 응답 DTO
+     */
+    public BoardResponseDTO.SearchPageResponse searchBoards(String searchType, String keyword, Pageable pageable) {
+        if (searchType == null || keyword == null) {
+            throw new BoardHandler(ErrorStatus.BOARD_SEARCH_INVALID_PARAMS);
+        }
+
+        Page<AuctionBoard> boardPage;
+
+        // 검색 유형에 따른 다른 검색 로직 적용
+        switch (searchType.toUpperCase()) {
+            case "MAJOR":
+                try {
+                    MajorSubject major = MajorSubject.valueOf(keyword.toUpperCase());
+                    boardPage = boardRepository.searchByMajor(major, pageable);
+                } catch (IllegalArgumentException e) {
+                    throw new BoardHandler(ErrorStatus.BOARD_SEARCH_INVALID_MAJOR);
+                }
+                break;
+            case "TEACHER_NAME":
+                boardPage = boardRepository.searchByTeacherName(keyword, pageable);
+                break;
+            case "SPEC_MAJOR":
+                boardPage = boardRepository.searchBySpecMajor(keyword, pageable);
+                break;
+            default:
+                throw new BoardHandler(ErrorStatus.BOARD_SEARCH_INVALID_TYPE);
+        }
+
+        // 각 게시글의 최고 입찰가 조회
+        List<Long> highestBids = new ArrayList<>();
+        for (AuctionBoard board : boardPage.getContent()) {
+            List<Negotiation> negotiations = negotiationRepository.findByBoardIdOrderByProposedPriceDesc(board.getBoardId());
+            Long highestBid = negotiations.isEmpty() ? null : negotiations.get(0).getProposedPrice();
+            highestBids.add(highestBid);
+        }
+
+        log.info("게시글 검색 완료. 검색 유형: {}, 검색어: {}, 결과 수: {}",
+                searchType, keyword, boardPage.getContent().size());
+
+        return BoardConverter.toSearchPageResponse(boardPage, highestBids);
     }
 }
