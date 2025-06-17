@@ -63,6 +63,7 @@ public class EnrollmentCommandService {
         // 수강 신청 생성
         Enrollment enrollment = Enrollment.builder()
                 .student(student)
+                .teacher(negotiation.getTeacher())  // 추가: 협상에서 교사 정보를 가져와 설정
                 .negotiation(negotiation)
                 .paidAmount(negotiation.getProposedPrice())
                 .enrolledAt(LocalDateTime.now())
