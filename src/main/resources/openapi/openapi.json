@@ -6,7 +6,7 @@
     "contact": {
       "name": "Studeal Team"
     },
-    "version": "4.3.0"
+    "version": "4.4.0"
   },
   "servers": [
     {
@@ -64,7 +64,7 @@
         ],
         "responses": {
           "400": {
-            "description": "게시글을 찾을 수 없습니다.",
+            "description": "유효하지 않은 가격 제안 요청입니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -240,7 +240,7 @@
             }
           },
           "400": {
-            "description": "사용자가 없습니다.",
+            "description": "유효하지 않은 가격 제안 요청입니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -271,8 +271,8 @@
           "required": true
         },
         "responses": {
-          "400": {
-            "description": "이미 수강신청 현황이 존재합니다.",
+          "404": {
+            "description": "존재하지 않는 협상입니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -281,8 +281,8 @@
               }
             }
           },
-          "404": {
-            "description": "존재하지 않는 협상입니다.",
+          "400": {
+            "description": "존재하지 않는 학생입니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -365,8 +365,8 @@
           "required": true
         },
         "responses": {
-          "400": {
-            "description": "이미 등록된 이메일입니다.",
+          "403": {
+            "description": "유효하지 않은 사용자 역할입니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -375,8 +375,8 @@
               }
             }
           },
-          "403": {
-            "description": "유효하지 않은 사용자 역할입니다.",
+          "400": {
+            "description": "유효한 이메일 형식이 아닙니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -555,22 +555,22 @@
               }
             }
           },
-          "200": {
-            "description": "OK, 성공",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponseCom.studeal.team.domain.enrollment.dto.EnrollmentResponseDTO"
-                }
-              }
-            }
-          },
           "404": {
             "description": "존재하지 않는 수강 신청입니다.",
             "content": {
               "*/*": {
                 "schema": {
                   "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK, 성공",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponseCom.studeal.team.domain.enrollment.dto.EnrollmentResponseDTO"
                 }
               }
             }
@@ -613,6 +613,80 @@
               "*/*": {
                 "schema": {
                   "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponseJava.lang.Object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/boards/search": {
+      "get": {
+        "tags": [
+          "게시판 API"
+        ],
+        "summary": "게시글 검색",
+        "description": "게시글을 검색 유형과 키워드로 검색합니다.\n\n검색 유형(searchType) 옵션:\n- MAJOR: 전공 과목으로 검색 (MATH, SCIENCE, ENGLISH, KOREAN, HISTORY, CODING)\n- TEACHER_NAME: 선생님 이름으로 검색\n- SPEC_MAJOR: 세부 전공으로 검색",
+        "operationId": "searchBoards",
+        "parameters": [
+          {
+            "name": "searchType",
+            "in": "query",
+            "description": "검색 유형 (MAJOR, TEACHER_NAME, SPEC_MAJOR)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "keyword",
+            "in": "query",
+            "description": "검색어",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "페이지 번호 (0부터 시작)",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "description": "페이지 크기 (기본값: 10)",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "올바르지 않은 검색 유형입니다.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK, 성공",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponseBoardSearchPageResponse"
                 }
               }
             }
@@ -1522,6 +1596,129 @@
           "result": {
             "type": "object",
             "description": "응답 데이터"
+          }
+        },
+        "description": "API 응답 형식"
+      },
+      "BoardSearchItemResponse": {
+        "type": "object",
+        "properties": {
+          "boardId": {
+            "type": "integer",
+            "description": "게시글 ID",
+            "format": "int64",
+            "example": 1
+          },
+          "title": {
+            "type": "string",
+            "description": "게시글 제목",
+            "example": "고등 수학 과외 모집합니다"
+          },
+          "major": {
+            "type": "string",
+            "description": "전공 과목",
+            "example": "MATH",
+            "enum": [
+              "수학",
+              "과학",
+              "영어",
+              "국어",
+              "역사",
+              "코딩"
+            ]
+          },
+          "specMajor": {
+            "type": "string",
+            "description": "세부 전공",
+            "example": "미적분학"
+          },
+          "teacherName": {
+            "type": "string",
+            "description": "선생님 이름",
+            "example": "김선생"
+          },
+          "highestBid": {
+            "type": "integer",
+            "description": "현재 최고 입찰가",
+            "format": "int64",
+            "example": 60000
+          }
+        },
+        "description": "게시글 검색 결과 항목"
+      },
+      "BoardSearchPageResponse": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "array",
+            "description": "검색 결과 게시글 목록",
+            "items": {
+              "$ref": "#/components/schemas/BoardSearchItemResponse"
+            }
+          },
+          "pageNumber": {
+            "type": "integer",
+            "description": "현재 페이지 번호",
+            "format": "int32",
+            "example": 0
+          },
+          "pageSize": {
+            "type": "integer",
+            "description": "페이지 크기",
+            "format": "int32",
+            "example": 10
+          },
+          "totalElements": {
+            "type": "integer",
+            "description": "총 요소 수",
+            "format": "int64",
+            "example": 42
+          },
+          "totalPages": {
+            "type": "integer",
+            "description": "총 페이지 수",
+            "format": "int32",
+            "example": 5
+          },
+          "first": {
+            "type": "boolean",
+            "description": "첫 페이지 여부",
+            "example": true
+          },
+          "last": {
+            "type": "boolean",
+            "description": "마지막 페이지 여부",
+            "example": false
+          }
+        },
+        "description": "게시글 검색 결과 페이징 응답"
+      },
+      "com.studeal.team.global.error.ApiResponseBoardSearchPageResponse": {
+        "type": "object",
+        "properties": {
+          "isSuccess": {
+            "type": "boolean",
+            "description": "성공 여부",
+            "example": true
+          },
+          "httpStatusCode": {
+            "type": "integer",
+            "description": "HTTP 상태 코드",
+            "format": "int32",
+            "example": 200
+          },
+          "code": {
+            "type": "string",
+            "description": "커스텀 응답 코드",
+            "example": "COMMON200"
+          },
+          "message": {
+            "type": "string",
+            "description": "응답 메시지",
+            "example": "성공입니다."
+          },
+          "result": {
+            "$ref": "#/components/schemas/BoardSearchPageResponse"
           }
         },
         "description": "API 응답 형식"

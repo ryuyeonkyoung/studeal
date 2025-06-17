@@ -373,4 +373,65 @@ public class BoardResponseDTO {
         @Schema(description = "조회된 게시글 수", example = "10")
         private int count;
     }
+
+    /**
+     * 게시글 검색 결과 응답 DTO
+     * 검색 결과는 페이징 처리되어 반환됩니다.
+     */
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Schema(name = "BoardSearchPageResponse", description = "게시글 검색 결과 페이징 응답")
+    public static class SearchPageResponse {
+        @Schema(description = "검색 결과 게시글 목록")
+        private List<SearchItemResponse> content;
+
+        @Schema(description = "현재 페이지 번호", example = "0")
+        private int pageNumber;
+
+        @Schema(description = "페이지 크기", example = "10")
+        private int pageSize;
+
+        @Schema(description = "총 요소 수", example = "42")
+        private long totalElements;
+
+        @Schema(description = "총 페이지 수", example = "5")
+        private int totalPages;
+
+        @Schema(description = "첫 페이지 여부", example = "true")
+        private boolean first;
+
+        @Schema(description = "마지막 페이지 여부", example = "false")
+        private boolean last;
+    }
+
+    /**
+     * 게시글 검색 결과 아이템 DTO
+     * 검색 결과의 각 게시글 항목을 나타냅니다.
+     */
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Schema(name = "BoardSearchItemResponse", description = "게시글 검색 결과 항목")
+    public static class SearchItemResponse {
+        @Schema(description = "게시글 ID", example = "1")
+        private Long boardId;
+
+        @Schema(description = "게시글 제목", example = "고등 수학 과외 모집합니다")
+        private String title;
+
+        @Schema(description = "전공 과목", example = "MATH")
+        private MajorSubject major;
+
+        @Schema(description = "세부 전공", example = "미적분학")
+        private String specMajor;
+
+        @Schema(description = "선생님 이름", example = "김선생")
+        private String teacherName;
+
+        @Schema(description = "현재 최고 입찰가", example = "60000")
+        private Long highestBid;
+    }
 }

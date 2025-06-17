@@ -1,6 +1,7 @@
 package com.studeal.team.domain.board.dao;
 
 import com.studeal.team.domain.board.domain.AuctionBoard;
+import com.studeal.team.domain.user.domain.entity.enums.MajorSubject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -77,4 +78,22 @@ public interface BoardRepository extends JpaRepository<AuctionBoard, Long> {
             "LEFT JOIN FETCH b.files",
             countQuery = "SELECT COUNT(b) FROM AuctionBoard b")
     Page<AuctionBoard> findBoardsByOffset(Pageable pageable);
+
+    /**
+     * 전공(Major)으로 게시글 검색 (페이징)
+     */
+    @Query("SELECT DISTINCT b FROM AuctionBoard b LEFT JOIN FETCH b.teacher WHERE b.major = :major")
+    Page<AuctionBoard> searchByMajor(@Param("major") MajorSubject major, Pageable pageable);
+
+    /**
+     * 선생님 이름으로 게시글 검색 (페이징)
+     */
+    @Query("SELECT DISTINCT b FROM AuctionBoard b JOIN FETCH b.teacher t WHERE LOWER(t.name) LIKE LOWER(CONCAT('%', :teacherName, '%'))")
+    Page<AuctionBoard> searchByTeacherName(@Param("teacherName") String teacherName, Pageable pageable);
+
+    /**
+     * 과외 주제(SpecMajor)로 게시글 검색 (페이징)
+     */
+    @Query("SELECT DISTINCT b FROM AuctionBoard b LEFT JOIN FETCH b.teacher WHERE LOWER(b.specMajor) LIKE LOWER(CONCAT('%', :specMajor, '%'))")
+    Page<AuctionBoard> searchBySpecMajor(@Param("specMajor") String specMajor, Pageable pageable);
 }
