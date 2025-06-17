@@ -4,11 +4,13 @@ import com.studeal.team.domain.negotiation.application.NegotiationService;
 import com.studeal.team.domain.negotiation.dto.NegotiationRequestDTO;
 import com.studeal.team.domain.negotiation.dto.NegotiationResponseDTO;
 import com.studeal.team.global.error.ApiResponse;
+import com.studeal.team.global.jwt.JwtTokenProvider;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -20,8 +22,9 @@ import org.springframework.web.bind.annotation.*;
 public class NegotiationController {
 
     private final NegotiationService negotiationService;
+    private final JwtTokenProvider jwtTokenProvider;
 
-    @Operation(summary = "학생 가격 제안(협상) 생성 API", description = "학생이 강사에게 가격 제안을 생성하는 API입니다.")
+    @Operation(summary = "학생 가격 제안(협상) 생성 API", description = "학생이 강사에게 가격 제안을 생성하는 API입니다. JWT 토큰에서 추출한 학생 ID를 사용합니다.")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON_200", description = "OK, 성공", content = @Content(schema = @Schema(implementation = NegotiationResponseDTO.class))),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "USER_400_01", description = "사용자가 없습니다.", content = @Content(schema = @Schema(implementation = ApiResponse.class))),
@@ -29,8 +32,14 @@ public class NegotiationController {
     })
     @PostMapping
     public ApiResponse<NegotiationResponseDTO> createNegotiation(
-            @Valid @RequestBody NegotiationRequestDTO.CreateRequest request) {
-        return ApiResponse.onSuccess(negotiationService.initiateNegotiation(request));
+            @Valid @RequestBody NegotiationRequestDTO.CreateRequest request,
+            HttpServletRequest httpServletRequest) {
+
+        // JWT 토큰에서 userId 추출
+        String token = resolveToken(httpServletRequest);
+        Long currentUserId = Long.parseLong(jwtTokenProvider.extractUserIdAsString(token));
+
+        return ApiResponse.onSuccess(negotiationService.initiateNegotiation(request, currentUserId));
     }
 
     @Operation(summary = "학생 가격 제안(협상) 상태 변경 API", description = "협상 ID로 학생의 가격 제안(협상) 상태를 변경하는 API입니다. 상태가 ACCEPTED로 변경될 경우 자동으로 Enrollment가 생성됩니다.")
@@ -54,5 +63,16 @@ public class NegotiationController {
     public ApiResponse<Void> deleteNegotiation(@PathVariable Long negotiationId) {
         negotiationService.deleteNegotiation(negotiationId);
         return ApiResponse.onSuccess(null);
+    }
+
+    /**
+     * HttpServletRequest에서 토큰을 추출합니다.
+     */
+    private String resolveToken(HttpServletRequest request) {
+        String bearerToken = request.getHeader("Authorization");
+        if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
+            return bearerToken.substring(7);
+        }
+        return null;
     }
 }
