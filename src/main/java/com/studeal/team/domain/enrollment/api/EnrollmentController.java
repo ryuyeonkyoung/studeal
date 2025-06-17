@@ -22,9 +22,10 @@ public class EnrollmentController {
     private final EnrollmentService enrollmentService;
 
     @Operation(
-            summary = "최고가를 부른 학생과 선생님을 연결하는 API",
-            description = "경매 종료 후, 최고가를 부른 학생과 선생님을 연결하는 API입니다." +
-                    "이를 통해 학생은 낙찰받은 수업을 결제하여 거래를 성사하거나, 거절하여 최종 낙찰을 포기할 수 있습니다.")
+            summary = "(테스트용) 최고가를 부른 학생과 선생님을 연결하는 API",
+            description = "(테스트용) 경매 종료 후, 최고가를 부른 학생과 선생님을 연결하는 API입니다.\n\n" +
+                    "이를 통해 학생은 낙찰받은 수업을 결제하여 거래를 성사하거나, 거절하여 최종 낙찰을 포기할 수 있습니다.\n" +
+                    "이 API는 테스트용으로, 실제 서비스에서는 경매 종료 후 자동으로 연결됩니다.")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON_200", description = "OK, 성공"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "STUDENT_400_01", description = "존재하지 않는 학생입니다.", content = @Content(schema = @Schema(implementation = ApiResponse.class))),

@@ -22,7 +22,8 @@ public class NegotiationController {
 
     private final NegotiationService negotiationService;
 
-    @Operation(summary = "학생 가격 제안(협상) 생성 API", description = "학생이 강사에게 가격 제안을 생성하는 API입니다. JWT 토큰에서 추출한 학생 ID를 사용합니다.")
+    @Operation(summary = "학생 가격 제안(협상) 생성 API",
+            description = "학생이 강사에게 가격 제안을 생성하는 API입니다.\n\n SecurityContext에서 현재 인증된 학생 ID를 자동으로 사용합니다.")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON_200", description = "OK, 성공", content = @Content(schema = @Schema(implementation = NegotiationResponseDTO.class))),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "USER_400_01", description = "사용자가 없습니다.", content = @Content(schema = @Schema(implementation = ApiResponse.class))),
