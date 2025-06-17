@@ -230,6 +230,9 @@ public class BoardResponseDTO {
 
         @Schema(description = "상태", example = "OPEN")
         private String status;
+
+        @Schema(description = "입찰 목록", implementation = BidResponse.class)
+        private List<BidResponse> bids;
     }
 
     /**
