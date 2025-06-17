@@ -6,7 +6,7 @@
     "contact": {
       "name": "Studeal Team"
     },
-    "version": "4.0.0"
+    "version": "4.0.1"
   },
   "servers": [
     {
@@ -60,7 +60,7 @@
         ],
         "responses": {
           "400": {
-            "description": "유효하지 않은 가격 제안 요청입니다.",
+            "description": "게시글을 찾을 수 없습니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -111,8 +111,8 @@
           "required": true
         },
         "responses": {
-          "400": {
-            "description": "게시글을 찾을 수 없습니다.",
+          "403": {
+            "description": "게시글 권한이 없습니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -121,8 +121,8 @@
               }
             }
           },
-          "403": {
-            "description": "게시글 권한이 없습니다.",
+          "400": {
+            "description": "게시글을 찾을 수 없습니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -163,8 +163,8 @@
           }
         ],
         "responses": {
-          "400": {
-            "description": "게시글을 찾을 수 없습니다.",
+          "403": {
+            "description": "게시글 권한이 없습니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -173,8 +173,8 @@
               }
             }
           },
-          "403": {
-            "description": "게시글 권한이 없습니다.",
+          "400": {
+            "description": "게시글을 찾을 수 없습니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -225,22 +225,22 @@
               }
             }
           },
-          "403": {
-            "description": "해당 사용자는 학생이 아닙니다.",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
-                }
-              }
-            }
-          },
           "200": {
             "description": "OK, 성공",
             "content": {
               "*/*": {
                 "schema": {
                   "$ref": "#/components/schemas/com.studeal.team.domain.negotiation.dto.NegotiationResponseDTO"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "해당 사용자는 학생이 아닙니다.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
                 }
               }
             }
@@ -267,8 +267,8 @@
           "required": true
         },
         "responses": {
-          "404": {
-            "description": "존재하지 않는 협상입니다.",
+          "400": {
+            "description": "협상이 성공 상태가 아닙니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -277,8 +277,8 @@
               }
             }
           },
-          "400": {
-            "description": "존재하지 않는 학생입니다.",
+          "404": {
+            "description": "존재하지 않는 협상입니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -361,8 +361,8 @@
           "required": true
         },
         "responses": {
-          "403": {
-            "description": "유효하지 않은 사용자 역할입니다.",
+          "400": {
+            "description": "유효한 이메일 형식이 아닙니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -371,8 +371,8 @@
               }
             }
           },
-          "400": {
-            "description": "유효한 이메일 형식이 아닙니다.",
+          "403": {
+            "description": "유효하지 않은 사용자 역할입니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -517,7 +517,7 @@
           "수업 참여 확정"
         ],
         "summary": "수업 참여 확정 변경 API",
-        "description": "수업 참여 확정 상태를 변경하는 API입니다. (대기 → 확정/취소 변경 가능) 이 API를 통해 학생은 수업 참여 확정 상태를 업데이트할 수 있습니다.\n\n가능한 EnrollmentStatus(상태) 값:\n- 대기 (WAITING) : 학생이 수업 참여를 신청한 상태\n- 확정 (CONFIRMED) : 수업 참여가 확정된 상태\n- 취소 (CANCELED) : 수업 참여가 취소된 상태",
+        "description": "수업 참여 확정 상태를 변경하는 API입니다. (대기 → 확정/취소 변경 가능) 이 API를 통해 학생은 수업 참여 확정 상태를 업데이트할 수 있습니다.\n\n가능한 EnrollmentStatus(상태) 값:\n- 대기 (WAITING) : 학생이 수업 참여를 신청한 상태\n- 확정 (CONFIRMED) : 수업 참여가 확정된 상태. 상태가 CONFIRMED로 변경될 경우 자동으로 Lesson이 생성됩니다.\n- 취소 (CANCELED) : 수업 참여가 취소된 상태",
         "operationId": "updateStatus",
         "parameters": [
           {

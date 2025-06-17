@@ -44,7 +44,7 @@ public class EnrollmentController {
                     " 이 API를 통해 학생은 수업 참여 확정 상태를 업데이트할 수 있습니다.\n\n" +
                     "가능한 EnrollmentStatus(상태) 값:\n" +
                     "- 대기 (WAITING) : 학생이 수업 참여를 신청한 상태\n" +
-                    "- 확정 (CONFIRMED) : 수업 참여가 확정된 상태\n" +
+                    "- 확정 (CONFIRMED) : 수업 참여가 확정된 상태. 상태가 CONFIRMED로 변경될 경우 자동으로 Lesson이 생성됩니다.\n" +
                     "- 취소 (CANCELED) : 수업 참여가 취소된 상태")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON_200", description = "OK, 성공"),
