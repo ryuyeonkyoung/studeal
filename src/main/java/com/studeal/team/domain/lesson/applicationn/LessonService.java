@@ -1,27 +1,28 @@
 package com.studeal.team.domain.lesson.applicationn;
 
+import com.studeal.team.domain.enrollment.domain.Enrollment;
 import com.studeal.team.domain.enrollment.domain.enums.AttendanceStatus;
 import com.studeal.team.domain.enrollment.domain.enums.EnrollmentStatus;
 import com.studeal.team.domain.lesson.converter.LessonConverter;
-import com.studeal.team.domain.lesson.dto.LessonRequestDTO;
+import com.studeal.team.domain.lesson.dao.LessonRepository;
 import com.studeal.team.domain.lesson.domain.Lesson;
 import com.studeal.team.domain.lesson.domain.LessonPresence;
-import com.studeal.team.domain.enrollment.domain.Enrollment;
-import com.studeal.team.domain.lesson.dao.LessonRepository;
+import com.studeal.team.domain.lesson.dto.LessonRequestDTO;
 import com.studeal.team.domain.negotiation.dao.NegotiationRepository;
 import com.studeal.team.domain.negotiation.domain.Negotiation;
-import com.studeal.team.domain.user.dao.TeacherRepository;
 import com.studeal.team.domain.user.dao.StudentRepository;
-import com.studeal.team.domain.user.domain.entity.Teacher;
+import com.studeal.team.domain.user.dao.TeacherRepository;
 import com.studeal.team.domain.user.domain.entity.Student;
+import com.studeal.team.domain.user.domain.entity.Teacher;
 import com.studeal.team.global.error.code.status.ErrorStatus;
-import com.studeal.team.global.error.exception.handler.*;
+import com.studeal.team.global.error.exception.handler.NegotiationHandler;
+import com.studeal.team.global.error.exception.handler.UserHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
@@ -38,7 +39,7 @@ public class LessonService {
 
         // 선생님 연관관계 매핑
         Teacher teacher = teacherRepository.findById(request.getTeacherId())
-                .orElseThrow(() -> new TeacherHandler(ErrorStatus.TEACHER_NOT_FOUND));
+                .orElseThrow(() -> new UserHandler(ErrorStatus.USER_NOT_FOUND));
         newLesson.setTeacher(teacher);
 
         // 협상 정보 연관관계 매핑
@@ -52,7 +53,7 @@ public class LessonService {
 
         // 학생 조회
         Student student = studentRepository.findById(request.getStudentId())
-                .orElseThrow(() -> new StudentHandler(ErrorStatus.STUDENT_NOT_FOUND));
+                .orElseThrow(() -> new UserHandler(ErrorStatus.USER_NOT_FOUND));
 
         // 수강신청 연관관계 매핑 (1:1 관계)
         Enrollment enrollment = Enrollment.builder()
