@@ -146,16 +146,28 @@ public class BoardQueryService {
         AuctionBoard auctionBoard = boardRepository.findByIdWithTeacher(boardId)
                 .orElseThrow(() -> new BoardHandler(ErrorStatus.BOARD_NOT_FOUND));
 
+        // 게시글에 관련된 모든 협상(입찰) 정보를 가격 높은 순으로 조회
+        List<Negotiation> negotiations = negotiationRepository.findByBoardIdOrderByProposedPriceDesc(boardId);
+
+        // 입찰 정보 변환 및 순위 부여
+        List<BoardResponseDTO.BidResponse> bids = new ArrayList<>();
+        int rank = 1;
+        for (Negotiation negotiation : negotiations) {
+            BoardResponseDTO.BidResponse bid = BoardResponseDTO.BidResponse.builder()
+                    .rank(rank++)
+                    .price(negotiation.getProposedPrice())
+                    .bidder(negotiation.getStudent().getName())
+                    .build();
+            bids.add(bid);
+        }
+
         // 가격 범위 문자열 생성 (시작 가격 + '~')
         String priceRange = auctionBoard.getExpectedPrice() + "~";
 
         // 선생님 정보 조회
         String teacherName = auctionBoard.getTeacher().getName();
         String teacherEmail = auctionBoard.getTeacher().getEmail();
-
-        // 해당 게시글에 대한 협상 정보 조회
-        List<Negotiation> negotiations = negotiationRepository.findByBoardIdOrderByProposedPriceDesc(boardId);
-
+        
         // Negotiation 상태 조회 (협상이 없는 경우 기본값 "OPEN" 사용)
         String status = "OPEN";
         if (!negotiations.isEmpty()) {
@@ -173,6 +185,7 @@ public class BoardQueryService {
                 .priceRange(priceRange)
                 .teacherName(teacherName)
                 .teacherEmail(teacherEmail)
+                .bids(bids)
                 .status(status)
                 .build();
     }

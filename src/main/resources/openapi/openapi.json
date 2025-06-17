@@ -6,7 +6,7 @@
     "contact": {
       "name": "Studeal Team"
     },
-    "version": "4.2.0"
+    "version": "4.3.0"
   },
   "servers": [
     {
@@ -48,7 +48,7 @@
           "게시판 API"
         ],
         "summary": "게시글 상세 조회 (역할 기반)",
-        "description": "JWT 토큰의 역할(선생님/학생)에 따라 게시글 상세 정보를 다르게 제공합니다. 선생님은 입찰 정보를, 학생은 선생님 정보를 추가로 확인할 수 있습니다.",
+        "description": "사용자의 역할(선생님/학생)에 따라 게시글 상세 정보를 다르게 제공합니다. 선생님은 입찰 정보를, 학생은 선생님 정보를 추가로 확인할 수 있습니다.",
         "operationId": "getBoardDetail",
         "parameters": [
           {
@@ -219,8 +219,8 @@
           "required": true
         },
         "responses": {
-          "400": {
-            "description": "사용자가 없습니다.",
+          "403": {
+            "description": "해당 사용자는 학생이 아닙니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -239,8 +239,8 @@
               }
             }
           },
-          "403": {
-            "description": "해당 사용자는 학생이 아닙니다.",
+          "400": {
+            "description": "사용자가 없습니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -272,7 +272,7 @@
         },
         "responses": {
           "400": {
-            "description": "협상이 성공 상태가 아닙니다.",
+            "description": "이미 수강신청 현황이 존재합니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -324,7 +324,7 @@
         },
         "responses": {
           "400": {
-            "description": "게시글을 찾을 수 없습니다.",
+            "description": "선생님을 찾을 수 없습니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -492,22 +492,22 @@
           "required": true
         },
         "responses": {
-          "200": {
-            "description": "OK, 성공",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/com.studeal.team.domain.negotiation.dto.NegotiationResponseDTO"
-                }
-              }
-            }
-          },
           "404": {
             "description": "존재하지 않는 협상입니다.",
             "content": {
               "*/*": {
                 "schema": {
                   "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK, 성공",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.studeal.team.domain.negotiation.dto.NegotiationResponseDTO"
                 }
               }
             }
@@ -545,16 +545,6 @@
           "required": true
         },
         "responses": {
-          "404": {
-            "description": "존재하지 않는 수강 신청입니다.",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
-                }
-              }
-            }
-          },
           "400": {
             "description": "유효하지 않은 수강 신청 요청입니다.",
             "content": {
@@ -574,6 +564,16 @@
                 }
               }
             }
+          },
+          "404": {
+            "description": "존재하지 않는 수강 신청입니다.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
+                }
+              }
+            }
           }
         }
       }
@@ -587,8 +587,8 @@
         "description": "로그인한 사용자의 마이페이지 정보를 조회합니다. 사용자 역할에 따라 다른 정보가 제공됩니다.",
         "operationId": "getMyPageInfo",
         "responses": {
-          "400": {
-            "description": "사용자가 없습니다.",
+          "403": {
+            "description": "유효하지 않은 사용자 역할입니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -597,8 +597,8 @@
               }
             }
           },
-          "403": {
-            "description": "유효하지 않은 사용자 역할입니다.",
+          "400": {
+            "description": "사용자가 없습니다.",
             "content": {
               "*/*": {
                 "schema": {
