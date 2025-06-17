@@ -58,7 +58,6 @@ public class NegotiationCommandService {
         return NegotiationConverter.toResponseDTO(negotiationRepository.save(negotiation));
     }
 
-    @PreAuthorize("hasRole('STUDENT')")
     public NegotiationResponseDTO updateNegotiationStatus(Long negotiationId, NegotiationStatus newStatus) {
         Negotiation negotiation = negotiationRepository.findById(negotiationId)
                 .orElseThrow(() -> new NegotiationHandler(ErrorStatus.NEGOTIATION_NOT_FOUND));
