@@ -2,7 +2,6 @@ package com.studeal.team.domain.negotiation.dto;
 
 import com.studeal.team.domain.negotiation.domain.enums.NegotiationStatus;
 import com.studeal.team.domain.user.domain.validation.ValidStudentId;
-import com.studeal.team.domain.user.domain.validation.ValidTeacherId;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -18,18 +17,17 @@ public class NegotiationRequestDTO {
     public static class CreateRequest {
         @NotNull
         @ValidStudentId
-        @Schema(description = "학생 ID", example = "1", required = true)
+        @Schema(description = "학생 ID", example = "41", required = true)
         private Long studentId;
-
-        @NotNull
-        @ValidTeacherId
-        @Schema(description = "선생님 ID", example = "2", required = true)
-        private Long teacherId;
 
         @NotNull
         @Positive
         @Schema(description = "제안 가격", example = "50000", required = true)
         private Long proposedPrice;
+
+        @NotNull
+        @Schema(description = "경매 게시판 ID", example = "41", required = true)
+        private Long boardId;
     }
 
     @Getter
