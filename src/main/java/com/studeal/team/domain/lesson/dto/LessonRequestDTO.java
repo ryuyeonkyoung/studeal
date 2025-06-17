@@ -5,12 +5,16 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
 @Schema(description = "수업 요청 DTO")
 public class LessonRequestDTO {
 
     @Getter
+    @Setter
+    @Builder
     @Schema(description = "수업 생성 요청")
     public static class CreateRequest {
         @NotBlank

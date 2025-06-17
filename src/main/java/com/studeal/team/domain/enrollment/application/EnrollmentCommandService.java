@@ -6,6 +6,8 @@ import com.studeal.team.domain.enrollment.domain.Enrollment;
 import com.studeal.team.domain.enrollment.domain.enums.EnrollmentStatus;
 import com.studeal.team.domain.enrollment.dto.EnrollmentRequestDTO;
 import com.studeal.team.domain.enrollment.dto.EnrollmentResponseDTO;
+import com.studeal.team.domain.lesson.applicationn.LessonCommandService;
+import com.studeal.team.domain.lesson.dto.LessonRequestDTO;
 import com.studeal.team.domain.negotiation.dao.NegotiationRepository;
 import com.studeal.team.domain.negotiation.domain.Negotiation;
 import com.studeal.team.domain.negotiation.domain.enums.NegotiationStatus;
@@ -16,6 +18,7 @@ import com.studeal.team.global.error.exception.handler.EnrollmentHandler;
 import com.studeal.team.global.error.exception.handler.NegotiationHandler;
 import com.studeal.team.global.error.exception.handler.UserHandler;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,11 +28,13 @@ import java.time.LocalDateTime;
 @Service
 @RequiredArgsConstructor
 @Transactional // 클래스 레벨에서 기본 트랜잭션 설정
+@Slf4j
 public class EnrollmentCommandService {
 
     private final EnrollmentRepository enrollmentRepository;
     private final NegotiationRepository negotiationRepository;
     private final StudentRepository studentRepository;
+    private final LessonCommandService lessonCommandService;
 
     /**
      * 수강 신청 생성 메서드
@@ -91,7 +96,36 @@ public class EnrollmentCommandService {
         // 상태 업데이트
         enrollment.setStatus(request.getStatus());
 
+        // 상태가 CONFIRMED로 변경된 경우 Lesson 생성
+        if (request.getStatus() == EnrollmentStatus.CONFIRMED) {
+            createLessonForConfirmedEnrollment(enrollment);
+            log.info("Created lesson for confirmed enrollment ID: {}", enrollmentId);
+        }
+
         return EnrollmentConverter.toResponseDTO(enrollmentRepository.save(enrollment));
+    }
+
+    /**
+     * 수강 신청이 확정(CONFIRMED)된 경우 자동으로 Lesson을 생성하는 메서드
+     */
+    private void createLessonForConfirmedEnrollment(Enrollment enrollment) {
+        Negotiation negotiation = enrollment.getNegotiation();
+
+        // 수업 제목 생성 - 실제 환경에서는 더 의미 있는 제목 생성 로직이 필요할 수 있음
+        String title = negotiation.getStudent().getName() + "님의 수업";
+
+        // Lesson 생성 요청 DTO 생성 (Builder 패턴 사용)
+        LessonRequestDTO.CreateRequest lessonRequest = LessonRequestDTO.CreateRequest.builder()
+                .title(title)
+                .negotiationId(negotiation.getNegotiationId())
+                .studentId(enrollment.getStudent().getUserId())
+                .teacherId(negotiation.getTeacher().getUserId())
+                .description("수강 확정에 따른 자동 생성된 수업입니다.")
+                .price(enrollment.getPaidAmount())
+                .build();
+
+        // Lesson 생성
+        lessonCommandService.createLesson(lessonRequest);
     }
 
     // TODO: 상태 전환 검증 로직을 별도의 유틸리티 클래스로 분리할 수 있음
