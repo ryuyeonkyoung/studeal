@@ -3,6 +3,7 @@ package com.studeal.team.domain.enrollment.domain;
 import com.studeal.team.domain.enrollment.domain.enums.EnrollmentStatus;
 import com.studeal.team.domain.negotiation.domain.Negotiation;
 import com.studeal.team.domain.user.domain.entity.Student;
+import com.studeal.team.domain.user.domain.entity.Teacher;
 import com.studeal.team.global.common.converter.BooleanToYNConverter;
 import com.studeal.team.global.common.domain.BaseEntity;
 import jakarta.persistence.*;
@@ -17,15 +18,15 @@ import java.time.LocalDateTime;
  */
 
 /*
-    * Enrollment (수강 신청) 엔티티는 학생이 협상에서 성공한 후, 수업 참여를 확정하는 상태를 나타냅니다.
-    * 이 엔티티는 학생과 협상을 연결하며, 수업 참여 확정 상태(WAITING, CONFIRMED, CANCELED)를 관리합니다.
-    * 또한, 수업 참여 확정 시 결제 금액(paidAmount)과 등록 시간(enrolledAt)을 기록합니다.
+ * Enrollment (수강 신청) 엔티티는 학생이 협상에서 성공한 후, 수업 참여를 확정하는 상태를 나타냅니다.
+ * 이 엔티티는 학생과 협상을 연결하며, 수업 참여 확정 상태(WAITING, CONFIRMED, CANCELED)를 관리합니다.
+ * 또한, 수업 참여 확정 시 결제 금액(paidAmount)과 등록 시간(enrolledAt)을 기록합니다.
  */
 @Entity
 @Table(name = "ENROLLMENTS")
 @Getter
 @Setter
-@NoArgsConstructor(access=AccessLevel.PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
 public class Enrollment extends BaseEntity {
@@ -37,6 +38,10 @@ public class Enrollment extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "student_id")
     private Student student;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "teacher_id")
+    private Teacher teacher;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "negotiation_id") // Negotiation중 일부만 Enrollment로 연결되므로 외래키가 Enrollment에 위치

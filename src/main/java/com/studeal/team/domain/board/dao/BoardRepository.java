@@ -20,7 +20,7 @@ public interface BoardRepository extends JpaRepository<AuctionBoard, Long> {
     Page<AuctionBoard> findByTeacherUserId(Long teacherId, Pageable pageable);
 
     /**
-     * 선생님 ID로 게시글 목록 조회 (모든 글)
+     * 선생님 ID로 게시글 목록 조회
      */
     List<AuctionBoard> findByTeacherUserId(Long teacherId);
 
