@@ -112,24 +112,9 @@ public class BoardController {
         Long userId = SecurityUtils.getCurrentUserId();
         log.info("게시글 상세 조회 요청: 게시글 ID {}, 사용자 ID {}", boardId, userId);
 
-        // SecurityUtils를 사용하여 사용자 역할 확인
-        boolean isTeacher = SecurityUtils.isTeacher();
-        boolean isStudent = SecurityUtils.isStudent();
-
-        // 역할에 따라 다른 응답 제공
-        if (isTeacher) {
-            BoardResponseDTO.DetailTeacherResponse response =
-                    boardQueryService.getTeacherDetailBoard(boardId, userId);
-            return ApiResponse.onSuccess(response);
-        } else if (isStudent) {
-            BoardResponseDTO.DetailStudentResponse response =
-                    boardQueryService.getStudentDetailBoard(boardId, userId);
-            return ApiResponse.onSuccess(response);
-        } else {
-            // 기본 응답 (역할이 없거나 알 수 없는 경우)
-            BoardResponseDTO.DetailResponse response = boardQueryService.getBoard(boardId);
-            return ApiResponse.onSuccess(response);
-        }
+        // 역할 확인 로직을 서비스 계층으로 이동
+        Object response = boardQueryService.getBoardDetailByRole(boardId, userId);
+        return ApiResponse.onSuccess(response);
     }
 
     @Operation(summary = "게시글 목록 조회 (커서 페이징)", description = "모든 과외 모집 게시글 목록을 커서 기반 페이징으로 조회합니다.")

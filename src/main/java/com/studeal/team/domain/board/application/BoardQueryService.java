@@ -7,7 +7,9 @@ import com.studeal.team.domain.board.dto.BoardResponseDTO;
 import com.studeal.team.domain.negotiation.dao.NegotiationRepository;
 import com.studeal.team.domain.negotiation.domain.Negotiation;
 import com.studeal.team.domain.user.dao.TeacherRepository;
+import com.studeal.team.domain.user.dao.UserRepository;
 import com.studeal.team.domain.user.domain.entity.Teacher;
+import com.studeal.team.domain.user.domain.entity.User;
 import com.studeal.team.domain.user.domain.entity.enums.MajorSubject;
 import com.studeal.team.domain.user.domain.entity.enums.UserRole;
 import com.studeal.team.global.error.code.status.ErrorStatus;
@@ -38,6 +40,7 @@ public class BoardQueryService {
     private final BoardRepository boardRepository;
     private final NegotiationRepository negotiationRepository;
     private final TeacherRepository teacherRepository;
+    private final UserRepository userRepository;
 
     /**
      * 게시글 상세 조회
@@ -319,5 +322,27 @@ public class BoardQueryService {
                 searchType, keyword, boardPage.getContent().size());
 
         return BoardConverter.toSearchPageResponse(boardPage, highestBids);
+    }
+
+    /**
+     * 게시글 상세 조회 - 역할 기반
+     * 사용자의 역할에 따라 다른 형태의 상세 정보를 반환합니다.
+     *
+     * @param boardId 게시글 ID
+     * @param userId  사용자 ID
+     * @return 역할에 맞는 게시글 상세 정보
+     */
+    public Object getBoardDetailByRole(Long boardId, Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserHandler(ErrorStatus.USER_NOT_FOUND));
+
+        if (user.getRole() == UserRole.TEACHER) {
+            return getTeacherDetailBoard(boardId, userId);
+        } else if (user.getRole() == UserRole.STUDENT) {
+            return getStudentDetailBoard(boardId, userId);
+        } else {
+            // 기본 응답 (역할이 없거나 알 수 없는 경우)
+            return getBoard(boardId);
+        }
     }
 }
