@@ -1,5 +1,6 @@
 package com.studeal.team.domain.board.application;
 
+import com.studeal.team.domain.board.application.strategy.BoardDetailStrategyFactory;
 import com.studeal.team.domain.board.converter.BoardConverter;
 import com.studeal.team.domain.board.dao.BoardRepository;
 import com.studeal.team.domain.board.domain.AuctionBoard;
@@ -41,6 +42,7 @@ public class BoardQueryService {
     private final NegotiationRepository negotiationRepository;
     private final TeacherRepository teacherRepository;
     private final UserRepository userRepository;
+    private final BoardDetailStrategyFactory strategyFactory;
 
     /**
      * 게시글 상세 조회
@@ -336,13 +338,7 @@ public class BoardQueryService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserHandler(ErrorStatus.USER_NOT_FOUND));
 
-        if (user.getRole() == UserRole.TEACHER) {
-            return getTeacherDetailBoard(boardId, userId);
-        } else if (user.getRole() == UserRole.STUDENT) {
-            return getStudentDetailBoard(boardId, userId);
-        } else {
-            // 기본 응답 (역할이 없거나 알 수 없는 경우)
-            return getBoard(boardId);
-        }
+        // 역할에 따른 전략 패턴 적용
+        return strategyFactory.getStrategy(user.getRole()).getBoardDetail(boardId, userId);
     }
 }
