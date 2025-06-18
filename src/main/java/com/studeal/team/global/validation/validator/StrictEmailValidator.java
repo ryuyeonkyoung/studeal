@@ -7,45 +7,52 @@ import java.util.regex.Pattern;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+/**
+ * 이메일 형식을 RFC 5322 기반으로 엄격하게 검증하는 Validator입니다.
+ */
 @Component
 @RequiredArgsConstructor
 public class StrictEmailValidator implements ConstraintValidator<StrictEmail, String> {
 
-  // RFC 5322 기반 이메일 정규표현식
+  /**
+   * RFC 5322 기반 이메일 정규표현식
+   */
   private static final String EMAIL_PATTERN =
       "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
 
   private static final Pattern pattern = Pattern.compile(EMAIL_PATTERN);
 
+  /**
+   * 입력된 이메일이 유효한지 검사합니다.
+   *
+   * @param email   입력된 이메일
+   * @param context 검증 컨텍스트
+   * @return 유효하면 true, 그렇지 않으면 false
+   */
   @Override
   public boolean isValid(String email, ConstraintValidatorContext context) {
     if (email == null || email.isEmpty()) {
-      return true; // null 검사는 @NotNull이나 @NotBlank가 담당
+      return true;
     }
 
-    // 기본 형식 검증
     if (!pattern.matcher(email).matches()) {
       return false;
     }
 
-    // 추가 검증: 최소 길이
-    if (email.length() < 5) { // a@b.c의 최소 길이
+    if (email.length() < 5) {
       return false;
     }
 
-    // 도메인 부분 검증
     String[] parts = email.split("@");
     if (parts.length != 2) {
       return false;
     }
 
     String domainPart = parts[1];
-    // 도메인에 최소 하나의 점이 있어야 함
     if (!domainPart.contains(".")) {
       return false;
     }
 
-    // 최상위 도메인 검증(TLD는 최소 2자 이상)
     String[] domainParts = domainPart.split("\\.");
     String tld = domainParts[domainParts.length - 1];
     return tld.length() >= 2;

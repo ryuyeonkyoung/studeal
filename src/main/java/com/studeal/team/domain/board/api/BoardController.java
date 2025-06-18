@@ -64,14 +64,14 @@ public class BoardController {
     return ApiResponse.onSuccess(response);
   }
 
-  @Operation(summary = "게시글 수정", description = "과외 모집 게시글을 수정합니다. 본인이 작성한 게시글만 수정 가능합니다.\n\n" +
-      "가능한 MajorSubject(전공 과목) 값:\n" +
-      "- 수학 (MATH)\n" +
-      "- 과학 (SCIENCE)\n" +
-      "- 영어 (ENGLISH)\n" +
-      "- 국어 (KOREAN)\n" +
-      "- 역사 (HISTORY)\n" +
-      "- 코딩 (CODING)")
+  @Operation(summary = "게시글 수정", description = "과외 모집 게시글을 수정합니다. 본인이 작성한 게시글만 수정 가능합니다.\n\n"
+      + "가능한 MajorSubject(전공 과목) 값:\n"
+      + "- 수학 (MATH)\n"
+      + "- 과학 (SCIENCE)\n"
+      + "- 영어 (ENGLISH)\n"
+      + "- 국어 (KOREAN)\n"
+      + "- 역사 (HISTORY)\n"
+      + "- 코딩 (CODING)")
   @ApiResponses({
       @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON_200", description = "OK, 성공"),
       @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "BOARD_400_01", description = "게시글을 찾을 수 없습니다.", content = @Content(schema = @Schema(implementation = ApiResponse.class))),

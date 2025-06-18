@@ -7,11 +7,21 @@ import jakarta.validation.ConstraintValidatorContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+/**
+ * 선생님의 전공 과목 유효성을 검증하는 Validator 클래스입니다. 선생님 역할로 가입 시 전공 과목이 필수적으로 입력되어야 합니다.
+ */
 @Component
 @RequiredArgsConstructor
 public class ValidMajorSubjectValidator
     implements ConstraintValidator<ValidMajorSubject, UserRequestDTO.SignupRequest> {
 
+  /**
+   * 회원가입 요청의 전공 과목 유효성을 검증합니다.
+   *
+   * @param request 회원가입 요청 DTO
+   * @param context 제약 조건 컨텍스트
+   * @return 유효한 경우 true, 그렇지 않으면 false
+   */
   @Override
   public boolean isValid(UserRequestDTO.SignupRequest request, ConstraintValidatorContext context) {
     // 역할이 지정되지 않은 경우

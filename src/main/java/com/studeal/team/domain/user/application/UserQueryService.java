@@ -27,7 +27,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * 사용자 조회 서비스 클래스 마이페이지 등 조회 작업만을 담당합니다.
+ * 사용자 조회 서비스를 제공하는 클래스입니다. 마이페이지 등 조회 작업만을 담당합니다.
  */
 @Slf4j
 @Service
@@ -35,19 +35,41 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true, propagation = Propagation.REQUIRED)
 public class UserQueryService {
 
+  /**
+   * 사용자 저장소입니다.
+   */
   private final UserRepository userRepository;
+  /**
+   * 선생님 정보 저장소입니다.
+   */
   private final TeacherRepository teacherRepository;
+  /**
+   * 학생 정보 저장소입니다.
+   */
   private final StudentRepository studentRepository;
+  /**
+   * 수업 정보 저장소입니다.
+   */
   private final LessonRepository lessonRepository;
+  /**
+   * 협상 정보 저장소입니다.
+   */
   private final NegotiationRepository negotiationRepository;
+  /**
+   * 수강 정보 저장소입니다.
+   */
   private final EnrollmentRepository enrollmentRepository;
+  /**
+   * 게시판 정보 저장소입니다.
+   */
   private final BoardRepository boardRepository;
 
   /**
-   * 사용자 마이페이지 정보 조회 사용자의 역할에 따라 다른 응답 형식으로 반환
+   * 사용자의 마이페이지 정보를 조회합니다. 사용자의 역할에 따라 다른 응답 형식으로 반환합니다.
    *
    * @param userId 사용자 ID
    * @return 역할에 맞는 마이페이지 응답 DTO
+   * @throws UserHandler 사용자를 찾을 수 없거나 역할이 유효하지 않은 경우
    */
   public Object getMyPageInfo(Long userId) {
     User user = userRepository.findById(userId)
@@ -63,10 +85,11 @@ public class UserQueryService {
   }
 
   /**
-   * 선생님 마이페이지 정보 조회
+   * 선생님의 마이페이지 정보를 조회합니다.
    *
    * @param teacherId 선생님 ID
    * @return 선생님 마이페이지 응답 DTO
+   * @throws UserHandler 선생님을 찾을 수 없는 경우
    */
   @PreAuthorize("hasRole('TEACHER')")
   public MyPageResponseDTO.TeacherResponse getTeacherMyPageInfo(Long teacherId) {
@@ -113,10 +136,11 @@ public class UserQueryService {
   }
 
   /**
-   * 학생 마이페이지 정보 조회
+   * 학생의 마이페이지 정보를 조회합니다.
    *
    * @param studentId 학생 ID
    * @return 학생 마이페이지 응답 DTO
+   * @throws UserHandler 학생을 찾을 수 없는 경우
    */
   @PreAuthorize("hasRole('STUDENT')")
   public MyPageResponseDTO.StudentResponse getStudentMyPageInfo(Long studentId) {
@@ -143,7 +167,8 @@ public class UserQueryService {
     // 협상 중인 수업 목록 조회 - 각 게시글당 최고 제안 가격만 포함 (Querydsl 최적화 버전 사용)
     List<BoardResponseDTO.BoardWithHighestPriceDTO> boardsWithPrice =
         negotiationRepository.findBoardsWithHighestPriceByStudentId(studentId);
-    List<MyPageResponseDTO.StudentNegotiatingLessonInfo> negotiatingLessonInfos = boardsWithPrice.stream()
+    List<MyPageResponseDTO.StudentNegotiatingLessonInfo> negotiatingLessonInfos
+        = boardsWithPrice.stream()
         .map(boardWithPrice -> MyPageResponseDTO.StudentNegotiatingLessonInfo.builder()
             .boardId(boardWithPrice.getBoard().getBoardId())
             .title(boardWithPrice.getBoard().getTitle())

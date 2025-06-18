@@ -3,6 +3,7 @@ plugins {
     id 'org.springframework.boot' version '3.4.5'
     id 'io.spring.dependency-management' version '1.1.7'
     id 'org.springdoc.openapi-gradle-plugin' version '1.9.0'
+    id 'checkstyle'
 }
 
 group = 'com.studeal.team'
@@ -98,4 +99,38 @@ clean {
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+// Checkstyle 설정
+checkstyle {
+    toolVersion = '10.12.5'
+    configFile = file('config/checkstyle/google_checks.xml')
+    maxWarnings = 0
+    ignoreFailures = false
+}
+
+tasks.register('checkstyleFormatSpecific', Checkstyle) {
+    description = 'Runs Checkstyle on specified files'
+    group = 'verification'
+    source = files(
+            'src/main/java/com/studeal/team/domain/user/domain/entity/Teacher.java',
+            'src/main/java/com/studeal/team/domain/board/strategy/TeacherBoardDetailStrategy.java',
+            'src/main/java/com/studeal/team/domain/user/presentation/TeacherHandler.java',
+            'src/main/java/com/studeal/team/domain/user/domain/repository/TeacherRepository.java',
+            'src/main/java/com/studeal/team/global/security/dto/TokenDTO.java',
+            'src/main/java/com/studeal/team/domain/user/domain/validation/UniqueEmail.java',
+            'src/main/java/com/studeal/team/domain/user/domain/entity/User.java',
+            'src/main/java/com/studeal/team/domain/user/presentation/UserAuthController.java',
+            'src/main/java/com/studeal/team/domain/user/application/UserCommandService.java',
+            'src/main/java/com/studeal/team/domain/user/domain/converter/UserConverter.java',
+            'src/main/java/com/studeal/team/domain/user/dto/UserRequestDTO.java',
+            'src/main/java/com/studeal/team/domain/user/dto/UserResponseDTO.java'
+    )
+    classpath = files()
+    configFile = file('config/checkstyle/google_checks.xml')
+    reports {
+        xml.required = false
+        html.required = true
+        html.outputLocation = layout.buildDirectory.file('reports/checkstyle/specific.html')
+    }
 }
