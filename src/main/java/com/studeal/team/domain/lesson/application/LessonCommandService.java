@@ -1,4 +1,4 @@
-package com.studeal.team.domain.lesson.applicationn;
+package com.studeal.team.domain.lesson.application;
 
 import com.studeal.team.domain.enrollment.domain.Enrollment;
 import com.studeal.team.domain.enrollment.domain.enums.AttendanceStatus;
@@ -19,6 +19,7 @@ import com.studeal.team.global.error.exception.handler.NegotiationHandler;
 import com.studeal.team.global.error.exception.handler.UserHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
@@ -26,6 +27,7 @@ import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(propagation = Propagation.REQUIRED)
 public class LessonCommandService {
 
     private final LessonRepository lessonRepository;
@@ -33,7 +35,6 @@ public class LessonCommandService {
     private final StudentRepository studentRepository;
     private final NegotiationRepository negotiationRepository;
 
-    @Transactional
     public Lesson createLesson(LessonRequestDTO.CreateRequest request) {
         Lesson newLesson = LessonConverter.toEntity(request);
 
@@ -78,4 +79,3 @@ public class LessonCommandService {
         return lessonRepository.save(newLesson);
     }
 }
-

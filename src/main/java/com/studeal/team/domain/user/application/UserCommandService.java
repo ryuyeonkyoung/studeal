@@ -16,10 +16,12 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(propagation = Propagation.REQUIRED)
 public class UserCommandService {
 
     private final StudentRepository studentRepository;
@@ -29,7 +31,7 @@ public class UserCommandService {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtTokenProvider jwtTokenProvider;
 
-    @Transactional(timeout = 5)
+    @Transactional(timeout = 5, propagation = Propagation.REQUIRED)
     public UserResponseDTO registerUser(UserRequestDTO.SignupRequest request) {
         // 비밀번호 암호화 추가
         request.setPassword(passwordEncoder.encode(request.getPassword()));
@@ -49,7 +51,6 @@ public class UserCommandService {
         }
     }
 
-    @Transactional
     public TokenDTO login(UserRequestDTO.LoginRequest loginRequest) {
         // 인증 토큰 생성
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
