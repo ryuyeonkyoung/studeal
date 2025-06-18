@@ -10,16 +10,19 @@ import com.studeal.team.domain.user.dto.UserResponseDTO;
 import com.studeal.team.global.error.code.status.ErrorStatus;
 import com.studeal.team.global.error.exception.handler.UserHandler;
 import com.studeal.team.global.jwt.JwtTokenProvider;
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(propagation = Propagation.REQUIRED)
 public class UserCommandService {
 
     private final StudentRepository studentRepository;
@@ -28,9 +31,22 @@ public class UserCommandService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtTokenProvider jwtTokenProvider;
+    private final EntityManager entityManager;
 
-    @Transactional(timeout = 5)
+    @Transactional(timeout = 1, propagation = Propagation.REQUIRED)
     public UserResponseDTO registerUser(UserRequestDTO.SignupRequest request) {
+        // 배타적 락을 통해 이메일 중복 체크
+        // 동일한 이메일로 다른 트랜잭션에서 동시에 사용자를 등록하려는 경우 방지
+        boolean existsUser = userRepository.findByEmail(request.getEmail()).isPresent();
+
+        if (existsUser) {
+            throw new UserHandler(ErrorStatus.USER_DUPLICATE_EMAIL);
+        }
+
+        // SELECT FOR UPDATE 구문을 이용해 행 레벨 락을 걸어 동시 등록 방지
+        entityManager.createNativeQuery("SELECT 1 FROM DUAL FOR UPDATE")
+                .getResultList();
+
         // 비밀번호 암호화 추가
         request.setPassword(passwordEncoder.encode(request.getPassword()));
 
@@ -49,7 +65,6 @@ public class UserCommandService {
         }
     }
 
-    @Transactional
     public TokenDTO login(UserRequestDTO.LoginRequest loginRequest) {
         // 인증 토큰 생성
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(

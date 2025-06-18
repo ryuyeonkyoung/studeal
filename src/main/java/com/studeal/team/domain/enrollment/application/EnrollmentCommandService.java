@@ -6,7 +6,7 @@ import com.studeal.team.domain.enrollment.domain.Enrollment;
 import com.studeal.team.domain.enrollment.domain.enums.EnrollmentStatus;
 import com.studeal.team.domain.enrollment.dto.EnrollmentRequestDTO;
 import com.studeal.team.domain.enrollment.dto.EnrollmentResponseDTO;
-import com.studeal.team.domain.lesson.applicationn.LessonCommandService;
+import com.studeal.team.domain.lesson.application.LessonCommandService;
 import com.studeal.team.domain.lesson.dto.LessonRequestDTO;
 import com.studeal.team.domain.negotiation.dao.NegotiationRepository;
 import com.studeal.team.domain.negotiation.domain.Negotiation;

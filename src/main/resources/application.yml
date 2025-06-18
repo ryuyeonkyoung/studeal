@@ -16,6 +16,8 @@ spring:
         hbm2ddl:
           auto: update
         default_batch_fetch_size: 1000
+  transaction:
+    default-timeout: 30
 
 # JWT 설정
 jwt:

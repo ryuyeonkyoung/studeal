@@ -1,6 +1,6 @@
 package com.studeal.team.domain.lesson.api;
 
-import com.studeal.team.domain.lesson.applicationn.LessonCommandService;
+import com.studeal.team.domain.lesson.application.LessonCommandService;
 import com.studeal.team.domain.lesson.converter.LessonConverter;
 import com.studeal.team.domain.lesson.domain.Lesson;
 import com.studeal.team.domain.lesson.dto.LessonRequestDTO;
