@@ -6,7 +6,7 @@
     "contact": {
       "name": "Studeal Team"
     },
-    "version": "4.5.0"
+    "version": "4.6.0"
   },
   "servers": [
     {
@@ -115,8 +115,8 @@
           "required": true
         },
         "responses": {
-          "400": {
-            "description": "게시글을 찾을 수 없습니다.",
+          "403": {
+            "description": "게시글 권한이 없습니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -125,8 +125,8 @@
               }
             }
           },
-          "403": {
-            "description": "게시글 권한이 없습니다.",
+          "400": {
+            "description": "게시글을 찾을 수 없습니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -167,8 +167,8 @@
           }
         ],
         "responses": {
-          "400": {
-            "description": "게시글을 찾을 수 없습니다.",
+          "403": {
+            "description": "게시글 권한이 없습니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -177,8 +177,8 @@
               }
             }
           },
-          "403": {
-            "description": "게시글 권한이 없습니다.",
+          "400": {
+            "description": "게시글을 찾을 수 없습니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -272,7 +272,17 @@
         },
         "responses": {
           "400": {
-            "description": "이미 수강신청 현황이 존재합니다.",
+            "description": "협상이 성공 상태가 아닙니다.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "존재하지 않는 협상입니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -287,16 +297,6 @@
               "*/*": {
                 "schema": {
                   "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponseCom.studeal.team.domain.enrollment.dto.EnrollmentResponseDTO"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "존재하지 않는 협상입니다.",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
                 }
               }
             }
@@ -545,8 +545,8 @@
           "required": true
         },
         "responses": {
-          "404": {
-            "description": "존재하지 않는 수강 신청입니다.",
+          "400": {
+            "description": "유효하지 않은 수강 신청 요청입니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -555,8 +555,8 @@
               }
             }
           },
-          "400": {
-            "description": "유효하지 않은 수강 신청 요청입니다.",
+          "404": {
+            "description": "존재하지 않는 수강 신청입니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -672,7 +672,7 @@
         ],
         "responses": {
           "400": {
-            "description": "올바르지 않은 검색 유형입니다.",
+            "description": "올바르지 않은 전공 과목입니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -805,22 +805,22 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": "OK, 성공",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponseJava.lang.Void"
-                }
-              }
-            }
-          },
           "404": {
             "description": "존재하지 않는 협상입니다.",
             "content": {
               "*/*": {
                 "schema": {
                   "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK, 성공",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponseJava.lang.Void"
                 }
               }
             }
@@ -1867,7 +1867,15 @@
           "major": {
             "type": "string",
             "description": "과목 분류",
-            "example": "수학"
+            "example": "수학",
+            "enum": [
+              "수학",
+              "과학",
+              "영어",
+              "국어",
+              "역사",
+              "코딩"
+            ]
           },
           "specMajor": {
             "type": "string",
