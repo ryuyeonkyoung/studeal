@@ -17,6 +17,7 @@ import com.studeal.team.domain.user.domain.entity.Teacher;
 import com.studeal.team.global.error.code.status.ErrorStatus;
 import com.studeal.team.global.error.exception.handler.NegotiationHandler;
 import com.studeal.team.global.error.exception.handler.UserHandler;
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -34,8 +35,21 @@ public class LessonCommandService {
     private final TeacherRepository teacherRepository;
     private final StudentRepository studentRepository;
     private final NegotiationRepository negotiationRepository;
+    private final EntityManager entityManager;
 
     public Lesson createLesson(LessonRequestDTO.CreateRequest request) {
+        // 배타적 락을 통해 협상 정보 조회
+        Negotiation negotiation = entityManager.createQuery(
+                        "SELECT n FROM Negotiation n WHERE n.negotiationId = :id",
+                        Negotiation.class)
+                .setParameter("id", request.getNegotiationId())
+                .setLockMode(jakarta.persistence.LockModeType.PESSIMISTIC_WRITE)
+                .getSingleResult();
+
+        if (negotiation == null) {
+            throw new NegotiationHandler(ErrorStatus.NEGOTIATION_NOT_FOUND);
+        }
+
         Lesson newLesson = LessonConverter.toEntity(request);
 
         // 선생님 연관관계 매핑
@@ -43,9 +57,7 @@ public class LessonCommandService {
                 .orElseThrow(() -> new UserHandler(ErrorStatus.USER_NOT_FOUND));
         newLesson.setTeacher(teacher);
 
-        // 협상 정보 연관관계 매핑
-        Negotiation negotiation = negotiationRepository.findById(request.getNegotiationId())
-                .orElseThrow(() -> new NegotiationHandler(ErrorStatus.NEGOTIATION_NOT_FOUND));
+        // 협상 정보 연관관계 매핑 - 이미 배타적 락이 걸린 객체 사용
         newLesson.setNegotiation(negotiation);
 
         // 현재 시간 설정

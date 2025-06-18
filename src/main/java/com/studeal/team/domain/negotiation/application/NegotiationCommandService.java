@@ -18,6 +18,7 @@ import com.studeal.team.global.error.code.status.ErrorStatus;
 import com.studeal.team.global.error.exception.handler.BoardHandler;
 import com.studeal.team.global.error.exception.handler.NegotiationHandler;
 import com.studeal.team.global.error.exception.handler.UserHandler;
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -35,6 +36,7 @@ public class NegotiationCommandService {
     private final StudentRepository studentRepository;
     private final BoardRepository boardRepository;
     private final EnrollmentCommandService enrollmentCommandService;
+    private final EntityManager entityManager;
 
     @PreAuthorize("hasRole('STUDENT')")
     public NegotiationResponseDTO initiateNegotiation(NegotiationRequestDTO.CreateRequest request, Long studentId) {
@@ -59,9 +61,19 @@ public class NegotiationCommandService {
         return NegotiationConverter.toResponseDTO(negotiationRepository.save(negotiation));
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public NegotiationResponseDTO updateNegotiationStatus(Long negotiationId, NegotiationStatus newStatus) {
-        Negotiation negotiation = negotiationRepository.findById(negotiationId)
-                .orElseThrow(() -> new NegotiationHandler(ErrorStatus.NEGOTIATION_NOT_FOUND));
+        // FOR UPDATE 구문을 통한 배타적 락 적용
+        Negotiation negotiation = entityManager.createQuery(
+                        "SELECT n FROM Negotiation n WHERE n.negotiationId = :id",
+                        Negotiation.class)
+                .setParameter("id", negotiationId)
+                .setLockMode(jakarta.persistence.LockModeType.PESSIMISTIC_WRITE)
+                .getSingleResult();
+
+        if (negotiation == null) {
+            throw new NegotiationHandler(ErrorStatus.NEGOTIATION_NOT_FOUND);
+        }
 
         log.info("Negotiation status updated: {} -> {}", negotiation.getNegotiationId(), newStatus);
 

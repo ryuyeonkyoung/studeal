@@ -10,6 +10,7 @@ import com.studeal.team.domain.user.domain.entity.Teacher;
 import com.studeal.team.global.error.code.status.ErrorStatus;
 import com.studeal.team.global.error.exception.handler.BoardHandler;
 import com.studeal.team.global.error.exception.handler.UserHandler;
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -29,6 +30,7 @@ public class BoardCommandService {
 
     private final BoardRepository boardRepository;
     private final TeacherRepository teacherRepository;
+    private final EntityManager entityManager;
 
     /**
      * 게시글 생성
@@ -40,9 +42,17 @@ public class BoardCommandService {
     // TODO: JPA 성능 최적화 필요 - N+1 문제 고려
     @PreAuthorize("hasRole('TEACHER')")
     public BoardResponseDTO.DetailResponse createBoard(Long teacherId, BoardRequestDTO.CreateRequest request) {
+        // 배타적 락을 통해 선생님 정보 조회
+        Teacher teacher = entityManager.createQuery(
+                        "SELECT t FROM Teacher t WHERE t.userId = :id",
+                        Teacher.class)
+                .setParameter("id", teacherId)
+                .setLockMode(jakarta.persistence.LockModeType.PESSIMISTIC_WRITE)
+                .getSingleResult();
 
-        Teacher teacher = teacherRepository.findById(teacherId)
-                .orElseThrow(() -> new UserHandler(ErrorStatus.USER_NOT_FOUND));
+        if (teacher == null) {
+            throw new UserHandler(ErrorStatus.USER_NOT_FOUND);
+        }
 
         // 게시글 생성 및 저장
         AuctionBoard auctionBoard = BoardConverter.toEntity(request, teacher);
