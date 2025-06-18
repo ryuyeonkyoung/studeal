@@ -39,6 +39,7 @@ public class NegotiationCommandService {
     private final EntityManager entityManager;
 
     @PreAuthorize("hasRole('STUDENT')")
+    @Transactional(propagation = Propagation.REQUIRED, timeout = 10)
     public NegotiationResponseDTO initiateNegotiation(NegotiationRequestDTO.CreateRequest request, Long studentId) {
 
         Student student = studentRepository.findById(studentId)
