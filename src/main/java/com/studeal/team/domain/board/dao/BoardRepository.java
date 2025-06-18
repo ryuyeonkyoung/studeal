@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface BoardRepository extends JpaRepository<AuctionBoard, Long> {
+public interface BoardRepository extends JpaRepository<AuctionBoard, Long>, BoardRepositoryCustom {
 
     /**
      * 선생님 ID로 게시글 목록 조회 (페이징)
