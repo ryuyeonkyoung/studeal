@@ -6,7 +6,7 @@
     "contact": {
       "name": "Studeal Team"
     },
-    "version": "4.4.0"
+    "version": "4.5.0"
   },
   "servers": [
     {
@@ -64,7 +64,7 @@
         ],
         "responses": {
           "400": {
-            "description": "유효하지 않은 가격 제안 요청입니다.",
+            "description": "게시글을 찾을 수 없습니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -115,8 +115,8 @@
           "required": true
         },
         "responses": {
-          "403": {
-            "description": "게시글 권한이 없습니다.",
+          "400": {
+            "description": "게시글을 찾을 수 없습니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -125,8 +125,8 @@
               }
             }
           },
-          "400": {
-            "description": "게시글을 찾을 수 없습니다.",
+          "403": {
+            "description": "게시글 권한이 없습니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -167,8 +167,8 @@
           }
         ],
         "responses": {
-          "403": {
-            "description": "게시글 권한이 없습니다.",
+          "400": {
+            "description": "게시글을 찾을 수 없습니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -177,8 +177,8 @@
               }
             }
           },
-          "400": {
-            "description": "게시글을 찾을 수 없습니다.",
+          "403": {
+            "description": "게시글 권한이 없습니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -219,6 +219,16 @@
           "required": true
         },
         "responses": {
+          "400": {
+            "description": "사용자가 없습니다.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
+                }
+              }
+            }
+          },
           "403": {
             "description": "해당 사용자는 학생이 아닙니다.",
             "content": {
@@ -235,16 +245,6 @@
               "*/*": {
                 "schema": {
                   "$ref": "#/components/schemas/com.studeal.team.domain.negotiation.dto.NegotiationResponseDTO"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "유효하지 않은 가격 제안 요청입니다.",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
                 }
               }
             }
@@ -271,18 +271,8 @@
           "required": true
         },
         "responses": {
-          "404": {
-            "description": "존재하지 않는 협상입니다.",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
-                }
-              }
-            }
-          },
           "400": {
-            "description": "존재하지 않는 학생입니다.",
+            "description": "이미 수강신청 현황이 존재합니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -297,6 +287,16 @@
               "*/*": {
                 "schema": {
                   "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponseCom.studeal.team.domain.enrollment.dto.EnrollmentResponseDTO"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "존재하지 않는 협상입니다.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
                 }
               }
             }
@@ -324,7 +324,7 @@
         },
         "responses": {
           "400": {
-            "description": "선생님을 찾을 수 없습니다.",
+            "description": "게시글을 찾을 수 없습니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -365,8 +365,8 @@
           "required": true
         },
         "responses": {
-          "403": {
-            "description": "유효하지 않은 사용자 역할입니다.",
+          "400": {
+            "description": "유효한 이메일 형식이 아닙니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -375,8 +375,8 @@
               }
             }
           },
-          "400": {
-            "description": "유효한 이메일 형식이 아닙니다.",
+          "403": {
+            "description": "유효하지 않은 사용자 역할입니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -492,22 +492,22 @@
           "required": true
         },
         "responses": {
-          "404": {
-            "description": "존재하지 않는 협상입니다.",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
-                }
-              }
-            }
-          },
           "200": {
             "description": "OK, 성공",
             "content": {
               "*/*": {
                 "schema": {
                   "$ref": "#/components/schemas/com.studeal.team.domain.negotiation.dto.NegotiationResponseDTO"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "존재하지 않는 협상입니다.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
                 }
               }
             }
@@ -545,8 +545,8 @@
           "required": true
         },
         "responses": {
-          "400": {
-            "description": "유효하지 않은 수강 신청 요청입니다.",
+          "404": {
+            "description": "존재하지 않는 수강 신청입니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -555,8 +555,8 @@
               }
             }
           },
-          "404": {
-            "description": "존재하지 않는 수강 신청입니다.",
+          "400": {
+            "description": "유효하지 않은 수강 신청 요청입니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -587,8 +587,8 @@
         "description": "로그인한 사용자의 마이페이지 정보를 조회합니다. 사용자 역할에 따라 다른 정보가 제공됩니다.",
         "operationId": "getMyPageInfo",
         "responses": {
-          "403": {
-            "description": "유효하지 않은 사용자 역할입니다.",
+          "400": {
+            "description": "사용자가 없습니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -597,8 +597,8 @@
               }
             }
           },
-          "400": {
-            "description": "사용자가 없습니다.",
+          "403": {
+            "description": "유효하지 않은 사용자 역할입니다.",
             "content": {
               "*/*": {
                 "schema": {
@@ -805,22 +805,22 @@
           }
         ],
         "responses": {
-          "404": {
-            "description": "존재하지 않는 협상입니다.",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
-                }
-              }
-            }
-          },
           "200": {
             "description": "OK, 성공",
             "content": {
               "*/*": {
                 "schema": {
                   "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponseJava.lang.Void"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "존재하지 않는 협상입니다.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/com.studeal.team.global.error.ApiResponse"
                 }
               }
             }
