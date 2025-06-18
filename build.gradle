@@ -72,6 +72,10 @@ dependencies {
     // 테스트 관련
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    // ArchUnit - 아키텍처 테스트
+    testImplementation 'com.tngtech.archunit:archunit:1.2.1'
+    testImplementation 'com.tngtech.archunit:archunit-junit5:1.2.1'
 }
 
 // Querydsl 설정 대체 (JPAAnnotationProcessor 문제 해결)
