@@ -63,7 +63,7 @@ public class MyPageResponseDTO {
     public static class StudentNegotiatingLessonInfo {
         private Long boardId;
         private String title;
-        private String status;
+        private Long highestPrice; // 학생이 제안한 최고 가격
     }
 
     /**

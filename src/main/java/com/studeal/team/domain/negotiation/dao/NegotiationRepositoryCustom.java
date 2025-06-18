@@ -1,6 +1,7 @@
 package com.studeal.team.domain.negotiation.dao;
 
 import com.studeal.team.domain.board.domain.AuctionBoard;
+import com.studeal.team.domain.board.dto.BoardResponseDTO;
 import com.studeal.team.domain.negotiation.domain.Negotiation;
 
 import java.util.List;
@@ -23,6 +24,15 @@ public interface NegotiationRepositoryCustom {
      * Querydsl 최적화 버전
      */
     List<AuctionBoard> findBoardsByStudentId(Long studentId);
+
+    /**
+     * 특정 학생이 참여한 협상 중인 게시글 목록과 각 게시글별 최고 제안 가격을 함께 조회
+     * 게시글당 가장 높은 가격만 포함
+     *
+     * @param studentId 학생 ID
+     * @return 게시글과 최고 제안 가격 정보가 담긴 DTO 리스트
+     */
+    List<BoardResponseDTO.BoardWithHighestPriceDTO> findBoardsWithHighestPriceByStudentId(Long studentId);
 
     /**
      * 협상 통계 정보 조회 (미사용)

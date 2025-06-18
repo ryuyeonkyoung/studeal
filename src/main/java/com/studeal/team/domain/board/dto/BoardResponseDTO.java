@@ -434,4 +434,40 @@ public class BoardResponseDTO {
         @Schema(description = "현재 최고 입찰가", example = "60000")
         private Long highestBid;
     }
+
+    /**
+     * 게시글과 최고 제안 가격 정보를 담는 DTO
+     */
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Schema(name = "BoardWithHighestPriceDTO", description = "게시글과 최고 제안 가격 정보")
+    public static class BoardWithHighestPriceDTO {
+        @Schema(description = "게시글 정보")
+        private AuctionBoardInfo board;
+
+        @Schema(description = "최고 제안 가격", example = "60000")
+        private Long highestPrice;
+
+        /**
+         * 게시글 기본 정보 DTO
+         */
+        @Getter
+        @Builder
+        @NoArgsConstructor
+        @AllArgsConstructor
+        @Schema(name = "AuctionBoardInfo", description = "게시글 기본 정보")
+        public static class AuctionBoardInfo {
+            @Schema(description = "게시글 ID", example = "1")
+            private Long boardId;
+
+            @Schema(description = "게시글 제목", example = "고등 수학 과외 모집합니다")
+            private String title;
+
+            @Schema(description = "과목", example = "MATH")
+            private MajorSubject major;
+        }
+    }
 }
+
