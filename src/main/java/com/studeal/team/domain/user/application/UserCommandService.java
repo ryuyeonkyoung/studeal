@@ -33,7 +33,7 @@ public class UserCommandService {
     private final JwtTokenProvider jwtTokenProvider;
     private final EntityManager entityManager;
 
-    @Transactional(timeout = 1, propagation = Propagation.REQUIRED)
+    @Transactional(timeout = 2, propagation = Propagation.REQUIRED)
     public UserResponseDTO registerUser(UserRequestDTO.SignupRequest request) {
         // 배타적 락을 통해 이메일 중복 체크
         // 동일한 이메일로 다른 트랜잭션에서 동시에 사용자를 등록하려는 경우 방지
