@@ -4,82 +4,99 @@ import com.studeal.team.domain.board.domain.AuctionBoard;
 import com.studeal.team.domain.negotiation.domain.Negotiation;
 import com.studeal.team.domain.user.domain.entity.Teacher;
 import com.studeal.team.global.common.domain.BaseEntity;
-import jakarta.persistence.*;
-import lombok.*;
-
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.Table;
 import java.util.HashSet;
 import java.util.Set;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "LESSONS")
 @Getter
 @Setter
-@NoArgsConstructor(access=AccessLevel.PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
 public class Lesson extends BaseEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "lessons_seq_gen")
-    @SequenceGenerator(name = "lessons_seq_gen", sequenceName = "LESSONS_SEQ", allocationSize = 1)
-    private Long lessonId;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "auction_board_id")
-    private AuctionBoard auctionBoard;
+  @Id
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "lessons_seq_gen")
+  @SequenceGenerator(name = "lessons_seq_gen", sequenceName = "LESSONS_SEQ", allocationSize = 1)
+  private Long lessonId;
 
-    @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<LessonPresence> lessonPresences = new HashSet<>();
+  @OneToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "auction_board_id")
+  private AuctionBoard auctionBoard;
 
-    @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Grade> grades = new HashSet<>();
+  @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL, orphanRemoval = true)
+  private Set<LessonPresence> lessonPresences = new HashSet<>();
 
-    @OneToMany
-    private Set<LessonImage> lessonImages = new HashSet<>();
+  @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL, orphanRemoval = true)
+  private Set<Grade> grades = new HashSet<>();
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "teacher_id")
-    private Teacher teacher;
+  @OneToMany
+  private Set<LessonImage> lessonImages = new HashSet<>();
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "negotiation_id")
-    private Negotiation negotiation;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "teacher_id")
+  private Teacher teacher;
 
-    @Column(length = 200, nullable = false)
-    private String title;
+  @OneToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "negotiation_id")
+  private Negotiation negotiation;
 
-    @Column(length = 1000)
-    private String description;
+  @Column(length = 200, nullable = false)
+  private String title;
 
-    @Column(nullable = false)
-    private Long price;
+  @Column(length = 1000)
+  private String description;
 
-    public void addLessonPresence(LessonPresence lessonPresence) {
-        this.lessonPresences.add(lessonPresence);
-        lessonPresence.setLesson(this);
-    }
+  @Column(nullable = false)
+  private Long price;
 
-    public void removeLessonPresence(LessonPresence lessonPresence) {
-        this.lessonPresences.remove(lessonPresence);
-        lessonPresence.setLesson(null);
-    }
+  public void addLessonPresence(LessonPresence lessonPresence) {
+    this.lessonPresences.add(lessonPresence);
+    lessonPresence.setLesson(this);
+  }
 
-    public void addGrade(Grade grade) {
-        this.grades.add(grade);
-        grade.setLesson(this);
-    }
+  public void removeLessonPresence(LessonPresence lessonPresence) {
+    this.lessonPresences.remove(lessonPresence);
+    lessonPresence.setLesson(null);
+  }
 
-    public void removeGrade(Grade grade) {
-        this.grades.remove(grade);
-        grade.setLesson(null);
-    }
+  public void addGrade(Grade grade) {
+    this.grades.add(grade);
+    grade.setLesson(this);
+  }
 
-    public void addLessonImage(LessonImage lessonImage) {
-        this.lessonImages.add(lessonImage);
-        lessonImage.setLesson(this);
-    }
+  public void removeGrade(Grade grade) {
+    this.grades.remove(grade);
+    grade.setLesson(null);
+  }
 
-    public void removeLessonImage(LessonImage lessonImage) {
-        this.lessonImages.remove(lessonImage);
-        lessonImage.setLesson(null);
-    }
+  public void addLessonImage(LessonImage lessonImage) {
+    this.lessonImages.add(lessonImage);
+    lessonImage.setLesson(this);
+  }
+
+  public void removeLessonImage(LessonImage lessonImage) {
+    this.lessonImages.remove(lessonImage);
+    lessonImage.setLesson(null);
+  }
 }

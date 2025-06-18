@@ -8,49 +8,48 @@ import com.studeal.team.domain.user.dto.UserRequestDTO;
 import com.studeal.team.domain.user.dto.UserResponseDTO;
 
 /**
- * User 엔티티와 DTO 간의 변환을 담당하는 유틸리티 클래스
- * 이 클래스는 인스턴스화할 수 없습니다.
+ * User 엔티티와 DTO 간의 변환을 담당하는 유틸리티 클래스 이 클래스는 인스턴스화할 수 없습니다.
  */
 public final class UserConverter {
 
-    /**
-     * 유틸리티 클래스의 인스턴스화를 방지하기 위한 private 생성자
-     */
-    private UserConverter() {
-        throw new AssertionError("유틸리티 클래스는 인스턴스화할 수 없습니다.");
-    }
+  /**
+   * 유틸리티 클래스의 인스턴스화를 방지하기 위한 private 생성자
+   */
+  private UserConverter() {
+    throw new AssertionError("유틸리티 클래스는 인스턴스화할 수 없습니다.");
+  }
 
-    public static Student toStudentEntity(UserRequestDTO.SignupRequest request) {
-        return Student.builder()
-                .name(request.getName())
-                .email(request.getEmail())
-                .password(request.getPassword())
-                .bio(request.getBio())
-                .role(UserRole.STUDENT)
-                .build();
-    }
+  public static Student toStudentEntity(UserRequestDTO.SignupRequest request) {
+    return Student.builder()
+        .name(request.getName())
+        .email(request.getEmail())
+        .password(request.getPassword())
+        .bio(request.getBio())
+        .role(UserRole.STUDENT)
+        .build();
+  }
 
-    public static Teacher toTeacherEntity(UserRequestDTO.SignupRequest request) {
-        return Teacher.builder()
-                .name(request.getName())
-                .email(request.getEmail())
-                .password(request.getPassword())
-                .bio(request.getBio())
-                .major(request.getMajor())
-                .role(UserRole.TEACHER)
-                .rating(0.0f)
-                .build();
-    }
+  public static Teacher toTeacherEntity(UserRequestDTO.SignupRequest request) {
+    return Teacher.builder()
+        .name(request.getName())
+        .email(request.getEmail())
+        .password(request.getPassword())
+        .bio(request.getBio())
+        .major(request.getMajor())
+        .role(UserRole.TEACHER)
+        .rating(0.0f)
+        .build();
+  }
 
-    public static UserResponseDTO toResponseDTO(User user) {
-        return UserResponseDTO.builder()
-                .userId(user.getUserId())
-                .name(user.getName())
-                .email(user.getEmail())
-                .role(user.getRole())
-                .bio(user.getBio())
-                .major(user instanceof Teacher ? ((Teacher) user).getMajor() : null)
-                .build();
-    }
+  public static UserResponseDTO toResponseDTO(User user) {
+    return UserResponseDTO.builder()
+        .userId(user.getUserId())
+        .name(user.getName())
+        .email(user.getEmail())
+        .role(user.getRole())
+        .bio(user.getBio())
+        .major(user instanceof Teacher ? ((Teacher) user).getMajor() : null)
+        .build();
+  }
 }
 

@@ -2,10 +2,10 @@ package com.studeal.team.domain.user.dto;
 
 import com.studeal.team.domain.user.domain.entity.enums.MajorSubject;
 import com.studeal.team.domain.user.domain.entity.enums.UserRole;
+import com.studeal.team.domain.user.domain.validation.ValidMajorSubject;
 import com.studeal.team.global.validation.annotation.StrictEmail;
 import com.studeal.team.global.validation.annotation.StrongPassword;
 import com.studeal.team.global.validation.annotation.UniqueEmail;
-import com.studeal.team.domain.user.domain.validation.ValidMajorSubject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -14,66 +14,67 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * 사용자 요청 DTO 클래스
- * 모든 사용자 관련 요청 DTO들의 컨테이너입니다.
+ * 사용자 요청 DTO 클래스 모든 사용자 관련 요청 DTO들의 컨테이너입니다.
  */
 @Schema(description = "사용자 요청 DTO")
 public class UserRequestDTO {
 
-    /**
-     * 회원가입 요청 DTO
-     */
-    @Getter
-    @Setter
-    @ValidMajorSubject
-    @Schema(description = "회원가입 요청")
-    public static class SignupRequest {
-        @NotBlank
-        @Size(max = 50)
-        @Schema(description = "사용자 이름", example = "홍길동", required = true)
-        private String name;
+  /**
+   * 회원가입 요청 DTO
+   */
+  @Getter
+  @Setter
+  @ValidMajorSubject
+  @Schema(description = "회원가입 요청")
+  public static class SignupRequest {
 
-        @StrictEmail
-        @NotBlank
-        @UniqueEmail
-        @Size(max = 100)
-        @Schema(description = "이메일", example = "user@example.com", required = true)
-        private String email;
+    @NotBlank
+    @Size(max = 50)
+    @Schema(description = "사용자 이름", example = "홍길동", required = true)
+    private String name;
 
-        @NotBlank
-        @StrongPassword
-        @Size(max = 255)
-        @Schema(description = "비밀번호", example = "StrongPassword1!", required = true)
-        private String password;
+    @StrictEmail
+    @NotBlank
+    @UniqueEmail
+    @Size(max = 100)
+    @Schema(description = "이메일", example = "user@example.com", required = true)
+    private String email;
 
-        @NotNull
-        @Schema(description = "사용자 역할", example = "학생",
-               allowableValues = {"학생", "선생님"}, required = true)
-        private UserRole role;
+    @NotBlank
+    @StrongPassword
+    @Size(max = 255)
+    @Schema(description = "비밀번호", example = "StrongPassword1!", required = true)
+    private String password;
 
-        @Size(max = 1000)
-        @Schema(description = "자기소개", example = "안녕하세요, 대학생 홍길동입니다.")
-        private String bio;
+    @NotNull
+    @Schema(description = "사용자 역할", example = "학생",
+        allowableValues = {"학생", "선생님"}, required = true)
+    private UserRole role;
 
-        // Student 필드
-        @Schema(description = "전공 과목", example = "수학",
-               allowableValues = {"수학", "과학", "영어", "국어", "역사", "코딩"})
-        private MajorSubject major;
-    }
+    @Size(max = 1000)
+    @Schema(description = "자기소개", example = "안녕하세요, 대학생 홍길동입니다.")
+    private String bio;
 
-    /**
-     * 로그인 요청 DTO
-     */
-    @Getter
-    @Setter
-    @Schema(name = "LoginRequest", description = "로그인 요청")
-    public static class LoginRequest {
-        @NotBlank(message = "이메일은 필수입니다")
-        @Schema(description = "이메일", example = "teacher@example.com", required = true)
-        private String email;
+    // Student 필드
+    @Schema(description = "전공 과목", example = "수학",
+        allowableValues = {"수학", "과학", "영어", "국어", "역사", "코딩"})
+    private MajorSubject major;
+  }
 
-        @NotBlank(message = "비밀번호는 필수입니다")
-        @Schema(description = "비밀번호", example = "StrongPassword1!", required = true)
-        private String password;
-    }
+  /**
+   * 로그인 요청 DTO
+   */
+  @Getter
+  @Setter
+  @Schema(name = "LoginRequest", description = "로그인 요청")
+  public static class LoginRequest {
+
+    @NotBlank(message = "이메일은 필수입니다")
+    @Schema(description = "이메일", example = "teacher@example.com", required = true)
+    private String email;
+
+    @NotBlank(message = "비밀번호는 필수입니다")
+    @Schema(description = "비밀번호", example = "StrongPassword1!", required = true)
+    private String password;
+  }
 }
