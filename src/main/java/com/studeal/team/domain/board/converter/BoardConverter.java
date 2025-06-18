@@ -197,6 +197,7 @@ public class BoardConverter {
 
     /**
      * AuctionBoard 엔티티와 최고 입찰가를 SearchItemResponse DTO로 변환
+     * 최고 입찰가가 null인 경우 0으로 설정
      */
     public static BoardResponseDTO.SearchItemResponse toSearchItemResponse(AuctionBoard auctionBoard, Long highestBid) {
         return BoardResponseDTO.SearchItemResponse.builder()
@@ -205,7 +206,7 @@ public class BoardConverter {
                 .major(auctionBoard.getMajor())
                 .specMajor(auctionBoard.getSpecMajor())
                 .teacherName(auctionBoard.getTeacher() != null ? auctionBoard.getTeacher().getName() : "Unknown")
-                .highestBid(highestBid)
+                .highestBid(highestBid != null ? highestBid : 0L) // null이면 0 반환
                 .build();
     }
 
