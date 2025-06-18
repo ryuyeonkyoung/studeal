@@ -64,7 +64,7 @@ public class UserCommandService {
         Long userId = userDetails.getUserId();
 
         // 사용자 역할 정보 가져오기
-        String userRole = userDetails.getRole().toString();
+        String userRole = userDetails.getRole().getKoreanName();
 
         // JWT 토큰 생성 (userId 포함)
         String accessToken = jwtTokenProvider.createAccessToken(authentication, userId);

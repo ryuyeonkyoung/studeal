@@ -78,7 +78,7 @@ public class UserQueryService {
         MyPageResponseDTO.UserInfo userInfo = MyPageResponseDTO.UserInfo.builder()
                 .name(teacher.getName())
                 .email(teacher.getEmail())
-                .role(teacher.getRole().toString())
+                .role(teacher.getRole().getKoreanName())
                 .build();
 
         // 개설한 수업 목록 조회 (enrollment 정보를 통해 가져옴)
@@ -89,7 +89,7 @@ public class UserQueryService {
                 .map(enrollment -> MyPageResponseDTO.OpenedLessonInfo.builder()
                         .enrollmentId(enrollment.getEnrollmentId())
                         .boardTitle(enrollment.getNegotiation().getAuctionBoard().getTitle())
-                        .status(enrollment.getStatus().toString())
+                        .status(enrollment.getStatus().getKoreanName())
                         .studentName(enrollment.getStudent().getName())  // 등록한 학생의 이름
                         .build())
                 .collect(Collectors.toList());
@@ -128,7 +128,7 @@ public class UserQueryService {
         MyPageResponseDTO.UserInfo userInfo = MyPageResponseDTO.UserInfo.builder()
                 .name(student.getName())
                 .email(student.getEmail())
-                .role(student.getRole().toString())
+                .role(student.getRole().getKoreanName())
                 .build();
 
         // 수강 중인 수업 목록 조회 (enrollment 정보를 통해 가져옴)
@@ -137,7 +137,7 @@ public class UserQueryService {
                 .map(enrollment -> MyPageResponseDTO.EnrolledLessonInfo.builder()
                         .enrollmentId(enrollment.getEnrollmentId())
                         .boardTitle(enrollment.getNegotiation().getAuctionBoard().getTitle()) // TODO: null 오류
-                        .status(enrollment.getStatus().toString())
+                        .status(enrollment.getStatus().getKoreanName())
                         .build())
                 .collect(Collectors.toList());
 
