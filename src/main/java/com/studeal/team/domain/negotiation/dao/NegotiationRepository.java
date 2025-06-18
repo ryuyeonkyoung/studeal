@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface NegotiationRepository extends JpaRepository<Negotiation, Long> {
+public interface NegotiationRepository extends JpaRepository<Negotiation, Long>, NegotiationRepositoryCustom {
     /**
      * 게시글 ID로 관련된 모든 협상 정보 조회
      * 학생 정보도 함께 조회 (Eager 로딩)
