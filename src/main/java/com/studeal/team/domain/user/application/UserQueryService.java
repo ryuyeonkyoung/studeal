@@ -136,7 +136,7 @@ public class UserQueryService {
         List<MyPageResponseDTO.EnrolledLessonInfo> enrolledLessonInfos = enrollments.stream()
                 .map(enrollment -> MyPageResponseDTO.EnrolledLessonInfo.builder()
                         .enrollmentId(enrollment.getEnrollmentId())
-                        .boardTitle(enrollment.getNegotiation().getAuctionBoard().getTitle())
+                        .boardTitle(enrollment.getNegotiation().getAuctionBoard().getTitle()) // TODO: null 오류
                         .status(enrollment.getStatus().toString())
                         .build())
                 .collect(Collectors.toList());
