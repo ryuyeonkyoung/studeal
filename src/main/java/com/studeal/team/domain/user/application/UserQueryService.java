@@ -2,6 +2,7 @@ package com.studeal.team.domain.user.application;
 
 import com.studeal.team.domain.board.dao.BoardRepository;
 import com.studeal.team.domain.board.domain.AuctionBoard;
+import com.studeal.team.domain.board.dto.BoardResponseDTO;
 import com.studeal.team.domain.enrollment.dao.EnrollmentRepository;
 import com.studeal.team.domain.enrollment.domain.Enrollment;
 import com.studeal.team.domain.lesson.dao.LessonRepository;
@@ -142,12 +143,13 @@ public class UserQueryService {
                         .build())
                 .collect(Collectors.toList());
 
-        // 협상 중인 수업 목록 조회 (학생이 참여 중인 협상 정보)
-        List<AuctionBoard> boards = negotiationRepository.findBoardsByStudentId(studentId);
-        List<MyPageResponseDTO.StudentNegotiatingLessonInfo> negotiatingLessonInfos = boards.stream()
-                .map(board -> MyPageResponseDTO.StudentNegotiatingLessonInfo.builder()
-                        .boardId(board.getBoardId())
-                        .title(board.getTitle())
+        // 협상 중인 수업 목록 조회 - 각 게시글당 최고 제안 가격만 포함 (Querydsl 최적화 버전 사용)
+        List<BoardResponseDTO.BoardWithHighestPriceDTO> boardsWithPrice = negotiationRepository.findBoardsWithHighestPriceByStudentId(studentId);
+        List<MyPageResponseDTO.StudentNegotiatingLessonInfo> negotiatingLessonInfos = boardsWithPrice.stream()
+                .map(boardWithPrice -> MyPageResponseDTO.StudentNegotiatingLessonInfo.builder()
+                        .boardId(boardWithPrice.getBoard().getBoardId())
+                        .title(boardWithPrice.getBoard().getTitle())
+                        .highestPrice(boardWithPrice.getHighestPrice()) // 최고 제안 가격 추가
                         .build())
                 .collect(Collectors.toList());
 

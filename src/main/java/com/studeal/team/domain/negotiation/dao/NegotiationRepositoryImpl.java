@@ -4,11 +4,13 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.studeal.team.domain.board.domain.AuctionBoard;
 import com.studeal.team.domain.board.domain.QAuctionBoard;
+import com.studeal.team.domain.board.dto.BoardResponseDTO;
 import com.studeal.team.domain.negotiation.domain.Negotiation;
 import com.studeal.team.domain.negotiation.domain.QNegotiation;
 import com.studeal.team.domain.user.domain.entity.QStudent;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -57,6 +59,55 @@ public class NegotiationRepositoryImpl extends QuerydslRepositorySupport impleme
                 .join(negotiation.auctionBoard, board).fetchJoin()
                 .where(negotiation.student.userId.eq(studentId))
                 .fetch();
+    }
+
+    /**
+     * 특정 학생이 참여한 협상 중인 게시글 목록과 각 게시글별 최고 제안 가격을 함께 조회
+     * 각 게시글당 학생이 제안한 가장 높은 가격만 반환
+     * 오라클 GROUP BY 규칙을 준수하는 구현 방식으로 변경
+     */
+    @Override
+    public List<BoardResponseDTO.BoardWithHighestPriceDTO> findBoardsWithHighestPriceByStudentId(Long studentId) {
+        QNegotiation negotiation = QNegotiation.negotiation;
+        QAuctionBoard board = QAuctionBoard.auctionBoard;
+
+        // 먼저 학생이 참여한 모든 게시글 조회
+        List<AuctionBoard> boards = queryFactory
+                .selectDistinct(board)
+                .from(negotiation)
+                .join(negotiation.auctionBoard, board)
+                .where(negotiation.student.userId.eq(studentId))
+                .fetch();
+
+        // 각 게시글별 최고 제안 가격을 별도로 조회
+        List<BoardResponseDTO.BoardWithHighestPriceDTO> result = new ArrayList<>();
+        for (AuctionBoard auctionBoard : boards) {
+            // 해당 게시글에 대한 학생의 최고 제안가 조회
+            Long highestPrice = queryFactory
+                    .select(negotiation.proposedPrice.max())
+                    .from(negotiation)
+                    .where(negotiation.student.userId.eq(studentId)
+                            .and(negotiation.auctionBoard.boardId.eq(auctionBoard.getBoardId())))
+                    .fetchOne();
+
+            // DTO 생성
+            BoardResponseDTO.BoardWithHighestPriceDTO.AuctionBoardInfo boardInfo =
+                    BoardResponseDTO.BoardWithHighestPriceDTO.AuctionBoardInfo.builder()
+                            .boardId(auctionBoard.getBoardId())
+                            .title(auctionBoard.getTitle())
+                            .major(auctionBoard.getMajor())
+                            .build();
+
+            BoardResponseDTO.BoardWithHighestPriceDTO dto =
+                    BoardResponseDTO.BoardWithHighestPriceDTO.builder()
+                            .board(boardInfo)
+                            .highestPrice(highestPrice)
+                            .build();
+
+            result.add(dto);
+        }
+
+        return result;
     }
 
     /**
