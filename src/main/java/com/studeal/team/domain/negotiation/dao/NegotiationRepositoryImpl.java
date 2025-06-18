@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
-/**
+/*
  * NegotiationRepositoryCustom 인터페이스 구현체 Querydsl을 활용한 쿼리 최적화
  */
 public class NegotiationRepositoryImpl extends QuerydslRepositorySupport implements
@@ -43,7 +43,7 @@ public class NegotiationRepositoryImpl extends QuerydslRepositorySupport impleme
         .fetch();
   }
 
-  /**
+  /*
    * 특정 학생이 참여한 협상 중인 게시글 목록 조회 - 최적화
    */
   @Override
@@ -59,7 +59,7 @@ public class NegotiationRepositoryImpl extends QuerydslRepositorySupport impleme
         .fetch();
   }
 
-  /**
+  /*
    * 특정 학생이 참여한 협상 중인 게시글 목록과 각 게시글별 최고 제안 가격을 함께 조회 각 게시글당 학생이 제안한 가장 높은 가격만 반환 오라클 GROUP BY 규칙을
    * 준수하는 구현 방식으로 변경
    */
@@ -108,7 +108,7 @@ public class NegotiationRepositoryImpl extends QuerydslRepositorySupport impleme
     return result;
   }
 
-  /**
+  /*
    * 협상 통계 정보 조회 (미사용)
    */
   @Override
