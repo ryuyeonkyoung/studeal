@@ -269,7 +269,7 @@ public class BoardResponseDTO {
         private Long id;
 
         @Schema(description = "과목 분류", example = "수학")
-        private String major;
+        private MajorSubject major;
 
         @Schema(description = "구체적인 과외 주제", example = "고등 수학 - 미적분")
         private String specMajor;

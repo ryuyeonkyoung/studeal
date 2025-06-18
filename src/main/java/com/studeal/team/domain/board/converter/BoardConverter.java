@@ -157,9 +157,7 @@ public class BoardConverter {
      * 커서 기반 페이징 API용 게시글 항목
      */
     public static BoardResponseDTO.CursorBoardItem toCursorBoardItem(AuctionBoard auctionBoard) {
-        String majorString = auctionBoard.getMajor() != null ?
-                String.valueOf(auctionBoard.getMajor()) : "기타";
-
+        // major 필드를 직접 전달하여 JSON 변환 시 한글명이 사용되도록 수정
         String teacherName = auctionBoard.getTeacher() != null ?
                 auctionBoard.getTeacher().getName() : "Unknown";
 
@@ -168,7 +166,7 @@ public class BoardConverter {
 
         return BoardResponseDTO.CursorBoardItem.builder()
                 .id(auctionBoard.getBoardId())
-                .major(majorString)
+                .major(auctionBoard.getMajor()) // String.valueOf() 제거하여 Enum 객체를 그대로 전달
                 .specMajor(auctionBoard.getSpecMajor())
                 .title(auctionBoard.getTitle())
                 .teacher(teacherName)

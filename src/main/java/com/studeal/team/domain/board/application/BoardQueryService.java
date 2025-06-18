@@ -297,7 +297,7 @@ public class BoardQueryService {
         switch (searchType.toUpperCase()) {
             case "MAJOR":
                 try {
-                    MajorSubject major = MajorSubject.valueOf(keyword.toUpperCase());
+                    MajorSubject major = MajorSubject.fromKoreanName(keyword);
                     boardPage = boardRepository.searchByMajor(major, pageable);
                 } catch (IllegalArgumentException e) {
                     throw new BoardHandler(ErrorStatus.BOARD_SEARCH_INVALID_MAJOR);
