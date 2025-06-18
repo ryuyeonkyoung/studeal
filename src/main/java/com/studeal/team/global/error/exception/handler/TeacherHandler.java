@@ -4,7 +4,8 @@ import com.studeal.team.global.error.code.status.ErrorStatus;
 import com.studeal.team.global.error.exception.GeneralException;
 
 public class TeacherHandler extends GeneralException {
-    public TeacherHandler(ErrorStatus status) {
-        super(status);
-    }
+
+  public TeacherHandler(ErrorStatus status) {
+    super(status);
+  }
 }

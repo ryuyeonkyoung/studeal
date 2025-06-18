@@ -13,14 +13,14 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class ExistTeacherValidator implements ConstraintValidator<ExistTeacher, Long> {
 
-    private final TeacherRepository teacherRepository;
+  private final TeacherRepository teacherRepository;
 
-    @Override
-    public boolean isValid(Long teacherId, ConstraintValidatorContext context) {
-        if (teacherId == null) {
-            return false;
-        }
-
-        return teacherRepository.existsById(teacherId);
+  @Override
+  public boolean isValid(Long teacherId, ConstraintValidatorContext context) {
+    if (teacherId == null) {
+      return false;
     }
+
+    return teacherRepository.existsById(teacherId);
+  }
 }

@@ -10,26 +10,28 @@ import lombok.Setter;
 @Schema(description = "협상 요청 DTO")
 public class NegotiationRequestDTO {
 
-    @Getter
-    @Setter
-    @Schema(description = "협상 생성 요청")
-    public static class CreateRequest {
-        @NotNull
-        @Positive
-        @Schema(description = "제안 가격", example = "50000", required = true)
-        private Long proposedPrice;
+  @Getter
+  @Setter
+  @Schema(description = "협상 생성 요청")
+  public static class CreateRequest {
 
-        @NotNull
-        @Schema(description = "경매 게시판 ID", example = "41", required = true)
-        private Long boardId;
-    }
+    @NotNull
+    @Positive
+    @Schema(description = "제안 가격", example = "50000", required = true)
+    private Long proposedPrice;
 
-    @Getter
-    @Setter
-    @Schema(description = "협상 상태 변경 요청")
-    public static class UpdateStatusRequest {
-        @NotNull
-        @Schema(description = "변경할 협상 상태", example = "ACCEPTED", required = true)
-        private NegotiationStatus status;
-    }
+    @NotNull
+    @Schema(description = "경매 게시판 ID", example = "41", required = true)
+    private Long boardId;
+  }
+
+  @Getter
+  @Setter
+  @Schema(description = "협상 상태 변경 요청")
+  public static class UpdateStatusRequest {
+
+    @NotNull
+    @Schema(description = "변경할 협상 상태", example = "ACCEPTED", required = true)
+    private NegotiationStatus status;
+  }
 }
