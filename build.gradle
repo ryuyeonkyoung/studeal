@@ -104,9 +104,14 @@ tasks.named('test') {
 // Checkstyle 설정
 checkstyle {
     toolVersion = '10.12.5'
-    configFile = file('config/checkstyle/google_checks.xml')
+    configFile = file('config/checkstyle/intellij-java-google-style.xml')
     maxWarnings = 0
     ignoreFailures = false
+}
+
+// checkstyleMain 태스크가 compileTestJava에 명시적으로 의존하도록 설정
+tasks.named('checkstyleMain') {
+    dependsOn 'compileTestJava'
 }
 
 tasks.register('checkstyleFormatSpecific', Checkstyle) {
@@ -127,7 +132,7 @@ tasks.register('checkstyleFormatSpecific', Checkstyle) {
             'src/main/java/com/studeal/team/domain/user/dto/UserResponseDTO.java'
     )
     classpath = files()
-    configFile = file('config/checkstyle/google_checks.xml')
+    configFile = file('config/checkstyle/intellij-java-google-style.xml')
     reports {
         xml.required = false
         html.required = true
