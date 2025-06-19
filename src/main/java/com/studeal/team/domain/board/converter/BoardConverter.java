@@ -11,23 +11,31 @@ import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
 
 /**
- * 게시판 데이터 변환 유틸리티 클래스
+ * 게시판 데이터 변환 유틸리티 클래스. 이 클래스는 인스턴스화할 수 없습니다.
  */
-public class BoardConverter {
+public final class BoardConverter {
 
   /**
-   * AuctionBoard 엔티티를 DetailResponse DTO로 변환
+   * 유틸리티 클래스의 인스턴스화를 방지하기 위한 private 생성자.
+   */
+  private BoardConverter() {
+    throw new AssertionError("유틸리티 클래스는 인스턴스화할 수 없습니다.");
+  }
+
+  /**
+   * AuctionBoard 엔티티를 DetailResponse DTO로 변환.
    */
   public static BoardResponseDTO.DetailResponse toDetailResponse(AuctionBoard auctionBoard) {
-    BoardResponseDTO.DetailResponse.DetailResponseBuilder builder = BoardResponseDTO.DetailResponse.builder()
-        .boardId(auctionBoard.getBoardId())
-        .title(auctionBoard.getTitle())
-        .content(auctionBoard.getContent())
-        .major(auctionBoard.getMajor())
-        .expectedPrice(auctionBoard.getExpectedPrice())
-        .specMajor(auctionBoard.getSpecMajor())
-        .createdAt(auctionBoard.getCreatedAt())
-        .updatedAt(auctionBoard.getUpdatedAt());
+    BoardResponseDTO.DetailResponse.DetailResponseBuilder builder =
+        BoardResponseDTO.DetailResponse.builder()
+            .boardId(auctionBoard.getBoardId())
+            .title(auctionBoard.getTitle())
+            .content(auctionBoard.getContent())
+            .major(auctionBoard.getMajor())
+            .expectedPrice(auctionBoard.getExpectedPrice())
+            .specMajor(auctionBoard.getSpecMajor())
+            .createdAt(auctionBoard.getCreatedAt())
+            .updatedAt(auctionBoard.getUpdatedAt());
 
     // 선생님 정보 세팅 - User 클래스에서 상속받은 필드를 사용
     if (auctionBoard.getTeacher() != null) {
@@ -45,7 +53,7 @@ public class BoardConverter {
   }
 
   /**
-   * AuctionBoard Page 객체를 PageResponse DTO로 변환
+   * AuctionBoard Page 객체를 PageResponse DTO로 변환.
    */
   public static BoardResponseDTO.PageResponse toPageResponse(Page<AuctionBoard> boardPage) {
     List<BoardResponseDTO.ListItemResponse> boardDtos = boardPage.getContent().stream()
@@ -64,16 +72,17 @@ public class BoardConverter {
   }
 
   /**
-   * AuctionBoard 엔티티를 ListItemResponse DTO로 변환
+   * AuctionBoard 엔티티를 ListItemResponse DTO로 변환.
    */
   public static BoardResponseDTO.ListItemResponse toListItemResponse(AuctionBoard auctionBoard) {
-    BoardResponseDTO.ListItemResponse.ListItemResponseBuilder builder = BoardResponseDTO.ListItemResponse.builder()
-        .boardId(auctionBoard.getBoardId())
-        .title(auctionBoard.getTitle())
-        .major(auctionBoard.getMajor())
-        .expectedPrice(auctionBoard.getExpectedPrice())
-        .specMajor(auctionBoard.getSpecMajor())
-        .createdAt(auctionBoard.getCreatedAt());
+    BoardResponseDTO.ListItemResponse.ListItemResponseBuilder builder =
+        BoardResponseDTO.ListItemResponse.builder()
+            .boardId(auctionBoard.getBoardId())
+            .title(auctionBoard.getTitle())
+            .major(auctionBoard.getMajor())
+            .expectedPrice(auctionBoard.getExpectedPrice())
+            .specMajor(auctionBoard.getSpecMajor())
+            .createdAt(auctionBoard.getCreatedAt());
 
     // 선생님 정보 세팅 - User 클래스에서 상속받은 필드를 사용
     if (auctionBoard.getTeacher() != null) {
@@ -90,7 +99,7 @@ public class BoardConverter {
   }
 
   /**
-   * CreateRequest DTO와 Teacher 엔티티로 AuctionBoard 엔티티 생성
+   * CreateRequest DTO와 Teacher 엔티티로 AuctionBoard 엔티티 생성.
    */
   public static AuctionBoard toEntity(BoardRequestDTO.CreateRequest request, Teacher teacher) {
     return AuctionBoard.builder()
@@ -105,9 +114,10 @@ public class BoardConverter {
   }
 
   /**
-   * UpdateRequest DTO로 AuctionBoard 엔티티 업데이트
+   * UpdateRequest DTO로 AuctionBoard 엔티티 업데이트.
    */
-  public static void updateEntity(AuctionBoard auctionBoard,
+  public static void updateEntity(
+      AuctionBoard auctionBoard,
       BoardRequestDTO.UpdateRequest request) {
     auctionBoard.setTitle(request.getTitle());
     auctionBoard.setContent(request.getContent());
@@ -121,17 +131,20 @@ public class BoardConverter {
   }
 
   /**
-   * AuctionBoard 엔티티를 BoardListItem DTO로 변환 게시글 목록 조회 API용 간략한 정보만 포함
+   * AuctionBoard 엔티티를 BoardListItem DTO로 변환 게시글 목록 조회 API용 간략한 정보만 포함.
    */
   public static BoardResponseDTO.BoardListItem toBoardListItem(AuctionBoard auctionBoard) {
     String majorString = auctionBoard.getMajor() != null
-        ? String.valueOf(auctionBoard.getMajor()) : "기타";
+        ? String.valueOf(auctionBoard.getMajor())
+        : "기타";
 
     String teacherName = auctionBoard.getTeacher() != null
-        ? auctionBoard.getTeacher().getName() : "Unknown";
+        ? auctionBoard.getTeacher().getName()
+        : "Unknown";
 
     String price = auctionBoard.getExpectedPrice() != null
-        ? formatPrice(auctionBoard.getExpectedPrice()) + "~" : "가격 미정";
+        ? formatPrice(auctionBoard.getExpectedPrice()) + "~"
+        : "가격 미정";
 
     return BoardResponseDTO.BoardListItem.builder()
         .id(auctionBoard.getBoardId())
@@ -144,7 +157,7 @@ public class BoardConverter {
   }
 
   /**
-   * 가격 포맷팅 메서드
+   * 가격 포맷팅 메서드.
    */
   private static String formatPrice(Long price) {
     if (price == null) {
@@ -154,19 +167,21 @@ public class BoardConverter {
   }
 
   /**
-   * AuctionBoard 엔티티를 CursorBoardItem DTO로 변환 커서 기반 페이징 API용 게시글 항목
+   * AuctionBoard 엔티티를 CursorBoardItem DTO로 변환 커서 기반 페이징 API용 게시글 항목.
    */
   public static BoardResponseDTO.CursorBoardItem toCursorBoardItem(AuctionBoard auctionBoard) {
     // major 필드를 직접 전달하여 JSON 변환 시 한글명이 사용되도록 수정
     String teacherName = auctionBoard.getTeacher() != null
-        ? auctionBoard.getTeacher().getName() : "Unknown";
+        ? auctionBoard.getTeacher().getName()
+        : "Unknown";
 
     String price = auctionBoard.getExpectedPrice() != null
-        ? formatPrice(auctionBoard.getExpectedPrice()) + "~" : "가격 미정";
+        ? formatPrice(auctionBoard.getExpectedPrice()) + "~"
+        : "가격 미정";
 
     return BoardResponseDTO.CursorBoardItem.builder()
         .id(auctionBoard.getBoardId())
-        .major(auctionBoard.getMajor()) // String.valueOf() 제거하여 Enum 객체를 그대로 전달
+        .major(auctionBoard.getMajor()) // Enum 객체를 그대로 전달
         .specMajor(auctionBoard.getSpecMajor())
         .title(auctionBoard.getTitle())
         .teacher(teacherName)
@@ -175,7 +190,7 @@ public class BoardConverter {
   }
 
   /**
-   * AuctionBoard 엔티티를 OffsetBoardItem DTO로 변환 오프셋 기반 페이징 API용 게시글 항목
+   * AuctionBoard 엔티티를 OffsetBoardItem DTO로 변환 오프셋 기반 페이징 API용 게시글 항목.
    */
   public static BoardResponseDTO.OffsetBoardItem toOffsetBoardItem(AuctionBoard auctionBoard) {
     return BoardResponseDTO.OffsetBoardItem.builder()
@@ -188,15 +203,15 @@ public class BoardConverter {
         .specMajor(auctionBoard.getSpecMajor())
         .createdAt(auctionBoard.getCreatedAt())
         .thumbnailUrl(auctionBoard.getFiles().stream()
-            .filter(file -> file.getIsThumbnail())
+            .filter(AuctionBoardFile::getIsThumbnail)
             .findFirst()
-            .map(file -> file.getFilePath())
+            .map(AuctionBoardFile::getFilePath)
             .orElse(null))
         .build();
   }
 
   /**
-   * AuctionBoard Page 객체를 SearchPageResponse DTO로 변환 각 게시글의 최고 입찰가를 포함하여 변환
+   * AuctionBoard Page 객체를 SearchPageResponse DTO로 변환 각 게시글의 최고 입찰가를 포함하여 변환.
    */
   public static BoardResponseDTO.SearchPageResponse toSearchPageResponse(
       Page<AuctionBoard> boardPage,
@@ -222,9 +237,10 @@ public class BoardConverter {
   }
 
   /**
-   * AuctionBoard 엔티티와 최고 입찰가를 SearchItemResponse DTO로 변환 최고 입찰가가 null인 경우 예상 가격으로 설정
+   * AuctionBoard 엔티티와 최고 입찰가를 SearchItemResponse DTO로 변환 최고 입찰가가 null인 경우 예상 가격으로 설정.
    */
-  public static BoardResponseDTO.SearchItemResponse toSearchItemResponse(AuctionBoard auctionBoard,
+  public static BoardResponseDTO.SearchItemResponse toSearchItemResponse(
+      AuctionBoard auctionBoard,
       Long highestBid) {
     return BoardResponseDTO.SearchItemResponse.builder()
         .boardId(auctionBoard.getBoardId())
@@ -234,7 +250,8 @@ public class BoardConverter {
         .teacherName(
             auctionBoard.getTeacher() != null ? auctionBoard.getTeacher().getName() : "Unknown")
         .highestBid(
-            highestBid != null ? highestBid
+            highestBid != null
+                ? highestBid
                 : auctionBoard.getExpectedPrice()) // 경매 참여자 없을 시 시작 가격 반환
         .build();
   }
