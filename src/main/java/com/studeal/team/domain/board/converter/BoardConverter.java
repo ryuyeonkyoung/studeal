@@ -11,9 +11,16 @@ import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
 
 /**
- * 게시판 데이터 변환 유틸리티 클래스
+ * 게시판 데이터 변환 유틸리티 클래스 이 클래스는 인스턴스화할 수 없습니다.
  */
-public class BoardConverter {
+public final class BoardConverter {
+
+  /**
+   * 유틸리티 클래스의 인스턴스화를 방지하기 위한 private 생성자
+   */
+  private BoardConverter() {
+    throw new AssertionError("유틸리티 클래스는 인스턴스화할 수 없습니다.");
+  }
 
   /**
    * AuctionBoard 엔티티를 DetailResponse DTO로 변환
