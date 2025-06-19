@@ -124,14 +124,14 @@ public class BoardConverter {
    * AuctionBoard 엔티티를 BoardListItem DTO로 변환 게시글 목록 조회 API용 간략한 정보만 포함
    */
   public static BoardResponseDTO.BoardListItem toBoardListItem(AuctionBoard auctionBoard) {
-    String majorString = auctionBoard.getMajor() != null ?
-        String.valueOf(auctionBoard.getMajor()) : "기타";
+    String majorString = auctionBoard.getMajor() != null
+        ? String.valueOf(auctionBoard.getMajor()) : "기타";
 
-    String teacherName = auctionBoard.getTeacher() != null ?
-        auctionBoard.getTeacher().getName() : "Unknown";
+    String teacherName = auctionBoard.getTeacher() != null
+        ? auctionBoard.getTeacher().getName() : "Unknown";
 
-    String price = auctionBoard.getExpectedPrice() != null ?
-        formatPrice(auctionBoard.getExpectedPrice()) + "~" : "가격 미정";
+    String price = auctionBoard.getExpectedPrice() != null
+        ? formatPrice(auctionBoard.getExpectedPrice()) + "~" : "가격 미정";
 
     return BoardResponseDTO.BoardListItem.builder()
         .id(auctionBoard.getBoardId())
@@ -158,11 +158,11 @@ public class BoardConverter {
    */
   public static BoardResponseDTO.CursorBoardItem toCursorBoardItem(AuctionBoard auctionBoard) {
     // major 필드를 직접 전달하여 JSON 변환 시 한글명이 사용되도록 수정
-    String teacherName = auctionBoard.getTeacher() != null ?
-        auctionBoard.getTeacher().getName() : "Unknown";
+    String teacherName = auctionBoard.getTeacher() != null
+        ? auctionBoard.getTeacher().getName() : "Unknown";
 
-    String price = auctionBoard.getExpectedPrice() != null ?
-        formatPrice(auctionBoard.getExpectedPrice()) + "~" : "가격 미정";
+    String price = auctionBoard.getExpectedPrice() != null
+        ? formatPrice(auctionBoard.getExpectedPrice()) + "~" : "가격 미정";
 
     return BoardResponseDTO.CursorBoardItem.builder()
         .id(auctionBoard.getBoardId())
@@ -222,7 +222,7 @@ public class BoardConverter {
   }
 
   /**
-   * AuctionBoard 엔티티와 최고 입찰가를 SearchItemResponse DTO로 변환 최고 입찰가가 null인 경우 0으로 설정
+   * AuctionBoard 엔티티와 최고 입찰가를 SearchItemResponse DTO로 변환 최고 입찰가가 null인 경우 예상 가격으로 설정
    */
   public static BoardResponseDTO.SearchItemResponse toSearchItemResponse(AuctionBoard auctionBoard,
       Long highestBid) {
@@ -233,7 +233,9 @@ public class BoardConverter {
         .specMajor(auctionBoard.getSpecMajor())
         .teacherName(
             auctionBoard.getTeacher() != null ? auctionBoard.getTeacher().getName() : "Unknown")
-        .highestBid(highestBid != null ? highestBid : 0L) // null이면 0 반환
+        .highestBid(
+            highestBid != null ? highestBid
+                : auctionBoard.getExpectedPrice()) // 경매 참여자 없을 시 시작 가격 반환
         .build();
   }
 }
