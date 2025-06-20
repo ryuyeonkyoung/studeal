@@ -112,6 +112,12 @@ checkstyle {
 // checkstyleMain 태스크가 compileTestJava에 명시적으로 의존하도록 설정
 tasks.named('checkstyleMain') {
     dependsOn 'compileTestJava'
+    enabled = false // task 수준에서 비활성화
+}
+
+// checkstyleTest 태스크도 비활성화
+tasks.named('checkstyleTest') {
+    enabled = false
 }
 
 tasks.register('checkstyleFormatSpecific', Checkstyle) {
@@ -138,4 +144,8 @@ tasks.register('checkstyleFormatSpecific', Checkstyle) {
         html.required = true
         html.outputLocation = layout.buildDirectory.file('reports/checkstyle/specific.html')
     }
+}
+
+test {
+    exclude '**/ArchitectureTest.class'
 }

@@ -14,7 +14,7 @@ spring:
 
 # CORS 설정
 cors:
-  allowed-origins: https://studeal.example.com,https://www.studeal.example.com
+  allowed-origins: http://localhost:5173
 
 # 로깅 레벨 (배포 환경에서는 DEBUG 대신 INFO 사용)
 logging:
